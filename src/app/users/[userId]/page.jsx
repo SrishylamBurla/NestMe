@@ -4,9 +4,9 @@ import { useParams } from "next/navigation";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 import {
-  useGetMeQuery,
-  useGetMyPropertiesQuery,
-} from "@/store/services/authApi";
+  useGetUserByIdQuery,
+  useGetUserPropertiesQuery,
+} from "@/store/services/userApi";
 
 import UserHero from "@/components/user/UserHero";
 import UserStats from "@/components/user/UserStats";
@@ -16,9 +16,9 @@ import UserAbout from "@/components/user/UserAbout";
 export default function UserPublicProfilePage() {
   const { userId } = useParams();
 
-  const { data: user, isLoading } = useGetMeQuery(userId);
+  const { data: user, isLoading } = useGetUserByIdQuery(userId);
 
-  const { data: properties } = useGetMyPropertiesQuery(
+  const { data: properties } = useGetUserPropertiesQuery(
     user?._id ?? skipToken
   );
 
