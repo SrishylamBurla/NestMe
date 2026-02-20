@@ -85,7 +85,7 @@ export default function UserPropertyCard({ property }) {
           {/* Property Image */}
           <img
             src={
-              property.images?.[0].url || "/propertyImg/placeholder-property.jpg"
+              property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
             }
             alt="property"
             className={`w-full h-48 object-cover transition duration-300 ${
