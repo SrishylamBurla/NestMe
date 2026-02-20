@@ -15,9 +15,9 @@ export default function BottomNav() {
   const navConfig = {
     user: [
       { icon: "home", path: "/" },
-      { icon: "favorite", path: "/saved" },
+      { icon: "inventory_2", path: "/my-properties" },
       { icon: "add", path: "/add-property", primary: true },
-      { icon: "chat_bubble", path: "/messages" },
+      { icon: "group", path: "/my-leads" },
       { icon: "person", path: "/me" },
     ],
     agent: [
