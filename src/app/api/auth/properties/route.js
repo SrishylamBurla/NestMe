@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Property from "@/models/Property";
 import { getAuthUser } from "@/lib/getAuthUser";
+import AgentProfile from "@/models/AgentProfile";
 
 export async function GET() {
   try {
