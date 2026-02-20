@@ -68,8 +68,8 @@ export default function MyPropertiesPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-10 px-4">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* ================= HEADER ================= */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-          <div className="flex gap-4">
+        <div className="">
+          <div className="flex justify-between items-center gap-4">
             <button
               onClick={() => (window.location.href = "/")}
               className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
@@ -79,27 +79,28 @@ export default function MyPropertiesPage() {
               </span>
             </button>
             <h1 className="text-3xl font-bold text-slate-800">My Properties</h1>
-          </div>
-
-          <span className="text-sm text-slate-500 bg-white px-4 py-2 rounded-full shadow-sm border">
+            <span className="text-sm text-slate-500 bg-white px-4 py-2 rounded-full shadow-sm border">
             {processedProperties.length} Listings
           </span>
+          </div>
+
+          
         </div>
 
         {/* ================= SEARCH + SORT ================= */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-row gap-4">
           <input
             type="text"
             placeholder="Search by title or city..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 h-11 px-4 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-70 flex-1 h-11 px-4 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
 
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="h-11 px-4 rounded-xl border border-slate-300 bg-white"
+            className="w-30 h-11 px-4 rounded-xl border border-slate-300 bg-white"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
