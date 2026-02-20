@@ -1,8 +1,7 @@
-import { connectDB } from "@/lib/db";
+import connectDB from "@/lib/db";
 import Property from "@/models/Property";
 import { NextResponse } from "next/server";
-import { getAuthUser } from "@/lib/auth";
-
+import { getAuthUser } from "@/lib/getAuthUser";
 
 
 export async function PATCH(req, { params }) {
