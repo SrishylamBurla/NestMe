@@ -164,7 +164,7 @@ return (
     </div>
 
     {/* MOBILE STICKY CTA */}
-    <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-slate-200 p-3 sm:hidden z-50">
+    {/* <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-slate-200 p-3 sm:hidden z-50">
       <div className="flex gap-3">
 
         <button className="flex-1 h-11 rounded-full border border-slate-300 text-slate-700 text-sm font-medium">
@@ -179,7 +179,7 @@ return (
         </button>
 
       </div>
-    </div>
+    </div> */}
 
   </div>
 );

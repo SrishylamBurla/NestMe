@@ -18,7 +18,7 @@ export default function PropertyAgent({ property }) {
 
   const profileLink = isAgentListing
     ? `/agents/${agent._id}`
-    : "#"; // you can later add /users/[id]
+    : `/users/${owner._id}`;
 
   return (
     <div className="space-y-4">

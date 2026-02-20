@@ -1,35 +1,41 @@
-// import { NextResponse } from "next/server";
-// import mongoose from "mongoose";
-// import connectDB from "@/lib/db";
-// import AgentProfile from "@/models/AgentProfile";
-
-// export async function GET(request, context) {
-//   await connectDB();
-
-//   // ✅ MUST AWAIT
-//   const { agentId } = await context.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(agentId)) {
-//     return NextResponse.json({ message: "Invalid agent id" }, { status: 400 });
-//   }
-
-//   const agent = await AgentProfile.findById(agentId)
-//     .populate("user", "name email")
-//     .lean();
-
-//   if (!agent) {
-//     return NextResponse.json({ message: "Agent not found" }, { status: 404 });
-//   }
-
-//   return NextResponse.json({ agent });
-// }
-
+import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectDB from "@/lib/db";
+import AgentProfile from "@/models/AgentProfile";
+
+// import mongoose from "mongoose";
+// import connectDB from "@/lib/db";
 import Lead from "@/models/Lead";
 import Property from "@/models/Property";
-import AgentProfile from "@/models/AgentProfile";
+// import AgentProfile from "@/models/AgentProfile";
 import { getAuthUser } from "@/lib/getAuthUser";
+
+
+export async function GET(request, context) {
+  await connectDB();
+
+  // ✅ MUST AWAIT
+  const { agentId } = await context.params;
+
+  if (!mongoose.Types.ObjectId.isValid(agentId)) {
+    return NextResponse.json({ message: "Invalid agent id" }, { status: 400 });
+  }
+
+  const agent = await AgentProfile.findById(agentId)
+    .populate("user", "name email")
+    .lean();
+
+  if (!agent) {
+    return NextResponse.json({ message: "Agent not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ agent });
+}
+
+
+
+
+
 
 export async function POST(req, { params }) {
   await connectDB();

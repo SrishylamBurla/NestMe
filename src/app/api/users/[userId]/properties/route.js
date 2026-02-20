@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
-import User from "@/models/User";
+import Property from "@/models/Property";
 import mongoose from "mongoose";
 
 export async function GET(req, { params }) {
@@ -12,13 +12,10 @@ export async function GET(req, { params }) {
     return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
   }
 
-  const user = await User.findById(userId)
-    .select("name email")
-    .lean();
+  const properties = await Property.find({
+    owner: userId,
+    approvalStatus: "approved",
+  });
 
-  if (!user) {
-    return NextResponse.json({ message: "Not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(user);
+  return NextResponse.json({ properties });
 }

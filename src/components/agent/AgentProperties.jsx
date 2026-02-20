@@ -25,7 +25,7 @@ export default function AgentProperties({ properties }) {
             <div
               className="h-40 bg-cover bg-center"
               style={{
-                backgroundImage: `url(${p.images?.[0] || "/placeholder.jpg"})`,
+                backgroundImage: `url(${p.images?.[0]?.url || "/placeholder.jpg"})`,
               }}
             />
 
