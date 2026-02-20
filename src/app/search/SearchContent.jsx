@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -149,26 +148,25 @@ export default function SearchContent() {
               </div>
 
               <div className="flex gap-2 sm:gap-3 overflow-x-auto mt-4 no-scrollbar">
-  {["sale", "rent"].map((type) => (
-    <button
-      key={type}
-      onClick={() =>
-        setFilters((prev) => ({
-          ...prev,
-          listingType: type,
-        }))
-      }
-      className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
-        filters.listingType === type
-          ? "bg-indigo-600 text-white shadow-lg"
-          : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-      }`}
-    >
-      {type === "sale" ? "Buy" : "Rent"}
-    </button>
-  ))}
-</div>
-
+                {["sale", "rent"].map((type) => (
+                  <button
+                    key={type}
+                    onClick={() =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        listingType: type,
+                      }))
+                    }
+                    className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+                      filters.listingType === type
+                        ? "bg-indigo-600 text-white shadow-lg"
+                        : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                    }`}
+                  >
+                    {type === "sale" ? "Buy" : "Rent"}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -177,7 +175,6 @@ export default function SearchContent() {
         <div className="max-w-7xl mx-auto px-6 pt-8 grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
           {/* ================= LEFT SIDEBAR ================= */}
           <aside className="hidden lg:block bg-slate-800 rounded-2xl p-6 space-y-8 h-fit sticky top-32">
-
             <SidebarSection title="Property Type">
               <div className="space-y-2">
                 {["apartment", "villa", "plot", "commercial"].map((type) => (
@@ -250,11 +247,8 @@ export default function SearchContent() {
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-
               {data?.properties?.map((p) => (
-                 
-                  <PropertyCard property={p} key={p._id} />
-                
+                <PropertyCard property={p} key={p._id} />
               ))}
             </div>
           </section>
@@ -263,7 +257,6 @@ export default function SearchContent() {
         {/* ================= BOTTOM ACTION BAR ================= */}
         <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-white/10 p-4">
           <div className="flex gap-3 max-w-5xl mx-auto px-2 sm:px-0">
-
             <button
               onClick={resetFilters}
               className="flex-1 border border-white/20 h-12 rounded-full"

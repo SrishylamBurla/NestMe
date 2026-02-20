@@ -1,11 +1,4 @@
-// "use client";
 "use client";
-
-import { useRouter, useSearchParams } from "next/navigation";
-import { useGetPropertiesQuery } from "@/store/services/PropertiesApi";
-import { LoadingGrid, EmptyState, ErrorState } from "@/components/LoadingGrid";
-import PropertiesGrid from "@/components/PropertiesGrid";
-import Link from "next/link";
 
 import { Suspense } from "react";
 import PropertiesContent from "./PropertiesContent";
@@ -25,3 +18,5 @@ export default function Page() {
 
 
 
+
+// export const dynamic = "force-dynamic";
