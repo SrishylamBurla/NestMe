@@ -129,7 +129,7 @@ function PropertyType({ icon, label, type }) {
       className="cursor-pointer space-y-2"
     >
       <div className="w-14 h-14 mx-auto rounded-full bg-white shadow-sm flex items-center justify-center">
-        <span className="material-symbols-outlined text-indigo-600 text-2xl">
+        <span className="material-symbols-outlined text-black text-2xl">
           {icon}
         </span>
       </div>
