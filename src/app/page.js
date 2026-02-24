@@ -18,9 +18,9 @@ export default function HomePage() {
         {/* ================= HERO ================= */}
         <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
 
-          <div className="max-w-xl mx-auto text-center space-y-5">
+          <div className="max-w-full mx-auto text-center space-y-5">
 
-            <h1 className="text-3xl font-bold leading-tight">
+            <h1 className="text-3xl md:text-5x font-sans font-bold">
               Find Your Perfect Property
             </h1>
 
