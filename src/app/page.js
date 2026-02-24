@@ -24,7 +24,7 @@ export default function HomePage() {
               Find Your Perfect Property
             </h1>
 
-            <p className="text-sm text-white/90">
+            <p className="text-md font-sans text-white/90">
               Buy, Rent or Lease verified homes across India
             </p>
 
@@ -32,7 +32,7 @@ export default function HomePage() {
               <SearchBar />
             </div>
 
-            <div className="flex justify-center gap-3 pt-3 flex-wrap">
+            <div className="flex justify-center gap-3 pt-3 flex-wrap font-sans">
               <PurposeChip label="Buy" type="sale" />
               <PurposeChip label="Rent" type="rent" />
               <PurposeChip label="Lease" type="lease" />
@@ -85,13 +85,13 @@ export default function HomePage() {
             Ready to list your property?
           </h2>
 
-          <p className="text-sm text-slate-600 mb-6">
+          <p className="text-[15px] font-sans text-slate-600 mb-6">
             Reach thousands of verified buyers instantly.
           </p>
 
           <Link
             href="/add-property"
-            className="inline-block px-8 py-3 bg-black text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition"
+            className="inline-block px-8 py-3 bg-black text-white font-sans rounded-full font-semibold shadow-lg hover:shadow-xl transition"
           >
             Post Property Free
           </Link>
@@ -134,7 +134,7 @@ function PropertyType({ icon, label, type }) {
         </span>
       </div>
 
-      <p className="text-xs font-bold text-slate-700">
+      <p className="text-xs font-bold font-sans text-slate-700">
         {label}
       </p>
     </div>

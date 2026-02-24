@@ -112,7 +112,7 @@ export default function Header() {
 
           <div>
             <p className="text-xs text-gray-400">Welcome</p>
-            <h1 className="text-sm font-sans font-bold capitalize">
+            <h1 className="text-sm font-sans font-semibold capitalize">
               {user?.name || "Guest"}
             </h1>
           </div>

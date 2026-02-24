@@ -85,14 +85,14 @@ export default function PropertyCard({ property }) {
     <p className="text-xl font-bold text-slate-900">
       ₹{property.priceValue?.toLocaleString()}
       {property.listingType === "rent" && (
-        <span className="text-sm font-normal text-slate-500 ml-1">
+        <span className="text-sm font-sans font-normal text-slate-500 ml-1">
           / month
         </span>
       )}
     </p>
 
     {/* Title */}
-    <h4 className="font-semibold text-slate-800 truncate hover:text-indigo-600 transition-colors duration-200">
+    <h4 className="font-semibold font-sans text-slate-800 truncate hover:text-indigo-600 transition-colors duration-200">
       {property.title}
     </h4>
 
@@ -102,7 +102,7 @@ export default function PropertyCard({ property }) {
         location_on
       </span>
       <span className="truncate">
-        <span className="text-indigo-600 font-medium">
+        <span className="text-indigo-600 font-medium font-sans">
           {property.city}
         </span>
         , {property.state}
@@ -112,14 +112,14 @@ export default function PropertyCard({ property }) {
     {/* Meta */}
     <div className="flex gap-4 text-xs text-slate-500 pt-3 border-t border-slate-200">
       <span className="flex items-center gap-1">
-        <span className="material-symbols-outlined text-[14px]">
+        <span className="material-symbols-outlined text-[14px] font-sans">
           bed
         </span>
         {property.beds} Beds
       </span>
 
-      <span className="flex items-center gap-1">
-        <span className="material-symbols-outlined text-[14px]">
+      <span className="flex items-center gap-1 font-sans">
+        <span className="material-symbols-outlined text-[14px] font-sans">
           bathtub
         </span>
         {property.baths} Baths

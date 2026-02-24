@@ -98,7 +98,7 @@ export default function SearchContent() {
               }`}
             >
               <div className="pt-6 pb-2">
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold font-sans text-white">
                   Search Properties
                 </h2>
                 {data && (

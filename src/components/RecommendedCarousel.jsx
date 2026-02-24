@@ -213,11 +213,11 @@ function PropertyCard({ property }) {
 
       {/* CONTENT */}
       <div className="p-5 space-y-2">
-        <h3 className="font-semibold text-base text-slate-800">
+        <h3 className="font-semibold font-sans tracking-tight text-base text-slate-800">
           {property.title}
         </h3>
 
-        <p className="text-xs text-slate-500">
+        <p className="text-sm text-slate-500 font-sans tracking-tight">
           {property.city}, {property.state}
         </p>
       </div>

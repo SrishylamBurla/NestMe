@@ -13,11 +13,11 @@ export default function Footer() {
 
           {/* BRAND */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold font-sans bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
               NestME
             </h2>
 
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-tight">
               Discover verified properties across India.
               Buy, Rent or Lease with confidence.
             </p>
@@ -29,7 +29,7 @@ export default function Footer() {
                   key={icon}
                   className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center hover:shadow-md transition cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-indigo-500 text-sm">
+                  <span className="material-symbols-outlined text-indigo-500 text-md font-sans">
                     public
                   </span>
                 </div>
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
 
           {/* QUICK LINKS */}
-          <div className="space-y-4">
+          <div className="space-y-4 font-sans tracking-tight">
             <h3 className="font-semibold text-slate-800">Quick Links</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
@@ -50,7 +50,7 @@ export default function Footer() {
           </div>
 
           {/* COMPANY */}
-          <div className="space-y-4">
+          <div className="space-y-4 font-sans tracking-tight">
             <h3 className="font-semibold text-slate-800">Company</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
@@ -62,12 +62,12 @@ export default function Footer() {
           </div>
 
           {/* NEWSLETTER */}
-          <div className="space-y-4">
+          <div className="space-y-4 font-sans">
             <h3 className="font-semibold text-slate-800">
               Stay Updated
             </h3>
 
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 tracking-tight">
               Get latest listings and offers directly in your inbox.
             </p>
 
@@ -89,7 +89,7 @@ export default function Footer() {
 
       {/* ================= BOTTOM STRIP ================= */}
       <div className="border-t border-white/50 bg-white/60 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-slate-600">
+        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-slate-600 font-sans">
           © {new Date().getFullYear()} NestMe. All rights reserved.
         </div>
       </div>
