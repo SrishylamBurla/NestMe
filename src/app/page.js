@@ -43,7 +43,7 @@ export default function HomePage() {
 
         {/* ================= PROPERTY TYPES ================= */}
         <section className="px-5 pt-8 pb-6 bg-indigo-50">
-          <h2 className="text-xl font-sans font-bold mb-5 text-slate-800">
+          <h2 className="text-lg font-sans font-bold mb-5 text-slate-800">
             Browse by Property Type
           </h2>
 
