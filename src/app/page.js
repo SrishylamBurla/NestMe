@@ -43,7 +43,7 @@ export default function HomePage() {
 
         {/* ================= PROPERTY TYPES ================= */}
         <section className="px-5 pt-8 pb-6 bg-indigo-50">
-          <h2 className="text-base font-bold mb-5 text-slate-800">
+          <h2 className="text-xl font-sans font-bold mb-5 text-slate-800">
             Browse by Property Type
           </h2>
 
@@ -56,7 +56,7 @@ export default function HomePage() {
         </section>
 
         {/* ================= NEWLY ADDED ================= */}
-        <section className="px-5 pt-8 pb-6 bg-gray-50">
+        <section className="px-4 pt-4 pb-4 bg-gray-50">
           <RecommendedCarousel
             title="Newly Added"
             sortType="latest"
@@ -64,7 +64,7 @@ export default function HomePage() {
         </section>
 
         {/* ================= TRENDING ================= */}
-        <section className="px-5 pt-8 pb-6 bg-purple-50">
+        <section className="px-4 pt-4 pb-4 bg-purple-50">
           <RecommendedCarousel
             title="Trending This Week"
             sortType="views"
@@ -72,7 +72,7 @@ export default function HomePage() {
         </section>
 
         {/* ================= PREMIUM ================= */}
-        <section className="px-5 pt-8 pb-8 bg-pink-50">
+        <section className="px-4 pt-4 pb-4 bg-pink-50">
           <RecommendedCarousel
             title="Premium Picks"
             minPrice={20000000}
@@ -81,7 +81,7 @@ export default function HomePage() {
 
         {/* ================= CTA ================= */}
         <section className="px-6 py-10 text-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-          <h2 className="text-xl font-bold mb-3 text-slate-800">
+          <h2 className="text-xl font-bold font-sans mb-3 text-slate-800">
             Ready to list your property?
           </h2>
 

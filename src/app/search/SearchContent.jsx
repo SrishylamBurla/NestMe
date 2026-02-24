@@ -130,7 +130,7 @@ export default function SearchContent() {
                   {/* Mobile Icon Button */}
                   <button
                     onClick={applyFilters}
-                    className="sm:hidden h-9 w-9 flex items-center justify-center rounded-full bg-indigo-600 text-white"
+                    className="sm:hidden h-9 w-9 flex items-center justify-center rounded-full text-white"
                   >
                     <span className="material-symbols-outlined text-[18px]">
                       arrow_forward

@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 inset-shadow-md border-white/40">
 
       {/* ================= MAIN FOOTER ================= */}
-      <div className="w-full px-12 py-14">
+      <div className="w-full px-6 pt-6 pb-12">
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 

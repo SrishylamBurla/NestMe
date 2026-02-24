@@ -64,11 +64,11 @@ export default function PropertyCard({ property }) {
     {/* Save Button (Now Safe) */}
     <button
       onClick={handleSave}
-      className="absolute top-3 right-3 z-20 p-2 bg-white/90 backdrop-blur rounded-full shadow hover:scale-110 transition-all duration-200"
+      className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-all duration-200"
     >
       <span
         className={`material-symbols-outlined text-[18px] transition-all duration-200 ${
-          isSaved ? "text-red-500 scale-110" : "text-slate-500"
+          isSaved ? "text-red-500 scale-110" : "text-slate-800"
         }`}
       >
         favorite
