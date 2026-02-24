@@ -44,7 +44,7 @@ export default function PropertyCard({ property }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 relative">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden relative">
 
   {/* Image Section */}
   <div
@@ -79,7 +79,7 @@ export default function PropertyCard({ property }) {
   {/* Wrap clickable area in Link */}
   <Link 
   href={`/properties/${property._id}`}
-  className="block p-5 flex flex-col gap-3 bg-white hover:bg-slate-50 transition"
+  className="block p-3 flex flex-col gap-1 bg-white hover:bg-slate-50 transition"
   >
     {/* Price */}
     <p className="text-xl font-bold text-slate-900">

@@ -50,37 +50,37 @@ export default function PropertiesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 space-y-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-indigo-100">
+      <div className="max-w-7xl mx-auto px-2 md:px-4 pt-4 pb-10 space-y-6">
         {/* HEADER */}
         <div className="space-y-6">
           <div className="flex gap-4">
             <button
               onClick={() => (window.location.href = "/")}
-              className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
+              className="w-10 h-10 rounded-full hover:bg-slate-200 transition flex items-center justify-center"
             >
               <span className="material-symbols-outlined text-slate-700">
                 arrow_back
               </span>
             </button>
             <div>
-              <h1 className="text-3xl font-bold text-slate-800">
+              <h1 className="text-3xl font-sans font-bold text-slate-800">
                 Explore Properties
               </h1>
-              <p className="text-slate-500">
+              <p className="text-slate-500 text-sm">
                 {data?.properties?.length || 0} properties found
               </p>
             </div>
           </div>
 
           {/* FILTER BAR */}
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-2">
             <input
               type="text"
               placeholder="Search title..."
               defaultValue={q}
               onChange={(e) => updateQuery("q", e.target.value)}
-              className="h-11 px-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-400 outline-none"
+              className="h-10 px-4 rounded-xl border border-slate-300 outline-none"
             />
 
             <input
@@ -88,13 +88,13 @@ export default function PropertiesContent() {
               placeholder="Filter by city"
               defaultValue={city}
               onChange={(e) => updateQuery("city", e.target.value)}
-              className="h-11 px-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-400 outline-none"
+              className="h-10 px-4 rounded-xl border border-slate-300 outline-none"
             />
 
             <select
               value={sort}
               onChange={(e) => updateQuery("sort", e.target.value)}
-              className="h-11 px-4 rounded-xl border border-slate-300 bg-white"
+              className="h-10 px-4 py-2 rounded-xl border border-slate-300 bg-white"
             >
               <option value="latest">Latest</option>
               <option value="oldest">Oldest</option>
@@ -104,7 +104,7 @@ export default function PropertiesContent() {
 
             <button
               onClick={() => router.push("/properties")}
-              className="h-11 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+              className="h-10 rounded-xl bg-gray-800 text-white font-medium hover:bg-gray-600 transition"
             >
               Reset Filters
             </button>
@@ -117,6 +117,7 @@ export default function PropertiesContent() {
 
         {!isFetching && data?.properties?.length > 0 && (
           <>
+          
             <PropertiesGrid properties={data.properties} />
 
             {/* PAGINATION */}
@@ -124,7 +125,7 @@ export default function PropertiesContent() {
               <button
                 disabled={page === 1}
                 onClick={() => changePage(page - 1)}
-                className="px-5 py-2.5 rounded-full border bg-white disabled:opacity-50"
+                className="px-2 py-1 rounded-md border bg-white"
               >
                 ← Previous
               </button>
@@ -136,7 +137,7 @@ export default function PropertiesContent() {
               <button
                 disabled={page >= totalPages}
                 onClick={() => changePage(page + 1)}
-                className="px-5 py-2.5 rounded-full border bg-white disabled:opacity-50"
+                className="px-2 py-1 rounded-md border bg-white"
               >
                 Next →
               </button>
