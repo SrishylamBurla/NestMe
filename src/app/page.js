@@ -11,18 +11,25 @@ import { useState, useEffect } from "react";
 import SplashScreen from "@/components/SplashScreen";
 
 export default function HomePage() {
-
-
-   const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplash(false);
-    }, 4000); // duration in ms
+    const seen = sessionStorage.getItem("nestme_intro_seen");
 
-    return () => clearTimeout(timer);
+    if (!seen) {
+      setShowSplash(true);
+
+      setTimeout(() => {
+        sessionStorage.setItem("nestme_intro_seen", "true");
+        setShowSplash(false);
+      }, 3500); // duration
+    }
+
+    setChecking(false);
   }, []);
 
+  if (checking) return null;
   if (showSplash) return <SplashScreen />;
 
   return (
@@ -30,14 +37,11 @@ export default function HomePage() {
       <Header />
 
       <main className="bg-[#f9fafb] overflow-x-hidden">
-
         {/* ================= HERO ================= */}
 
         {/* ================= HERO ================= */}
         <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
-
           <div className="max-w-full mx-auto text-center space-y-5">
-
             <h1 className="text-3xl md:text-5xl font-bold">
               Find Your Perfect Property
             </h1>
@@ -55,7 +59,6 @@ export default function HomePage() {
               <PurposeChip label="Rent" type="rent" />
               <PurposeChip label="Lease" type="lease" />
             </div>
-
           </div>
         </section>
         {/* <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
@@ -93,32 +96,27 @@ export default function HomePage() {
             <PropertyType icon="apartment" label="Apartment" type="apartment" />
             <PropertyType icon="holiday_village" label="Villa" type="villa" />
             <PropertyType icon="terrain" label="Plot" type="plot" />
-            <PropertyType icon="storefront" label="Commercial" type="commercial" />
+            <PropertyType
+              icon="storefront"
+              label="Commercial"
+              type="commercial"
+            />
           </div>
         </section>
 
         {/* ================= NEWLY ADDED ================= */}
         <section className="px-4 pt-4 pb-4 bg-gray-50">
-          <RecommendedCarousel
-            title="Newly Added"
-            sortType="latest"
-          />
+          <RecommendedCarousel title="Newly Added" sortType="latest" />
         </section>
 
         {/* ================= TRENDING ================= */}
         <section className="px-4 pt-4 pb-4 bg-purple-50">
-          <RecommendedCarousel
-            title="Trending This Week"
-            sortType="views"
-          />
+          <RecommendedCarousel title="Trending This Week" sortType="views" />
         </section>
 
         {/* ================= PREMIUM ================= */}
         <section className="px-4 pt-4 pb-4 bg-pink-50">
-          <RecommendedCarousel
-            title="Premium Picks"
-            minPrice={20000000}
-          />
+          <RecommendedCarousel title="Premium Picks" minPrice={20000000} />
         </section>
 
         {/* ================= CTA ================= */}
@@ -138,7 +136,6 @@ export default function HomePage() {
             Post Property Free
           </Link>
         </section>
-
       </main>
 
       <Footer />
@@ -176,9 +173,7 @@ function PropertyType({ icon, label, type }) {
         </span>
       </div>
 
-      <p className="text-xs font-bold font-sans text-slate-700">
-        {label}
-      </p>
+      <p className="text-xs font-bold font-sans text-slate-700">{label}</p>
     </div>
   );
 }
