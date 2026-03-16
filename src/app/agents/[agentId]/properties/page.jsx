@@ -75,7 +75,7 @@ export default function AgentPropertiesPage() {
   }
   return (
     <section className="min-h-screen bg-gradient-to-br from-indigo-200 via-violet-200 to-purple-200 p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-3">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
           <button
@@ -97,61 +97,52 @@ export default function AgentPropertiesPage() {
         </div>
 
         {/* Search + Sort */}
-        {/* Search + Sort */}
-<div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <div className="rounded-lg">
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            {/* Search */}
+            <div className="relative flex-1 bg-white rounded-lg">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                search
+              </span>
 
-  <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <input
+                type="text"
+                placeholder="Search properties..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full h-11 pl-12 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:shadow-md focus:ring-gray-500 text-sm"
+              />
+            </div>
 
-    {/* Search */}
-    <div className="relative flex-1">
-      <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-        search
-      </span>
-
-      <input
-        type="text"
-        placeholder="Search properties..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full h-11 pl-12 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-      />
-    </div>
-
-    {/* Sort */}
-    <select
-      value={sort}
-      onChange={(e) => setSort(e.target.value)}
-      className="h-11 px-4 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[180px]"
-    >
-      <option value="latest">Sort: Latest</option>
-      <option value="oldest">Sort: Oldest</option>
-      <option value="priceHigh">Price: High → Low</option>
-      <option value="priceLow">Price: Low → High</option>
-    </select>
-
-  </div>
-</div>
-
-
+            {/* Sort */}
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="h-11 px-4 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:shadow-sm focus:ring-gray-500 min-w-[180px]"
+            >
+              <option value="latest">Sort: Latest</option>
+              <option value="oldest">Sort: Oldest</option>
+              <option value="priceHigh">Price: High → Low</option>
+              <option value="priceLow">Price: Low → High</option>
+            </select>
+          </div>
+        </div>
 
         <div className="flex gap-3 flex-wrap pt-2">
-
-  {["all", "approved", "pending", "rejected"].map((status) => (
-    <button
-      key={status}
-      onClick={() => setFilter(status)}
-      className={`px-5 py-2 rounded-lg text-sm font-medium transition ${
-        filter === status
-          ? "bg-indigo-600 text-white shadow-sm"
-          : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
-      }`}
-    >
-      {status.charAt(0).toUpperCase() + status.slice(1)}
-    </button>
-  ))}
-
-</div>
-
+          {["all", "approved", "pending", "rejected"].map((status) => (
+            <button
+              key={status}
+              onClick={() => setFilter(status)}
+              className={`px-5 py-2 rounded-lg text-sm font-medium transition ${
+                filter === status
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </button>
+          ))}
+        </div>
 
         {/* Empty State */}
         {processedProperties.length === 0 && (
