@@ -17,7 +17,7 @@ export default function Footer() {
               NestME
             </h2>
 
-            <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-tight">
+            <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-lighter">
               Discover verified properties across India.
               Buy, Rent or Lease with confidence.
             </p>
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
 
           {/* QUICK LINKS */}
-          <div className="space-y-4 font-sans tracking-tight">
+          <div className="space-y-4 font-sans tracking-lighter">
             <h3 className="font-semibold text-slate-800">Quick Links</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
@@ -50,7 +50,7 @@ export default function Footer() {
           </div>
 
           {/* COMPANY */}
-          <div className="space-y-4 font-sans tracking-tight">
+          <div className="space-y-4 font-sans tracking-lighter">
             <h3 className="font-semibold text-slate-800">Company</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
@@ -67,7 +67,7 @@ export default function Footer() {
               Stay Updated
             </h3>
 
-            <p className="text-sm text-slate-600 tracking-tight">
+            <p className="text-sm text-slate-600 tracking-lighter">
               Get latest listings and offers directly in your inbox.
             </p>
 

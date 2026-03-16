@@ -49,13 +49,13 @@ export default function SearchBar() {
             className="
               w-full
               pl-14 pr-5
-              py-4
+              py-3
               text-sm sm:text-base
               rounded-2xl
               bg-transparent
               focus:outline-none
               placeholder:text-gray-400
-              cursor-pointer
+              cursor-pointer font-sans
             "
           />
         </div>
