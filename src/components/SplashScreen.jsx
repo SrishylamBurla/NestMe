@@ -2,7 +2,7 @@
 
 export default function SplashScreen() {
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-black text-white overflow-hidden">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-black via-indigo-900 to-black text-white overflow-hidden">
 
       {/* Soft glow background */}
       <div className="absolute w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full animate-pulse" />
