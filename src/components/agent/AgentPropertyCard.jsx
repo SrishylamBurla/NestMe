@@ -37,7 +37,7 @@ export default function AgentPropertyCard({ property }) {
       {/* ================= CARD ================= */}
       <div
         onClick={handleCardClick}
-        className={`relative bg-white/70 backdrop-blur-xl  rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${
+        className={`relative bg-white/70 backdrop-blur-xl mt-2 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${
           showBlocked ? "animate-shake border-red-400" : ""
         }`}
       >

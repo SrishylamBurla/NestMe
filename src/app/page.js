@@ -7,8 +7,24 @@ import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import SplashScreen from "@/components/SplashScreen";
 
 export default function HomePage() {
+
+
+   const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 4000); // duration in ms
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showSplash) return <SplashScreen />;
+
   return (
     <>
       <Header />
@@ -16,7 +32,33 @@ export default function HomePage() {
       <main className="bg-[#f9fafb] overflow-x-hidden">
 
         {/* ================= HERO ================= */}
+
+        {/* ================= HERO ================= */}
         <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
+
+          <div className="max-w-full mx-auto text-center space-y-5">
+
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Find Your Perfect Property
+            </h1>
+
+            <p className="text-md text-white/90">
+              Buy, Rent or Lease verified homes across India
+            </p>
+
+            <div className="max-w-md mx-auto">
+              <SearchBar />
+            </div>
+
+            <div className="flex justify-center gap-3 pt-3 flex-wrap">
+              <PurposeChip label="Buy" type="sale" />
+              <PurposeChip label="Rent" type="rent" />
+              <PurposeChip label="Lease" type="lease" />
+            </div>
+
+          </div>
+        </section>
+        {/* <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
 
           <div className="max-w-full mx-auto text-center space-y-5">
 
@@ -39,7 +81,7 @@ export default function HomePage() {
             </div>
 
           </div>
-        </section>
+        </section> */}
 
         {/* ================= PROPERTY TYPES ================= */}
         <section className="px-5 pt-8 pb-6 bg-indigo-50">

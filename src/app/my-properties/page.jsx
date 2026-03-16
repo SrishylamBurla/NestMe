@@ -66,7 +66,7 @@ export default function MyPropertiesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-10 px-4">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-2">
         {/* ================= HEADER ================= */}
         <div className="">
           <div className="flex justify-between items-center gap-4">
