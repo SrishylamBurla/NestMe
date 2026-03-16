@@ -199,7 +199,7 @@ export default function UserPropertyCard({ property }) {
           >
             <img
               src={
-                previewProperty.images?.[0] ||
+                previewProperty.images?.[0]?.url ||
                 "/propertyImg/placeholder-property.jpg"
               }
               className="h-64 w-full object-cover"
