@@ -345,14 +345,14 @@ export default function HomePage() {
 
 /* ================= SMALL COMPONENTS ================= */
 
-function Stat({ label, value }) {
-  return (
-    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/10">
-      <p className="text-lg font-bold text-indigo-400">{value}</p>
-      <p className="text-xs text-white/70">{label}</p>
-    </div>
-  );
-}
+// function Stat({ label, value }) {
+//   return (
+//     <div className="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+//       <p className="text-lg font-bold text-indigo-400">{value}</p>
+//       <p className="text-xs text-white/70">{label}</p>
+//     </div>
+//   );
+// }
 
 function PurposeChip({ label, type }) {
   const router = useRouter();
