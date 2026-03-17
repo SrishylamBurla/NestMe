@@ -1,40 +1,44 @@
-// import { NextResponse } from "next/server";
-// import connectDB from "@/lib/db";
-// import { getAuthUser } from "@/lib/getAuthUser";
-// import Property from "@/models/Property";
-
-// export async function GET() {
-//   await connectDB();
-
-//   const user = await getAuthUser();
-//   if (!user || user.role !== "agent")
-//     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-
-//   const properties = await Property.find({ agent: user.agentProfileId, approvalStatus: "approved" })
-//     .sort({ createdAt: -1 });
-
-//   return NextResponse.json({ properties });
-// }
-
 import mongoose from "mongoose";
 import connectDB from "@/lib/db";
 import Property from "@/models/Property";
+import AgentProfile from "@/models/AgentProfile";
 
 export async function GET(req, context) {
   await connectDB();
 
   const { agentId } = await context.params;
 
+  /* ================= VALIDATE ID ================= */
+
   if (!mongoose.Types.ObjectId.isValid(agentId)) {
-    return Response.json({ message: "Invalid Agent ID" }, { status: 400 });
+    return Response.json(
+      { message: "Invalid Agent ID" },
+      { status: 400 }
+    );
   }
 
-  // ✅ PUBLIC FETCH
+  /* ================= GET AGENT PROFILE ================= */
+
+  const agentProfile = await AgentProfile.findById(agentId);
+
+  if (!agentProfile) {
+    return Response.json(
+      { message: "Agent not found" },
+      { status: 404 }
+    );
+  }
+
+  const userId = agentProfile.user;
+
+  /* ================= FETCH PROPERTIES ================= */
+
   const properties = await Property.find({
-    agent: agentId,
-    approvalStatus: "approved", // only show approved publicly
-  })
-    .sort({ createdAt: -1 });
+    $or: [
+      { agent: agentId }, // listed as agent
+      { owner: userId },  // owned before becoming agent
+    ],
+    approvalStatus: "approved",
+  }).sort({ createdAt: -1 });
 
   return Response.json({ properties });
 }

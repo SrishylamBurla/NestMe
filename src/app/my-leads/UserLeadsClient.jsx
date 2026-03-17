@@ -75,7 +75,7 @@ export default function UserLeadsClient() {
       {/* Skeleton */}
       {isLoading && (
         <div className="space-y-4">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(1)].map((_, i) => (
             <div
               key={i}
               className="animate-pulse bg-white rounded-3xl h-40 shadow-md"
@@ -139,8 +139,7 @@ export default function UserLeadsClient() {
                   {lead.property.title}
                 </p>
                 <p className="text-sm text-slate-500">
-                  ₹ {lead.property.priceLabel} •{" "}
-                  {lead.property.city}
+                  ₹ {lead.property.priceLabel} • {lead.property.city}
                 </p>
               </div>
             )}

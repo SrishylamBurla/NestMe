@@ -74,8 +74,8 @@ export default function ProfileStats() {
       {role === "agent" && agentStats && (
         <>
           {/* Growth */}
-          <div className="bg-gray-300 p-5 rounded-2xl shadow-sm">
-            <h3 className="text-sm text-slate-300 mb-3">📈 Lead Growth</h3>
+          <div className="bg-gray-300 p-5 rounded-2xl shadow-sm text-black/80">
+            <h3 className="text-sm mb-3 text-black">📈 Lead Growth</h3>
 
             <div className="flex justify-between text-sm">
               <span>This Month: {agentStats?.growth?.leadsThisMonth ?? 0}</span>
@@ -100,7 +100,7 @@ export default function ProfileStats() {
                   />
 
                   <div>
-                    <p className="font-semibold">
+                    <p className="font-semibold text-black">
                       {agentStats.topProperty.title}
                     </p>
                     <p className="text-indigo-400 font-bold">
@@ -126,7 +126,7 @@ export default function ProfileStats() {
 /* ================= REUSABLE CARD ================= */
 function StatCard({ label, value }) {
   return (
-    <div className="bg-slate-300 rounded-2xl p-5 text-center border border-white/5 hover:scale-105 transition-all duration-300">
+    <div className="bg-slate-300 rounded-2xl p-3 text-center border border-white/5 hover:scale-105 transition-all duration-300">
       <p className="text-3xl font-bold text-indigo-400">
         {new Intl.NumberFormat("en-IN").format(value)}
       </p>
