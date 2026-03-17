@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import PremiumSplash from "@/components/PremiumSplash";
+import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
@@ -63,7 +64,7 @@ export default function HomePage() {
         {/* ================= HERO ================= */}
         <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
           <div className="max-w-full mx-auto text-center space-y-5">
-            <h1 className="text-3xl md:text-4xl font-bold font-sans tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-bold font-sans">
               Find Your Perfect Property
             </h1>
 
@@ -141,12 +142,114 @@ export default function HomePage() {
         </section>
 
         {/* ================= CTA ================= */}
+        <ListingOptionsSection />
+
+        {/* ================= LISTING OPTIONS ================= */}
+        {/* <section className="px-6 py-16 bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e293b] text-white">
+          <div className="max-w-6xl mx-auto text-center mb-12 font-sans">
+            <h2 className="text-3xl md:text-4xl font-bold">
+              List Your Property on NestMe
+            </h2>
+
+            <p className="text-white/80 mt-3 max-w-2xl mx-auto">
+              Whether you're an individual owner or a professional agent, NestMe
+              provides the right tools to sell or rent faster.
+            </p>
+          </div>
+
+          // ===== COMPARISON CARDS =====
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            // ---------- USER CARD ---------- 
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6 font-sans">
+              <h3 className="text-xl font-bold">For Property Owners</h3>
+
+              <p className="text-white/70 text-sm">
+                Ideal for individuals who want to sell or rent their own
+                property.
+              </p>
+
+              <ul className="space-y-3 text-sm text-white/80">
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined text-indigo-400">
+                    check_circle
+                  </span>
+                  Post up to <b>1 property</b> for free
+                </li>
+
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined text-indigo-400">
+                    visibility
+                  </span>
+                  Reach verified buyers & tenants
+                </li>
+
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined text-indigo-400">
+                    schedule
+                  </span>
+                  Manage enquiries easily
+                </li>
+              </ul>
+
+              <Link
+                href="/add-property"
+                className="block text-center bg-white text-black font-semibold py-3 rounded-xl hover:bg-gray-200 transition"
+              >
+                Post Your Property
+              </Link>
+            </div>
+
+          // ---------- AGENT CARD ---------- 
+            <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 shadow-2xl space-y-6 font-sans">
+              <div className="absolute top-4 right-4 text-xs bg-white/20 px-3 py-1 rounded-full">
+                Recommended
+              </div>
+
+              <h3 className="text-xl font-bold">For Real Estate Agents</h3>
+
+              <p className="text-white/90 text-sm">
+                Built for professionals managing multiple listings.
+              </p>
+
+              <ul className="space-y-3 text-sm text-white/95">
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined">
+                    check_circle
+                  </span>
+                  Post <b>unlimited properties</b>
+                </li>
+
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined">dashboard</span>
+                  Dedicated agent dashboard
+                </li>
+
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined">groups</span>
+                  Receive verified leads
+                </li>
+
+                <li className="flex gap-3">
+                  <span className="material-symbols-outlined">trending_up</span>
+                  Grow your real estate business
+                </li>
+              </ul>
+
+              <Link
+                href="/subscribe"
+                className="block text-center bg-white text-indigo-700 font-bold py-3 rounded-xl hover:bg-indigo-50 transition"
+              >
+                Become an Agent
+              </Link>
+            </div>
+          </div>
+        </section> */}
 
         {/* ================= SELLER CTA — PREMIUM ================= */}
-        <section className="px-6 py-14 bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e293b] text-white">
+        {/* <section className="px-6 py-14 bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e293b] text-white">
           <div className="max-w-full">
             <div className="grid md:grid-cols-2 gap-10 items-center">
-              {/* ===== LEFT: TEXT ===== */}
+              // ===== LEFT: TEXT ===== 
               <div className="space-y-6">
                 <h2 className="text-3xl md:text-4xl font-bold font-sans leading-tight">
                   Sell or Rent your property
@@ -158,7 +261,7 @@ export default function HomePage() {
                   buyers and tenants across India.
                 </p>
 
-                {/* Feature bullets */}
+               // Feature bullets
                 <ul className="space-y-3 text-white/80 text-sm">
                   <li className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-indigo-400">
@@ -182,7 +285,7 @@ export default function HomePage() {
                   </li>
                 </ul>
 
-                {/* CTA Button */}
+                // CTA Button 
                 <Link
                   href="/add-property"
                   className="inline-flex items-center gap-3 px-8 py-4 bg-violet-600 hover:bg-violet-700 rounded-xl font-semibold shadow-2xl hover:shadow-indigo-500/30 transition text-white"
@@ -194,7 +297,7 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              {/* ===== RIGHT: VISUAL CARD ===== */}
+              // ===== RIGHT: VISUAL CARD ===== 
               <div className="relative">
                 <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl space-y-5">
                   <h3 className="text-xl font-semibold">
@@ -209,12 +312,13 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Glow behind card */}
+                // Glow behind card
                 <div className="absolute -z-10 inset-0 bg-indigo-500/20 blur-3xl rounded-full" />
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
+
         {/* <section className="px-6 py-10 text-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
           <h2 className="text-xl font-bold font-sans mb-3 text-slate-800">
             Ready to list your property?
@@ -240,7 +344,6 @@ export default function HomePage() {
 }
 
 /* ================= SMALL COMPONENTS ================= */
-
 
 function Stat({ label, value }) {
   return (
