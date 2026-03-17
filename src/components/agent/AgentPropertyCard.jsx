@@ -80,7 +80,7 @@ export default function AgentPropertyCard({ property }) {
             </span>
           </div>
         </div> */}
-        <div className="relative">
+        <div className="relative font-sans">
           {/* Property Image */}
           <img
             src={
@@ -119,8 +119,8 @@ export default function AgentPropertyCard({ property }) {
         </div>
 
         {/* CONTENT */}
-        <div className="p-5 space-y-3">
-          <h3 className="font-semibold text-base text-slate-800 line-clamp-1">
+        <div className="p-4 space-y-1 font-sans">
+          <h3 className="font-semibold font-sans text-base text-slate-800 line-clamp-1">
             {property.title}
           </h3>
 

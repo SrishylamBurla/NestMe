@@ -46,7 +46,7 @@ export default function LeadsClient({ agentId }) {
     );
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-4">
 
       {/* Search */}
       <div>

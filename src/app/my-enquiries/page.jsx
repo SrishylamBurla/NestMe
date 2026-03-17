@@ -40,13 +40,13 @@ export default function MyEnquiriesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <div className="max-w-6xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-4 py-3">
 
         {/* Header */}
-        <div className="mb-8 flex justify-between items-center border-b border-slate-200 pb-4">
+        <div className="mb-4 flex justify-between items-center border-b border-slate-200 pb-3">
 
         <button
-      onClick={() => window.location.href = "/"}
+      onClick={() => router.back()}
       className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
     >
       <span className="material-symbols-outlined text-slate-700">
@@ -54,7 +54,7 @@ export default function MyEnquiriesPage() {
       </span>
     </button>
           
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold font-sans bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             My Enquiries
           </h1>
 
@@ -64,7 +64,7 @@ export default function MyEnquiriesPage() {
         </div>
 
         {/* Search */}
-        <div className="mb-6">
+        <div className="mb-4">
           <input
             type="text"
             placeholder="Search by property title..."
@@ -75,7 +75,7 @@ export default function MyEnquiriesPage() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex gap-3 mb-4">
           {["all", "new", "contacted", "closed"].map((status) => (
             <button
               key={status}

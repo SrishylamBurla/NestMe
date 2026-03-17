@@ -32,7 +32,7 @@ export default function DashboardHeader() {
 
           <BackButton />
 
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-sans font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Dashboard
           </h1>
 

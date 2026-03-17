@@ -21,7 +21,7 @@ export default function BottomNav() {
   if (isLoading || !agentId) return null;
 
   return (
-    <div className="flex justify-between md:hidden fixed bottom-0 left-0 w-full bg-white border-t py-2 px-4 pb-6 z-50">
+    <div className="flex justify-between md:hidden fixed bottom-0 left-0 w-full bg-white py-2 px-8 pb-2 shadow-md z-50">
 
       <NavItem
         icon="dashboard"
@@ -40,7 +40,7 @@ export default function BottomNav() {
       {/* ➕ Add Property */}
       <button
         onClick={() => router.push("/add-property")}
-        className="relative -top-6 w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg active:scale-95 transition"
+        className="relative -top-6 w-14 h-14 rounded-full bg-[#d378f1] text-white flex items-center justify-center shadow-lg active:scale-95 transition"
       >
         <span className="material-symbols-outlined text-2xl">add</span>
       </button>

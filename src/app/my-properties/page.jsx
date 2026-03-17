@@ -65,8 +65,8 @@ export default function MyPropertiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-10 px-4">
-      <div className="max-w-7xl mx-auto space-y-2">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-3 px-4">
+      <div className="max-w-7xl mx-auto space-y-3">
         {/* ================= HEADER ================= */}
         <div className="">
           <div className="flex justify-between items-center gap-4">
@@ -78,7 +78,7 @@ export default function MyPropertiesPage() {
                 arrow_back
               </span>
             </button>
-            <h1 className="text-3xl font-bold text-slate-800">My Properties</h1>
+            <h1 className="text-2xl font-sans font-bold text-slate-800">My Properties</h1>
             <span className="text-sm text-slate-500 bg-white px-4 py-2 rounded-full shadow-sm border">
             {processedProperties.length} Listings
           </span>
@@ -130,7 +130,7 @@ export default function MyPropertiesPage() {
 
         {/* ================= EMPTY STATE ================= */}
         {processedProperties.length === 0 && (
-          <div className="bg-white border p-10 rounded-2xl shadow-sm text-center">
+          <div className="bg-white p-10 rounded-2xl shadow-md text-center">
             <h3 className="text-lg font-semibold text-slate-700">
               No {filterLabels[filter]}
             </h3>
