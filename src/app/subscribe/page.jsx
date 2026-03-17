@@ -101,7 +101,7 @@ export default function SubscribePage() {
 
         {/* Back Home */}
         <button
-          onClick={() => router.push("/")}
+          onClick={() => router.back()}
           className="w-full text-xs text-slate-400 hover:text-white transition"
         >
           ← Back to Home
