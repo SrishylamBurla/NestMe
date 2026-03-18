@@ -31,7 +31,7 @@ export default function ProfileHeader({ user }) {
         </h2>
 
         <button
-          onClick={() => router.push("/profile/edit")}
+          onClick={() => router.push("/me/edit")}
           className="h-10 w-10 rounded-full bg-slate-800 hover:bg-indigo-600 flex items-center justify-center transition"
         >
           <span className="material-symbols-outlined text-white">

@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   return (
     <AuthLayout title="Welcome Back">
-      <form onSubmit={submitHandler} className="space-y-4">
+      <form onSubmit={submitHandler} className="space-y-4 font-sans">
         <Input
           label="Email"
           type="email"

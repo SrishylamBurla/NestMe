@@ -4,9 +4,11 @@ import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
 import SavedPropertyCard from "@/components/saved/SavedPropertyCard";
 import SavedSkeleton from "@/components/saved/SavedSkeleton";
 import BottomNav from "@/components/BottomNav";
+import { useRouter } from "next/navigation";
 
 export default function SavedPropertiesPage() {
   const { data, isLoading } = useGetSavedPropertiesQuery();
+  const router = useRouter();
 
   const savedProperties = data?.saved || [];
 
@@ -20,7 +22,7 @@ export default function SavedPropertiesPage() {
 
     {/* Back Button */}
     <button
-      onClick={() => window.location.href = "/"}
+      onClick={() => router.back()}
       className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
     >
       <span className="material-symbols-outlined text-slate-700">

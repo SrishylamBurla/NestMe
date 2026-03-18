@@ -34,10 +34,10 @@ export default function ProfileSection({ user }) {
 
       {/* Account */}
       <div className="bg-slate-800 rounded-2xl border border-white/5 overflow-hidden">
-        <Row icon="person" title="Personal Information" link="/profile/edit" />
+        <Row icon="person" title="Personal Information" link="/me/edit" />
         <Row icon="favorite" title="Saved Properties" link="/saved" />
         {user?.role === "agent" && (
-          <Row icon="home" title="My Properties" link="/agent/properties" />
+          <Row icon="home" title="My Properties" link={`/agents/${user._id}/properties`} />
         )}
       </div>
 

@@ -24,7 +24,7 @@ export default function HomePage() {
       setTimeout(() => {
         sessionStorage.setItem("nestme_intro_seen", "true");
         setShowSplash(false);
-      }, 4000); // premium duration
+      }, 2500); // premium duration
     }
 
     setChecking(false);

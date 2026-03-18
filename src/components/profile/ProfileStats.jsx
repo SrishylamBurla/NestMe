@@ -34,13 +34,13 @@ export default function ProfileStats() {
       {/* ================= ROLE BASED STATS ================= */}
       <div className="grid grid-cols-3 gap-4">
         {/* ================= USER ================= */}
-        {role === "user" && (
+        {/* {role === "user" && (
           <>
-            <StatCard label="Saved" value={savedData?.length ?? 0} />
+            <StatCard label="Saved" value={savedData?.saved?.length ?? 0} />
             <StatCard label="Enquiries" value={user?.enquiryCount ?? 0} />
-            <StatCard label="Viewed" value={user?.viewedCount ?? 0} />
+            <StatCard label="Viewed" value={user?.viewsCount ?? 0} />
           </>
-        )}
+        )} */}
 
         {/* ================= AGENT ================= */}
         {role === "agent" && (
