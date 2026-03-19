@@ -195,14 +195,14 @@ export default function Header() {
                 label="My Leads"
                 onClick={() => router.push("/my-leads")}
               />
-              <DrawerItem
+              {/* <DrawerItem
                 label="My Enquiries"
                 onClick={() => router.push("/my-enquiries")}
-              />
-              <DrawerItem
+              /> */}
+              {/* <DrawerItem
                 label="Become Agent"
                 onClick={() => router.push("/subscribe")}
-              />
+              /> */}
             </>
           )}
 

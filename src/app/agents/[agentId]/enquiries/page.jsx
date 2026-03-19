@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useGetMyEnquiriesQuery } from "@/store/services/authApi";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { useGetAgentEnquiriesQuery } from "@/store/services/agentApi";
 
-export default function MyEnquiriesPage() {
-  const { data, isLoading, isError } = useGetMyEnquiriesQuery();
+export default function AgentEnquiriesPage() {
   const router = useRouter();
+  const { agentId } = useParams();
+
+  const { data, isLoading, isError } = useGetAgentEnquiriesQuery(agentId);
 
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -16,18 +18,11 @@ export default function MyEnquiriesPage() {
     if (!data?.enquiries) return [];
 
     return [...data.enquiries]
+      .filter((e) => (filter === "all" ? true : e.status === filter))
       .filter((e) =>
-        filter === "all" ? true : e.status === filter
+        e.property?.title?.toLowerCase().includes(search.toLowerCase()),
       )
-      .filter((e) =>
-        e.property?.title
-          ?.toLowerCase()
-          .includes(search.toLowerCase())
-      )
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt) - new Date(a.createdAt)
-      );
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }, [data, filter, search]);
 
   if (isError) {
@@ -41,21 +36,19 @@ export default function MyEnquiriesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-3">
-
         {/* Header */}
         <div className="mb-4 flex justify-between items-center border-b border-slate-200 pb-3">
+          <button
+            onClick={() => router.back()}
+            className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
+          >
+            <span className="material-symbols-outlined text-slate-700">
+              arrow_back
+            </span>
+          </button>
 
-        <button
-      onClick={() => router.back()}
-      className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
-    >
-      <span className="material-symbols-outlined text-slate-700">
-        arrow_back
-      </span>
-    </button>
-          
           <h1 className="text-2xl font-bold font-sans bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            My Enquiries
+            Agent Enquiries
           </h1>
 
           <span className="text-sm text-slate-500">
@@ -78,7 +71,6 @@ export default function MyEnquiriesPage() {
             page.
           </p>
         </div>
-
         {/* Search */}
         <div className="mb-4">
           <input
@@ -107,7 +99,7 @@ export default function MyEnquiriesPage() {
           ))}
         </div>
 
-        {/* Skeleton Loading */}
+        {/* Skeleton */}
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
@@ -119,15 +111,15 @@ export default function MyEnquiriesPage() {
           </div>
         )}
 
-        {/* Cards */}
+        {/* Empty */}
         {!isLoading && processedEnquiries.length === 0 && (
           <div className="bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl p-10 text-center shadow-md text-slate-500">
             No enquiries found.
           </div>
         )}
 
+        {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {processedEnquiries.map((e) => (
             <div
               key={e._id}
@@ -138,21 +130,17 @@ export default function MyEnquiriesPage() {
               }}
               className="relative overflow-hidden group cursor-pointer bg-white rounded-3xl shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-200"
             >
-              {/* Ripple */}
-              <span className="absolute inset-0 opacity-0 group-active:opacity-20 bg-indigo-500 transition duration-200" />
-
               {/* Image */}
-              {e.property?.images?.[0] && (
+              {e.property?.images?.[0]?.url && (
                 <div
                   className="h-48 w-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
                   style={{
-                    backgroundImage: `url(${e.property.images[0]})`,
+                    backgroundImage: `url(${e.property.images[0]?.url})`,
                   }}
                 />
               )}
 
               <div className="p-5 space-y-3 border-t border-slate-100">
-
                 <h2 className="font-semibold text-lg text-slate-800 line-clamp-1">
                   {e.property?.title}
                 </h2>
@@ -163,8 +151,7 @@ export default function MyEnquiriesPage() {
                 </p>
 
                 <p className="text-xs text-slate-400">
-                  Enquired on{" "}
-                  {new Date(e.createdAt).toLocaleDateString()}
+                  Enquired on {new Date(e.createdAt).toLocaleDateString()}
                 </p>
 
                 {e.message && (
@@ -173,7 +160,7 @@ export default function MyEnquiriesPage() {
                   </p>
                 )}
 
-                {/* Status Badge */}
+                {/* Status */}
                 <div>
                   {e.status === "new" && (
                     <span className="text-xs px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-medium">
@@ -191,15 +178,11 @@ export default function MyEnquiriesPage() {
                     </span>
                   )}
                 </div>
-
               </div>
             </div>
           ))}
-
         </div>
-
       </div>
     </div>
   );
 }
-

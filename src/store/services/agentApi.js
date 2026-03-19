@@ -23,14 +23,12 @@ export const agentApi = api.injectEndpoints({
     }),
 
     getAgentAppointments: builder.query({
-  query: (agentId) => `/agents/${agentId}/appointments`,
-}),
-getAgentEnquiries: builder.query({
-  query: (agentId) => `/agents/${agentId}/enquiries`,   
-
-
+      query: (agentId) => `/agents/${agentId}/appointments`,
+    }),
+    getAgentEnquiries: builder.query({
+      query: (agentId) => `/agents/${agentId}/enquiries`,
+    }),
   }),
-})
 });
 
 export const {
