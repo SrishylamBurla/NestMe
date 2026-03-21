@@ -65,17 +65,16 @@ export default function MyEnquiriesPage() {
 
         <div className="mb-6 p-5 bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl shadow-md">
           <p>
-            <span className="font-bold text-red-500">Note</span>: This is a list
-            of all enquiries made by agents under your management. The status of
+            <span className="font-bold text-red-500">Note</span>: The status of
             each enquiry is determined by the agent when they respond to the
             lead. You can click on any enquiry to view the associated property
             and contact details.
           </p>
           <p className="mt-2 text-sm text-slate-500">
-            This page is only visible to agents. If you are a property owner,
-            you can view your enquiries on the{" "}
-            <span className="font-medium text-indigo-600">My Enquiries</span>{" "}
-            page.
+            If you are a property owner,
+            you can view your enquiries on this page.
+            {/* <span className="font-medium text-indigo-600">My Enquiries</span>{" "}
+            page. */}
           </p>
         </div>
 

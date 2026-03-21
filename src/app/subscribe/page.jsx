@@ -3,123 +3,267 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useGetMeQuery } from "@/store/services/authApi";
+import { useGetAgentSubscriptionQuery } from "@/store/services/SubscribeApi";
+import { useSubscribeAgentMutation } from "@/store/services/SubscribeApi";
+import { useCancelSubscriptionMutation } from "@/store/services/SubscribeApi";
+import { toast } from "react-hot-toast";
 
 export default function SubscribePage() {
   const router = useRouter();
-  const { data: user, isLoading } = useGetMeQuery();
+
+  const { data: user, isLoading, refetch } = useGetMeQuery();
   const [loading, setLoading] = useState(false);
+  const { data, isLoading: isSubscriptionLoading } =
+    useGetAgentSubscriptionQuery();
 
-  const subscribeHandler = async (plan) => {
+  const [cancelSubscription, { isLoading: cancelling }] =
+    useCancelSubscriptionMutation();
+
+  const [subscribeAgent, { isLoading: subLoading, data: subData }] =
+    useSubscribeAgentMutation();
+
+ const subscribeHandler = async (plan) => {
+  const loadingToast = toast.loading("Activating plan...");
+
+  try {
+    const data = await subscribeAgent(plan).unwrap();
+
+    toast.dismiss(loadingToast);
+    toast.success("Agent plan activated!");
+
+    router.push(`/agents/${data.agentProfileId}/dashboard`);
+  } catch (err) {
+    toast.dismiss(loadingToast);
+    toast.error(err?.data?.message || "Subscription failed");
+  }
+};
+
+  const handleCancel = async () => {
     try {
-      setLoading(true);
+      await cancelSubscription().unwrap();
 
-      const res = await fetch("/api/agent/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
-      });
+      await refetch(); // 🔥 refresh user data
 
-      const data = await res.json();
+      router.push("/subscribe"); // redirect to subscribe page
 
-      if (!res.ok) {
-        throw new Error(data.message || "Subscription failed");
-      }
-
-      router.push(`/agents/${data.agentProfileId}/dashboard`);
+      toast.success("Subscription cancelled");
     } catch (err) {
-      console.error("SUBSCRIBE ERROR:", err.message);
-      alert(err.message);
-    } finally {
-      setLoading(false);
+      toast.error(err?.data?.message || "Cancel failed");
     }
   };
 
+  /* ================= LOADING ================= */
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
         Loading...
       </div>
     );
   }
 
+  /* ================= ALREADY AGENT ================= */
+
   if (user?.role === "agent") {
+    if (subLoading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+          Loading plan...
+        </div>
+      );
+    }
+
+    const sub = data?.subscription;
+
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white p-6">
-        <div className="bg-slate-800 border border-white/10 p-8 rounded-2xl text-center space-y-4 max-w-md w-full">
-          <h2 className="text-xl font-bold">You're already an Agent 🎯</h2>
+      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold">Your Agent Plan</h2>
+            <p className="text-slate-400 text-sm">Manage your subscription</p>
+          </div>
+
+          {/* PLAN CARD */}
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-center shadow-xl">
+            <p className="text-xs uppercase opacity-80">Current Plan</p>
+
+            <p className="text-3xl font-bold capitalize">
+              {sub?.plan || "Basic"}
+            </p>
+
+            <p className="text-sm opacity-90">₹{sub?.price}/month</p>
+          </div>
+
+          {/* DETAILS */}
+          <div className="space-y-3 text-sm">
+            <Detail
+              label="Status"
+              value={data?.isActive ? "Active" : "Expired"}
+            />
+
+            <Detail
+              label="Expiry Date"
+              value={
+                sub?.endDate ? new Date(sub.endDate).toLocaleDateString() : "—"
+              }
+            />
+
+            <Detail
+              label="Days Remaining"
+              value={`${data?.daysRemaining ?? 0} days`}
+            />
+          </div>
+
+          {/* ACTIONS */}
           <button
             onClick={() =>
               router.push(`/agents/${user.agentProfileId}/dashboard`)
             }
-            className="mt-2 bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
+            className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-semibold"
           >
             Go to Dashboard
+          </button>
+
+          <button
+            onClick={() => router.push("/subscribe")}
+            className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20"
+          >
+            Upgrade / Renew Plan
+          </button>
+
+          <button
+            onClick={handleCancel}
+            disabled={cancelling}
+            className="w-full py-3 rounded-xl bg-red-500 hover:bg-red-600 font-semibold transition"
+          >
+            {cancelling ? "Cancelling..." : "Cancel Subscription"}
           </button>
         </div>
       </div>
     );
   }
 
+  /* ================= SUBSCRIBE PAGE ================= */
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white px-5 py-14 font-sans">
+      <div className="max-w-5xl mx-auto space-y-12">
+        {/* ================= HERO ================= */}
 
-      <div className="max-w-md w-full bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl space-y-8">
-
-        {/* Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
-            Become a Professional Agent
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight font-sans">
+            Grow Your Real Estate Business
+            <span className="block bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              with NestMe Agent
+            </span>
           </h1>
-          <p className="text-sm text-slate-400">
-            Unlock powerful tools to grow your real estate business.
+
+          <p className="text-slate-400 max-w-2xl mx-auto">
+            Join thousands of professional agents who trust NestMe to generate
+            high-quality leads and close deals faster.
           </p>
         </div>
 
-        {/* Pricing Card */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-center shadow-xl">
-          <p className="text-4xl font-bold">₹999</p>
-          <p className="text-sm opacity-90">Per Month</p>
+        {/* ================= PRICING CARD ================= */}
+
+        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl p-8 md:p-12">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            {/* LEFT — PRICE */}
+
+            <div className="text-center md:text-left space-y-6">
+              <div>
+                <p className="text-sm text-indigo-400 uppercase font-semibold tracking-wide">
+                  Basic Plan
+                </p>
+
+                <h2 className="text-5xl font-bold mt-2">
+                  ₹999
+                  <span className="text-lg text-slate-400 font-medium">
+                    /month
+                  </span>
+                </h2>
+              </div>
+
+              <button
+                onClick={() => subscribeHandler("basic")}
+                disabled={loading}
+                className="w-full md:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold shadow-xl hover:scale-[1.02] transition"
+              >
+                {loading ? "Processing..." : "Subscribe Now"}
+              </button>
+
+              <p className="text-xs text-slate-500">
+                Cancel anytime • No hidden charges
+              </p>
+            </div>
+
+            {/* RIGHT — FEATURES */}
+
+            <div className="space-y-4 text-sm">
+              <Feature text="Unlimited property listings" />
+              <Feature text="Receive verified buyer & tenant leads" />
+              <Feature text="Advanced analytics dashboard" />
+              <Feature text="Priority property approval" />
+              <Feature text="Direct contact with serious buyers" />
+              <Feature text="Professional agent profile page" />
+            </div>
+          </div>
         </div>
 
-        {/* Features */}
-        <div className="space-y-3 text-sm text-slate-300">
-          <Feature text="Post Unlimited Properties" />
-          <Feature text="Receive Verified Buyer Leads" />
-          <Feature text="Track Property Views" />
-          <Feature text="Lead Analytics & Growth Dashboard" />
-          <Feature text="Priority Property Approval" />
+        {/* ================= TRUST / SOCIAL PROOF ================= */}
+
+        <div className="grid grid-cols-3 gap-6 text-center text-sm">
+          <Stat value="10K+" label="Active Buyers" />
+          <Stat value="120+" label="Cities Covered" />
+          <Stat value="95%" label="Verified Users" />
         </div>
 
-        {/* CTA */}
-        <button
-          onClick={() => subscribeHandler("basic")}
-          disabled={loading}
-          className="w-full py-3 rounded-full font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-lg"
-        >
-          {loading ? "Processing..." : "Subscribe & Start Selling 🚀"}
-        </button>
+        {/* ================= BACK BUTTON ================= */}
 
-        {/* Back Home */}
-        <button
-          onClick={() => router.back()}
-          className="w-full text-xs text-slate-400 hover:text-white transition"
-        >
-          ← Go Back
-        </button>
+        <div className="text-center">
+          <button
+            onClick={() => router.back()}
+            className="text-slate-400 hover:text-white transition text-sm"
+          >
+            ← Back
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-/* ================= FEATURE ITEM ================= */
+/* ================= FEATURE ================= */
 
 function Feature({ text }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="h-5 w-5 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold">
+    <div className="flex items-start gap-3">
+      <div className="h-6 w-6 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-bold">
         ✓
       </div>
-      <p>{text}</p>
+      <p className="text-slate-300">{text}</p>
+    </div>
+  );
+}
+
+/* ================= STATS ================= */
+
+function Stat({ value, label }) {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-lg">
+      <p className="text-2xl font-bold text-indigo-400">{value}</p>
+      <p className="text-slate-400 text-xs mt-1">{label}</p>
+    </div>
+  );
+}
+
+/* ================= DETAILS ROW ================= */
+
+function Detail({ label, value }) {
+  return (
+    <div className="flex justify-between bg-white/5 border border-white/10 rounded-lg p-3">
+      <span className="text-slate-400">{label}</span>
+      <span className="font-semibold">{value}</span>
     </div>
   );
 }

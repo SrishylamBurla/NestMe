@@ -175,24 +175,25 @@ export default function ProfileSection({ user }) {
     <div className="px-4 space-y-6">
 
       {/* ACCOUNT */}
-      <Section title="Account">
+      {/* <Section title="Account">
         <Row icon="person" title="Personal Information" link="/me/edit" />
         <Row icon="lock" title="Change Password" link="/me/edit#password" />
         <Row icon="phone" title="Verify Phone" link="/me/verify-phone" />
-      </Section>
+      </Section> */}
 
       {/* PROPERTY ACTIVITY */}
       <Section title="Property Activity">
         <Row icon="favorite" title="Saved Properties" link="/saved" />
         <Row icon="mail" title="My Enquiries" link="/my-enquiries" />
-        <Row icon="history" title="Recently Viewed" link="/recent" />
+        {/* <Row icon="history" title="Recently Viewed" link="/recent" /> */}
+        <Row icon="credit_card" title="Subscription" link="/subscribe" />
 
-        {user?.role === "agent" && (
+        {/* {user?.role === "agent" && (
           <>
             <Row icon="home" title="My Listings" link={`/agents/${user.agentProfileId}/properties`} />
             <Row icon="groups" title="Leads Received" link={`/agents/${user.agentProfileId}/leads`} />
           </>
-        )}
+        )} */}
       </Section>
 
       {/* AGENT PANEL */}
@@ -200,7 +201,7 @@ export default function ProfileSection({ user }) {
         <Section title="Agent Tools">
           <Row icon="dashboard" title="Agent Dashboard" link={`/agents/${user.agentProfileId}/dashboard`} />
           <Row icon="badge" title="Agent Profile" link={`/agents/${user.agentProfileId}`} />
-          <Row icon="credit_card" title="Subscription" link="/subscription" />
+          {/* <Row icon="credit_card" title="Subscription" link="/subscribe" /> */}
         </Section>
       )}
 

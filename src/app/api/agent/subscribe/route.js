@@ -39,19 +39,17 @@ export async function POST(req) {
 
   /* ================= CREATE AGENT PROFILE ================= */
 
-  const agentProfile = await AgentProfile.create({
-    user: user._id,
-    designation: "Property Agent",
-    city: "",
-    experienceYears: 0,
-    phone: "",
-    bio: "",
-    specializations: [],
-    dealsClosed: 0,
-    rating: 0,
-    totalListings: 0,
-    verified: false,
-  });
+  const agentProfile = await AgentProfile.findOneAndUpdate(
+  { user: user._id },
+  {
+    $setOnInsert: {
+      user: user._id,
+      designation: user.destination || "Real Estate Agent",
+      city: "",
+    }
+  },
+  { new: true, upsert: true }
+);
 
   /* ================= UPDATE EXISTING PROPERTIES ================= */
 
@@ -77,5 +75,44 @@ export async function POST(req) {
       role: user.role,
       agentProfileId: user.agentProfileId,
     },
+  });
+}
+
+
+export async function GET() {
+  await connectDB();
+
+  const user = await getAuthUser();
+  if (!user) {
+    return NextResponse.json(
+      { message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  const subscription = await Subscription.findOne({
+    user: user._id,
+  }).sort({ createdAt: -1 });
+
+  if (!subscription) {
+    return NextResponse.json({
+      subscription: null,
+      isActive: false,
+      daysRemaining: 0,
+    });
+  }
+
+  const now = new Date();
+  const end = new Date(subscription.endDate);
+
+  const daysRemaining = Math.max(
+    0,
+    Math.ceil((end - now) / (1000 * 60 * 60 * 24))
+  );
+
+  return NextResponse.json({
+    subscription,
+    isActive: daysRemaining > 0,
+    daysRemaining,
   });
 }

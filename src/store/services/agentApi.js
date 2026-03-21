@@ -28,6 +28,9 @@ export const agentApi = api.injectEndpoints({
     getAgentEnquiries: builder.query({
       query: (agentId) => `/agents/${agentId}/enquiries`,
     }),
+    // getAgentSubscription: builder.query({
+    //   query: (agentId) => `agents/${agentId}/subscription`,
+    // }),
   }),
 });
 
@@ -38,4 +41,5 @@ export const {
   useGetAgentStatsQuery,
   useGetAgentAppointmentsQuery,
   useGetAgentEnquiriesQuery,
+  // useGetAgentSubscriptionQuery,
 } = agentApi;

@@ -23,9 +23,9 @@ export default function DashboardHeader() {
           {/* 🔙 Back Button */}
           {/* <button
             onClick={() => router.back()}
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-600 hover:bg-gray-800 transition"
+            className="h-10 w-10 flex items-center justify-center rounded-full"
           >
-            <span className="material-symbols-outlined text-gray-100">
+            <span className="material-symbols-outlined text-gray-800">
               arrow_back
             </span>
           </button> */}
