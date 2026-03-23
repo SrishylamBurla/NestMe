@@ -75,7 +75,7 @@ export default function PremiumSplash() {
       <div className="absolute w-[550px] h-[550px] bg-cyan-400/20 rounded-full blur-[140px] animate-orb2" />
 
       {/* ===== Center Content ===== */}
-      <div className="relative text-center px-6 space-y-2">
+      <div className="relative text-center px-6 space-y-4">
 
         {/* ===== Nest + Home Logo ===== */}
         <div className="flex justify-center animate-logoReveal">
@@ -93,8 +93,8 @@ export default function PremiumSplash() {
 
         {/* ===== Glass Tagline Card ===== */}
         <div className="mx-auto max-w-md backdrop-blur-2xl bg-white/5 border border-white/10 rounded-2xl px-6 py-4 shadow-2xl animate-fadeUp delay-200">
-          <p className="text-sm md:text-base text-white/80 leading-relaxed">
-            India’s modern platform to buy, sell and rent verified properties
+          <p className="text-xl md:text-base text-white/80 leading-relaxed">
+            Find your dream home
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export default function PremiumSplash() {
         <div className="flex justify-center pt-6 animate-fadeUp delay-500">
           <div className="relative w-12 h-12">
             <div className="absolute inset-0 rounded-full border border-white/20"></div>
-            <div className="absolute inset-0 rounded-full border-t-indigo-400 border-2 animate-spin"></div>
+            <div className="absolute inset-0 rounded-full border-t-purple-400 border-2 animate-spin"></div>
           </div>
         </div>
 
