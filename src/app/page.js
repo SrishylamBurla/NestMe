@@ -64,7 +64,7 @@ export default function HomePage() {
         {/* ================= HERO ================= */}
         <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
           <div className="max-w-full mx-auto text-center space-y-5">
-            <h1 className="text-3xl md:text-4xl font-bold font-sans">
+            <h1 className="text-3xl md:text-5xl font-bold font-sans">
               Find Your Perfect Property
             </h1>
 
@@ -114,7 +114,7 @@ export default function HomePage() {
             Browse by Property Type
           </h2>
 
-          <div className="grid grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-4 gap-4 text-center max-w-4xl mx-auto">
             <PropertyType icon="apartment" label="Apartment" type="apartment" />
             <PropertyType icon="holiday_village" label="Villa" type="villa" />
             <PropertyType icon="terrain" label="Plot" type="plot" />

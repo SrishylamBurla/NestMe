@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 inset-shadow-md border-white/40">
       {/* ================= MAIN FOOTER ================= */}
-      <div className="w-full px-6 pt-6 pb-12 max-w-7xl mx-auto">
+      <div className="px-6 md:px-16 pt-6 pb-12 w-full mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* BRAND */}
           <div className="space-y-2">
@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
 
           {/* COMPANY */}
-          <div className="space-y-4 font-sans tracking-lighter md:pl-12">
+          <div className="space-y-4 font-sans tracking-lighter md:pl-16">
             <h3 className="font-semibold text-slate-800">Company</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
@@ -76,7 +76,7 @@ export default function Footer() {
               Get latest listings and offers directly in your inbox.
             </p>
 
-            <div className="flex items-center bg-white rounded-full shadow-sm overflow-hidden">
+            <div className="flex items-center bg-white rounded-md shadow-sm overflow-hidden">
               <input
                 type="email"
                 placeholder="Enter email"
