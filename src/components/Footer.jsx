@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 inset-shadow-md border-white/40">
+    <footer className="bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 inset-shadow-md border-white/40">
 
       {/* ================= MAIN FOOTER ================= */}
       <div className="w-full px-6 pt-6 pb-12 max-w-7xl mx-auto">
@@ -18,8 +18,8 @@ export default function Footer() {
             alt="NestMe Logo"
             className="w-28 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
           />
-            <h2 className="text-3xl font-bold font-sans bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
-              nestme<span className="text-gray-600">.in</span>
+            <h2 className="text-6xl font-bold font-sans text-white">
+              nestme<span className="text-gray-50">.in</span>
             </h2>
 
             <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-lighter">
