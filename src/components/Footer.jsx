@@ -7,14 +7,19 @@ export default function Footer() {
     <footer className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 inset-shadow-md border-white/40">
 
       {/* ================= MAIN FOOTER ================= */}
-      <div className="w-full px-6 pt-6 pb-12">
+      <div className="w-full px-6 pt-6 pb-12 max-w-7xl mx-auto">
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
           {/* BRAND */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold font-sans bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
-              NestME
+          <div className="space-y-2">
+          <img
+            src="/splashlogo.png"
+            alt="NestMe Logo"
+            className="w-28 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+          />
+            <h2 className="text-3xl font-bold font-sans bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
+              nestme<span className="text-gray-600">.in</span>
             </h2>
 
             <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-lighter">
@@ -22,19 +27,7 @@ export default function Footer() {
               Buy, Rent or Lease with confidence.
             </p>
 
-            {/* SOCIALS */}
-            <div className="flex gap-4 pt-2">
-              {["facebook", "instagram", "twitter", "linkedin"].map((icon) => (
-                <div
-                  key={icon}
-                  className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center hover:shadow-md transition cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-indigo-500 text-md font-sans">
-                    public
-                  </span>
-                </div>
-              ))}
-            </div>
+           
           </div>
 
           {/* QUICK LINKS */}
@@ -80,6 +73,20 @@ export default function Footer() {
               <button className="px-5 py-2 bg-gradient-to-r from-indigo-500 to-pink-500 text-white text-sm font-semibold">
                 Subscribe
               </button>
+            </div>
+
+             {/* SOCIALS */}
+            <div className="flex gap-4 pt-2">
+              {["facebook", "instagram", "twitter", "linkedin"].map((icon) => (
+                <div
+                  key={icon}
+                  className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center hover:shadow-md transition cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-indigo-500 text-md font-sans">
+                    public
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 

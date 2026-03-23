@@ -94,20 +94,28 @@ export default function Header() {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-40 bg-white shadow-sm px-4 sm:px-6 py-3 flex justify-between items-center">
+      <header className="sticky top-0 z-40 bg-white shadow-sm px-2 sm:px-6 py-1 flex justify-between items-center">
         {/* LEFT PROFILE */}
         <div
-          className="flex items-center gap-3 cursor-pointer"
+          className="flex items-center gap-1 cursor-pointer"
           onClick={() => {
             if (!isMobile && user) {
               setOpenDrawer(true);
             }
           }}
         >
-          <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+          {/* <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
             <span className="font-bold text-indigo-600 text-lg">
               {user?.name?.[0] || "G"}
             </span>
+          </div> */}
+
+          <div>
+            <img
+              src={"/splashlogo.png"}
+              alt="logo"
+              className="h-20 w-20 object-cover"
+            />
           </div>
 
           <div>
