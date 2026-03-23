@@ -95,27 +95,18 @@ export default function Header() {
     <>
       {/* ================= HEADER ================= */}
       <header className="sticky top-0 z-40 bg-white shadow-sm px-2 sm:px-6 py-1 flex justify-between items-center">
-        {/* LEFT PROFILE */}
-        <div
-          className="flex items-center gap-1 cursor-pointer"
-          onClick={() => {
+        {/* LEFT SIDE */}
+
+        <div className="flex items-center gap-2 cursor-pointer"
+        onClick={() => {
             if (!isMobile && user) {
               setOpenDrawer(true);
             }
-          }}
-        >
-          {/* <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-            <span className="font-bold text-indigo-600 text-lg">
+          }}>
+          <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+            <span className="font-bold text-purple-600 text-lg">
               {user?.name?.[0] || "G"}
             </span>
-          </div> */}
-
-          <div>
-            <img
-              src={"/splashlogo.png"}
-              alt="logo"
-              className="h-20 w-20 object-cover"
-            />
           </div>
 
           <div>
@@ -125,9 +116,23 @@ export default function Header() {
             </h1>
           </div>
         </div>
+        {/* LEFT PROFILE */}
+        <div
+          className="flex items-center gap-1 cursor-pointer"
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          <img
+            src={"/splashlogo.png"}
+            alt="logo"
+            className="h-15 w-15 object-cover"
+          />
+        </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3"
+        >
           {user && (
             <>
               <FavoriteButton />

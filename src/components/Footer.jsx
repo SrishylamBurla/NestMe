@@ -5,60 +5,72 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 inset-shadow-md border-white/40">
-
       {/* ================= MAIN FOOTER ================= */}
       <div className="w-full px-6 pt-6 pb-12 max-w-7xl mx-auto">
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
           {/* BRAND */}
           <div className="space-y-2">
-          <img
-            src="/splashlogo.png"
-            alt="NestMe Logo"
-            className="w-28 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
-          />
+            <img
+              src="/splashlogo.png"
+              alt="NestMe Logo"
+              className="w-28 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+            />
             <h2 className="text-6xl font-bold font-sans text-white">
               nestme<span className="text-gray-50">.in</span>
             </h2>
 
             <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-lighter">
-              Discover verified properties across India.
-              Buy, Rent or Lease with confidence.
+              Discover verified properties across India. Buy, Rent or Lease with
+              confidence.
             </p>
-
-           
           </div>
 
+          
+          <div className="col-span-2 grid grid-cols-2 gap-6">
           {/* QUICK LINKS */}
-          <div className="space-y-4 font-sans tracking-lighter">
+            <div className="space-y-4 font-sans tracking-lighter md:pl-24">
             <h3 className="font-semibold text-slate-800">Quick Links</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
-              <li><Link href="/properties?listingType=sale">Buy Property</Link></li>
-              <li><Link href="/properties?listingType=rent">Rent Property</Link></li>
-              <li><Link href="/add-property">Post Property</Link></li>
-              <li><Link href="/search">Search Homes</Link></li>
+              <li>
+                <Link href="/properties?listingType=sale">Buy Property</Link>
+              </li>
+              <li>
+                <Link href="/properties?listingType=rent">Rent Property</Link>
+              </li>
+              <li>
+                <Link href="/add-property">Post Property</Link>
+              </li>
+              <li>
+                <Link href="/search">Search Homes</Link>
+              </li>
             </ul>
           </div>
 
           {/* COMPANY */}
-          <div className="space-y-4 font-sans tracking-lighter">
+          <div className="space-y-4 font-sans tracking-lighter md:pl-12">
             <h3 className="font-semibold text-slate-800">Company</h3>
 
             <ul className="space-y-2 text-sm text-slate-600">
-              <li><Link href="#">About Us</Link></li>
-              <li><Link href="#">Careers</Link></li>
-              <li><Link href="#">Contact</Link></li>
-              <li><Link href="#">Privacy Policy</Link></li>
+              <li>
+                <Link href="#">About Us</Link>
+              </li>
+              <li>
+                <Link href="#">Careers</Link>
+              </li>
+              <li>
+                <Link href="#">Contact</Link>
+              </li>
+              <li>
+                <Link href="#">Privacy Policy</Link>
+              </li>
             </ul>
+          </div>
           </div>
 
           {/* NEWSLETTER */}
           <div className="space-y-4 font-sans">
-            <h3 className="font-semibold text-slate-800">
-              Stay Updated
-            </h3>
+            <h3 className="font-semibold text-slate-800">Stay Updated</h3>
 
             <p className="text-sm text-slate-600 tracking-lighter">
               Get latest listings and offers directly in your inbox.
@@ -75,7 +87,7 @@ export default function Footer() {
               </button>
             </div>
 
-             {/* SOCIALS */}
+            {/* SOCIALS */}
             <div className="flex gap-4 pt-2">
               {["facebook", "instagram", "twitter", "linkedin"].map((icon) => (
                 <div
@@ -89,18 +101,15 @@ export default function Footer() {
               ))}
             </div>
           </div>
-
         </div>
-
       </div>
 
       {/* ================= BOTTOM STRIP ================= */}
-      <div className="border-t border-white/50 bg-white/60 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-slate-600 font-sans">
+      <div className="border-t border-white/50 bg-black backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-slate-100 font-sans">
           © {new Date().getFullYear()} NestMe. All rights reserved.
         </div>
       </div>
-
     </footer>
   );
 }

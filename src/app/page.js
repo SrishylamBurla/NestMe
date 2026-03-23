@@ -110,7 +110,7 @@ export default function HomePage() {
 
         {/* ================= PROPERTY TYPES ================= */}
         <section className="px-5 pt-8 pb-6 bg-indigo-50">
-          <h2 className="text-lg font-sans font-bold mb-5 text-slate-800">
+          <h2 className="text-xl md:text-2xl font-sans font-bold mb-12 text-slate-800 text-center md:text-left">
             Browse by Property Type
           </h2>
 
@@ -132,12 +132,12 @@ export default function HomePage() {
         </section>
 
         {/* ================= TRENDING ================= */}
-        <section className="px-4 pt-4 pb-4 bg-purple-50">
+        <section className="px-4 pt-4 pb-4 bg-indigo-100">
           <RecommendedCarousel title="Trending This Week" sortType="views" />
         </section>
 
         {/* ================= PREMIUM ================= */}
-        <section className="px-4 pt-4 pb-4 bg-pink-50">
+        <section className="px-4 pt-4 pb-4 bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100">
           <RecommendedCarousel title="Premium Picks" minPrice={20000000} />
         </section>
 

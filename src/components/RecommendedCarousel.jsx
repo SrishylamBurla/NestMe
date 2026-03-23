@@ -22,13 +22,13 @@ export default function RecommendedCarousel({
 
       {/* HEADER */}
       <div className="flex justify-between items-center px-1">
-        <h2 className="text-lg font-sans font-bold text-slate-900">
+        <h2 className="text-lg font-sans font-bold text-slate-800">
           {title}
         </h2>
 
         <Link
           href="/properties"
-          className="text-sm font-semibold text-indigo-600 hover:underline"
+          className="text-sm font-semibold text-black border border-black rounded-md p-1 bg-white hover:underline"
         >
           View All
         </Link>
