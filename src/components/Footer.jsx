@@ -146,7 +146,7 @@ const StyledWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 25px 25px;
+    padding: 15px 5px;
     gap: 20px;
   }
 
