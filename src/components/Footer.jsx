@@ -18,7 +18,7 @@ export default function Footer() {
               alt="NestMe Logo"
               className="w-28 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             />
-            <h2 className="text-6xl font-bold font-sans text-white">
+            <h2 className="text-6xl font-bold font-sans text-white tracking-tight">
               nestme<span className="text-gray-50">.in</span>
             </h2>
 

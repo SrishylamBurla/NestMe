@@ -3,7 +3,7 @@ import PropertyCard from "./PropertyCard";
 
 export default function PropertiesGrid({ properties }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-4 px-4">
       {properties.map((property) => (
         <div
           // href={`/properties/${property._id}`}

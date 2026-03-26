@@ -18,7 +18,7 @@ export default function PremiumSplash() {
       <div className="absolute w-[550px] h-[550px] bg-cyan-400/20 rounded-full blur-[140px] animate-orb2" />
 
       {/* ===== Center Content ===== */}
-      <div className="relative text-center px-6 space-y-4">
+      <div className="relative text-center px-6 space-y-2">
 
         {/* ===== Nest + Home Logo ===== */}
         <div className="flex justify-center animate-logoReveal">
@@ -30,17 +30,21 @@ export default function PremiumSplash() {
         </div>
 
         {/* ===== Brand Name ===== */}
-        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight animate-logoReveal">
+        <h1 className="text-5xl md:text-5xl font-bold tracking-tight animate-logoReveal">
           nestme<span className="text-indigo-400">.in</span>
         </h1>
 
+
         {/* ===== Glass Tagline Card ===== */}
-        <div className="mx-auto max-w-md backdrop-blur-2xl bg-white/5 border border-white/10 rounded-2xl px-6 py-4 shadow-2xl animate-fadeUp delay-200">
-          <p className="text-xl md:text-base text-white/80 leading-relaxed">
+        <p className="text-xl font-bold text-white/80 leading-relaxed">
+            Find your dream home
+          </p>
+        {/* <div className="mx-auto mt-10 max-w-md backdrop-blur-2xl bg-white/5 border border-white/10 rounded-2xl px-4 py-2 shadow-2xl animate-fadeUp delay-200">
+          <p className="text-3xl font-bold text-white/80 leading-relaxed">
             Find your dream home
           </p>
           
-        </div>
+        </div> */}
         <div className="scale-60">
         <Loader />
         </div>
