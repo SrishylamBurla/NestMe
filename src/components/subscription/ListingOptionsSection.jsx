@@ -15,14 +15,14 @@ export default function ListingOptionsSection() {
     <section className="relative px-6 py-16 overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e293b] text-white rounded-t-[2rem] space-y-12">
       {/* ===== SOFT AMBIENT LIGHTS ===== */}
 
-      {/* Top Right Glow */}
-      <div className="absolute top-[-140px] right-[-120px] w-[520px] h-[520px] bg-indigo-500/20 rounded-full blur-[180px]" />
+     {/* Top Right Glow */}
+<div className="absolute pointer-events-none top-[-140px] right-[-120px] w-[520px] h-[520px] bg-indigo-500/20 rounded-full blur-[180px]" />
 
-      {/* Mid Right Accent */}
-      <div className="absolute top-[80px] right-[-60px] w-[320px] h-[320px] bg-cyan-400/20 rounded-full blur-[140px]" />
+{/* Mid Right Accent */}
+<div className="absolute pointer-events-none top-[80px] right-[-60px] w-[320px] h-[320px] bg-cyan-400/20 rounded-full blur-[140px]" />
 
-      {/* Bottom Left Balance Glow */}
-      <div className="absolute bottom-[-180px] left-[-120px] w-[620px] h-[620px] bg-purple-500/20 rounded-full blur-[200px]" />
+{/* Bottom Left Balance Glow */}
+<div className="absolute pointer-events-none bottom-[-180px] left-[-120px] w-[620px] h-[620px] bg-purple-500/20 rounded-full blur-[200px]" />
 
       {/* Center Soft Light */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
