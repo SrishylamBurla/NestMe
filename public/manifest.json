@@ -1,12 +1,10 @@
 {
   "name": "NestMe",
   "short_name": "NestMe",
-  "description": "Find your dream home",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#0f172a",
   "theme_color": "#0f172a",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/splash.png",
@@ -17,6 +15,12 @@
       "src": "/icons/splash.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/icons/splash.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
