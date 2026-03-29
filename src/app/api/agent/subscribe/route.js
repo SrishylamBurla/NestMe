@@ -29,13 +29,15 @@ export async function POST(req) {
   /* ================= CREATE SUBSCRIPTION ================= */
 
   const subscription = await Subscription.create({
-    user: user._id,
-    plan,
-    price: planPrices[plan],
-    endDate: new Date(
-      Date.now() + durationDays * 24 * 60 * 60 * 1000
-    ),
-  });
+  user: user._id,
+  plan,
+  price: planPrices[plan],
+  status: "active",
+  startDate: new Date(),
+  endDate: new Date(
+    Date.now() + durationDays * 24 * 60 * 60 * 1000
+  ),
+});
 
   /* ================= CREATE AGENT PROFILE ================= */
 

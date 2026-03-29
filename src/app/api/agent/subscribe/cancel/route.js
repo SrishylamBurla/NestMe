@@ -16,10 +16,10 @@ export async function POST() {
     );
   }
 
-  const subscription = await Subscription.findOne({
-    user: user._id,
-    status: "active",
-  });
+ const subscription = await Subscription.findOne({
+  user: user._id,
+  endDate: { $gt: new Date() },
+});
 
   if (!subscription) {
     return NextResponse.json(

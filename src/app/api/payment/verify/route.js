@@ -2,13 +2,18 @@ import crypto from "crypto";
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import User from "@/models/User";
-import AgentProfile from "@/models/AgentProfile"; // 👈 IMPORTANT
+import Subscription from "@/models/Subscription";
+import AgentProfile from "@/models/AgentProfile";
 import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function POST(req) {
   await connectDB();
 
   const user = await getAuthUser();
+
+  if (!user) {
+    return NextResponse.json({ success: false }, { status: 401 });
+  }
 
   const {
     razorpay_order_id,
@@ -41,10 +46,24 @@ export async function POST(req) {
 
   user.agentProfileId = agent._id;
 
+  // ✅ CREATE SUBSCRIPTION (🔥 THIS WAS MISSING)
+ const subscription = await Subscription.create({
+  user: user._id,
+  plan: "basic",
+  price: 999,
+  status: "active",
+  startDate: new Date(),
+  endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+});
+
+console.log("SUB CREATED:", subscription);
+
+  user.subscriptionId = subscription._id;
+console.log("VERIFY API CALLED");
   await user.save();
 
   return NextResponse.json({
     success: true,
-    agentProfileId: agent._id, // 🔥 THIS WAS MISSING
+    agentProfileId: agent._id,
   });
 }
