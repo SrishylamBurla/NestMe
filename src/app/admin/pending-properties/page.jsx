@@ -3,6 +3,7 @@
 import { useGetPendingPropertiesQuery } from "@/store/services/adminApi";
 import { useAdminUpdatePropertyStatusMutation } from "@/store/services/PropertiesApi";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function PendingPropertiesPage() {
   const { data, isLoading } = useGetPendingPropertiesQuery();
@@ -26,9 +27,10 @@ export default function PendingPropertiesPage() {
           {/* IMAGE PREVIEW */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-3 bg-gray-50">
             {p.images?.slice(0, 4).map((img, i) => (
-              <img
+              <Image
                 key={i}
                 src={img.url}
+                alt="Property Image"
                 className="h-32 w-full object-cover rounded-lg"
               />
             ))}

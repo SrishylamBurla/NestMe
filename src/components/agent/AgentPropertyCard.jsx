@@ -6,6 +6,7 @@ import {
   useDeletePropertyMutation,
   useUpdatePropertyMutation,
 } from "@/store/services/PropertiesApi";
+import Image from "next/image";
 
 export default function AgentPropertyCard({ property }) {
   const router = useRouter();
@@ -82,9 +83,10 @@ export default function AgentPropertyCard({ property }) {
         </div> */}
         <div className="relative font-sans">
           {/* Property Image */}
-          <img
+          <Image
             src={
-              property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
+              property.images?.[0]?.url ||
+              "/propertyImg/placeholder-property.jpg"
             }
             alt="property"
             className={`w-full h-48 object-cover transition duration-300 ${
@@ -133,86 +135,57 @@ export default function AgentPropertyCard({ property }) {
           </p>
 
           {/* PERFORMANCE */}
-          {/* <div className="flex justify-between text-xs text-slate-500 bg-slate-50 rounded-xl p-2">
-            <div className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-[16px]">
-                visibility
-              </span>
-              {property.viewsCount || 0} Views
-            </div>
-
-            <div className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-[16px]">
-                groups
-              </span>
-              {property.leadsCount || 0} Leads
-            </div>
-          </div> */}
-
-
-          {/* PERFORMANCE */}
-<div className="grid grid-cols-2 gap-3 text-xs mt-2">
-
-  {/* Views */}
-  <div
-    className={`flex items-center justify-between px-3 py-2 rounded-xl border transition
+          <div className="grid grid-cols-2 gap-3 text-xs mt-2">
+            {/* Views */}
+            <div
+              className={`flex items-center justify-between px-3 py-2 rounded-xl border transition
       ${
         property.viewsCount > 50
           ? "bg-green-50 border-green-200 text-green-700"
           : property.viewsCount > 10
-          ? "bg-yellow-50 border-yellow-200 text-yellow-700"
-          : "bg-red-50 border-red-200 text-red-600"
+            ? "bg-yellow-50 border-yellow-200 text-yellow-700"
+            : "bg-red-50 border-red-200 text-red-600"
       }
     `}
-  >
-    <div className="flex items-center gap-1">
-      <span className="material-symbols-outlined text-[16px]">
-        visibility
-      </span>
-      <span className="font-semibold">
-        {property.viewsCount || 0}
-      </span>
-    </div>
-    <span className="text-[10px] font-medium uppercase tracking-wide">
-      Views
-    </span>
-  </div>
+            >
+              <div className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px]">
+                  visibility
+                </span>
+                <span className="font-semibold">
+                  {property.viewsCount || 0}
+                </span>
+              </div>
+              <span className="text-[10px] font-medium uppercase tracking-wide">
+                Views
+              </span>
+            </div>
 
-  {/* Leads */}
-  <div
-    className={`flex items-center justify-between px-3 py-2 rounded-xl border transition
+            {/* Leads */}
+            <div
+              className={`flex items-center justify-between px-3 py-2 rounded-xl border transition
       ${
         property.leadsCount > 10
           ? "bg-green-50 border-green-200 text-green-700"
           : property.leadsCount > 3
-          ? "bg-yellow-50 border-yellow-200 text-yellow-700"
-          : "bg-red-50 border-red-200 text-red-600"
+            ? "bg-yellow-50 border-yellow-200 text-yellow-700"
+            : "bg-red-50 border-red-200 text-red-600"
       }
     `}
-  >
-    <div className="flex items-center gap-1">
-      <span className="material-symbols-outlined text-[16px]">
-        groups
-      </span>
-      <span className="font-semibold">
-        {property?.leadsCount || 0}
-      </span>
-    </div>
-    <span className="text-[10px] font-medium uppercase tracking-wide">
-      Leads
-    </span>
-  </div>
-
-</div>
-
-
-          {/* REJECTION REASON */}
-          {/* {property.approvalStatus === "rejected" &&
-            property.rejectionReason && (
-              <div className="bg-red-50 border border-red-200 p-3 rounded-xl text-xs text-red-600">
-                <b>Reason:</b> {property.rejectionReason}
+            >
+              <div className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px]">
+                  groups
+                </span>
+                <span className="font-semibold">
+                  {property?.leadsCount || 0}
+                </span>
               </div>
-            )} */}
+              <span className="text-[10px] font-medium uppercase tracking-wide">
+                Leads
+              </span>
+            </div>
+          </div>
 
           {/* ACTIONS */}
           <div className="flex gap-2 pt-2">
@@ -256,7 +229,8 @@ export default function AgentPropertyCard({ property }) {
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-3xl w-[95%] max-w-3xl shadow-2xl overflow-hidden"
           >
-            <img
+            <Image
+              alt="property preview"
               src={
                 previewProperty.images?.[0]?.url ||
                 "/propertyImg/placeholder-property.jpg"

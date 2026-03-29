@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAddPropertyMutation } from "@/store/services/PropertiesApi";
+import Image from "next/image";
 // import MapPicker from "@/components/MapPicker";
 
 const AMENITIES = ["pool", "gym", "parking", "security", "garden", "lift"];
@@ -13,7 +14,7 @@ export default function AddPropertyPage() {
   const [addProperty, { isLoading }] = useAddPropertyMutation();
 
   const [listingType, setListingType] = useState("sale");
-  const [imageFiles, setImageFiles] = useState([])
+  const [imageFiles, setImageFiles] = useState([]);
 
   const [form, setForm] = useState({
     title: "",
@@ -60,92 +61,38 @@ export default function AddPropertyPage() {
     }));
   };
 
-  /* ------------------ */
-  /* SUBMIT */
-  /* ------------------ */
-
-  // const submitHandler = async () => {
-  //   if (!form.title || !form.priceValue || !form.city) {
-  //     alert("Title, Price and City are required");
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     title: form.title.trim(),
-  //     description: form.description.trim(),
-
-  //     listingType,
-  //     propertyType: form.propertyType,
-  //     status: form.status, // ✅
-
-  //     priceLabel: form.priceLabel || undefined,
-  //     priceValue: Number(form.priceValue),
-  //     pricePerSqFt: form.pricePerSqFt || undefined,
-
-  //     city: form.city,
-  //     state: form.state,
-  //     address: form.address || undefined,
-
-  //     location: {
-  //       lat: form.lat ? Number(form.lat) : null,
-  //       lng: form.lng ? Number(form.lng) : null,
-  //     }, // ✅ PROPER FORMAT
-
-  //     beds: Number(form.beds),
-  //     baths: Number(form.baths),
-  //     areaSqFt: Number(form.areaSqFt) || undefined,
-
-  //     furnishing: form.furnishing,
-  //     facing: form.facing || undefined,
-
-  //     amenities: form.amenities,
-  //     images: form.images.filter(Boolean), // remove empty inputs
-  //   };
-
-  //   try {
-  //     await addProperty(payload).unwrap();
-  //     router.push("/");
-  //   } catch (err) {
-  //     console.error("ADD PROPERTY FAILED", err);
-  //     alert(err?.data?.message || "Failed to create property");
-  //   }
-  // };
-
   const submitHandler = async () => {
-  if (!form.title || !form.priceValue || !form.city) {
-    alert("Title, Price and City are required");
-    return;
-  }
-
-  const formData = new FormData();
-
-  // Text fields
-  Object.keys(form).forEach((key) => {
-    if (key === "amenities") {
-      form.amenities.forEach((a) =>
-        formData.append("amenities[]", a)
-      );
-    } else {
-      formData.append(key, form[key]);
+    if (!form.title || !form.priceValue || !form.city) {
+      alert("Title, Price and City are required");
+      return;
     }
-  });
 
-  formData.append("listingType", listingType);
+    const formData = new FormData();
 
-  // Append Images
-  imageFiles.forEach((file) => {
-    formData.append("images", file);
-  });
+    // Text fields
+    Object.keys(form).forEach((key) => {
+      if (key === "amenities") {
+        form.amenities.forEach((a) => formData.append("amenities[]", a));
+      } else {
+        formData.append(key, form[key]);
+      }
+    });
 
-  try {
-    await addProperty(formData).unwrap();
-    router.push("/");
-  } catch (err) {
-    console.error("ADD PROPERTY FAILED", err);
-    alert(err?.data?.message || "Failed to create property");
-  }
-};
+    formData.append("listingType", listingType);
 
+    // Append Images
+    imageFiles.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    try {
+      await addProperty(formData).unwrap();
+      router.push("/");
+    } catch (err) {
+      console.error("ADD PROPERTY FAILED", err);
+      alert(err?.data?.message || "Failed to create property");
+    }
+  };
 
   /* UI */
 
@@ -344,59 +291,56 @@ export default function AddPropertyPage() {
                 />
               </Section>
               <Section title="Property Images">
+                {/* Upload Button */}
+                <label className="flex items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer hover:bg-gray-50 transition">
+                  <div className="text-center">
+                    <span className="material-symbols-outlined text-4xl text-gray-400">
+                      add_photo_alternate
+                    </span>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Click to upload images
+                    </p>
+                  </div>
 
-  {/* Upload Button */}
-  <label className="flex items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer hover:bg-gray-50 transition">
-    <div className="text-center">
-      <span className="material-symbols-outlined text-4xl text-gray-400">
-        add_photo_alternate
-      </span>
-      <p className="text-sm text-gray-500 mt-2">
-        Click to upload images
-      </p>
-    </div>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files);
+                      setImageFiles((prev) => [...prev, ...files]);
+                    }}
+                  />
+                </label>
 
-    <input
-      type="file"
-      multiple
-      accept="image/*"
-      hidden
-      onChange={(e) => {
-        const files = Array.from(e.target.files);
-        setImageFiles((prev) => [...prev, ...files]);
-      }}
-    />
-  </label>
+                {/* Preview Images */}
+                {imageFiles.length > 0 && (
+                  <div className="grid grid-cols-3 gap-3 mt-4">
+                    {imageFiles.map((file, index) => (
+                      <div key={index} className="relative">
+                        <Image
+                          src={URL.createObjectURL(file)}
+                          alt="preview"
+                          className="h-28 w-full object-cover rounded-lg"
+                        />
 
-  {/* Preview Images */}
-  {imageFiles.length > 0 && (
-    <div className="grid grid-cols-3 gap-3 mt-4">
-      {imageFiles.map((file, index) => (
-        <div key={index} className="relative">
-          <img
-            src={URL.createObjectURL(file)}
-            alt="preview"
-            className="h-28 w-full object-cover rounded-lg"
-          />
-
-          <button
-            type="button"
-            onClick={() =>
-              setImageFiles((prev) =>
-                prev.filter((_, i) => i !== index)
-              )
-            }
-            className="absolute top-1 right-1 bg-black text-white rounded-full px-2 text-xs"
-          >
-            ✕
-          </button>
-        </div>
-      ))}
-    </div>
-  )}
-
-</Section>
-
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setImageFiles((prev) =>
+                              prev.filter((_, i) => i !== index),
+                            )
+                          }
+                          className="absolute top-1 right-1 bg-black text-white rounded-full px-2 text-xs"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Section>
             </div>
           </div>
 
@@ -429,9 +373,6 @@ export default function AddPropertyPage() {
   );
 }
 
-/* ------------------ */
-/* UI HELPERS */
-/* ------------------ */
 
 function Section({ title, children }) {
   return (

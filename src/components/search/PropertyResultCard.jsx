@@ -1,9 +1,11 @@
+import Image from "next/image";
+
 export default function PropertyResultCard({ property }) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
       {/* IMAGE */}
       <div className="relative aspect-[16/10]">
-        <img
+        <Image
           src={property.images?.[0]}
           alt={property.title}
           className="w-full h-full object-cover"

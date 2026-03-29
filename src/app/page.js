@@ -12,23 +12,25 @@ import PremiumSplash from "@/components/PremiumSplash";
 import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
 
 export default function HomePage() {
-  const [showSplash, setShowSplash] = useState(false);
-  const [checking, setChecking] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === "undefined") return false;
+
+    const seen = sessionStorage.getItem("nestme_intro_seen");
+    return !seen;
+  });
+
+  const [checking, setChecking] = useState(false);
 
   useEffect(() => {
-    const seen = sessionStorage.getItem("nestme_intro_seen");
+    if (!showSplash) return;
 
-    if (!seen) {
-      setShowSplash(true);
+    const timer = setTimeout(() => {
+      sessionStorage.setItem("nestme_intro_seen", "true");
+      setShowSplash(false);
+    }, 6000);
 
-      setTimeout(() => {
-        sessionStorage.setItem("nestme_intro_seen", "true");
-        setShowSplash(false);
-      }, 6000); // premium duration
-    }
-
-    setChecking(false);
-  }, []);
+    return () => clearTimeout(timer);
+  }, [showSplash]);
 
   if (checking) return null;
   if (showSplash) return <PremiumSplash />;
@@ -83,7 +85,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        
 
         {/* ================= PROPERTY TYPES ================= */}
         <section className="px-5 pt-8 pb-6 bg-indigo-50">
@@ -120,7 +121,6 @@ export default function HomePage() {
 
         {/* ================= CTA ================= */}
         <ListingOptionsSection />
-
       </main>
 
       <Footer />
@@ -128,8 +128,6 @@ export default function HomePage() {
     </>
   );
 }
-
-
 
 function PurposeChip({ label, type }) {
   const router = useRouter();

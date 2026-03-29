@@ -17,37 +17,43 @@ export default function UserEditPropertyPage() {
   const { data, isLoading } = useGetPropertyByIdQuery(id);
   const [updateProperty, { isLoading: saving }] = useUpdatePropertyMutation();
 
-  const [listingType, setListingType] = useState("sale");
+  // const [listingType, setListingType] = useState("sale");
   const [form, setForm] = useState(null);
 
+  const listingType = form?.listingType || "sale";
+
   useEffect(() => {
-    if (data) {
-      const p = data;
+  if (!data) return;
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  setForm((prev) => {
+    // ✅ prevent repeated updates
+    if (prev && prev.title === data.title) return prev;
 
-      setListingType(p.listingType || "sale");
+    const p = data;
 
-      setForm({
-        title: p.title || "",
-        description: p.description || "",
-        propertyType: p.propertyType || "apartment",
-        priceLabel: p.priceLabel || "",
-        priceValue: p.priceValue || "",
-        pricePerSqFt: p.pricePerSqFt || "",
-        beds: p.beds || 2,
-        baths: p.baths || 2,
-        areaSqFt: p.areaSqFt || "",
-        furnishing: p.furnishing || "semi",
-        facing: p.facing || "",
-        address: p.address || "",
-        city: p.city || "",
-        state: p.state || "",
-        lat: p.location?.lat || "",
-        lng: p.location?.lng || "",
-        amenities: p.amenities || [],
-        images: p.images?.length ? p.images : [""],
-      });
-    }
-  }, [data]);
+    return {
+      title: p.title || "",
+      description: p.description || "",
+      propertyType: p.propertyType || "apartment",
+      priceLabel: p.priceLabel || "",
+      priceValue: p.priceValue || "",
+      pricePerSqFt: p.pricePerSqFt || "",
+      beds: p.beds || 2,
+      baths: p.baths || 2,
+      areaSqFt: p.areaSqFt || "",
+      furnishing: p.furnishing || "semi",
+      facing: p.facing || "",
+      address: p.address || "",
+      city: p.city || "",
+      state: p.state || "",
+      lat: p.location?.lat || "",
+      lng: p.location?.lng || "",
+      amenities: p.amenities || [],
+      images: p.images?.length ? p.images : [""],
+      listingType: p.listingType || "sale",
+    };
+  });
+}, [data]);
 
   if (isLoading || !form) return <p className="p-4">Loading property...</p>;
 
@@ -65,7 +71,7 @@ export default function UserEditPropertyPage() {
   const submitHandler = async () => {
     const payload = {
       ...form,
-      listingType,
+      listingType: form.listingType,
       priceValue: Number(form.priceValue),
       approvalStatus: "pending",      // 🔥 back to review
       listingStatus: "sold",         // not live yet
@@ -104,15 +110,15 @@ export default function UserEditPropertyPage() {
               {/* LISTING TYPE */}
               <div className="p-4">
                 <div className="flex bg-gray-200 rounded-xl p-1">
-                  {["sale", "rent"].map((t) => (
+                  {["sale", "rent", "lease"].map((t) => (
                     <button
                       key={t}
-                      onClick={() => setListingType(t)}
+                      onClick={() => update("listingType", t)} 
                       className={`flex-1 py-2 rounded-lg font-bold ${
                         listingType === t ? "bg-white shadow" : "text-gray-500"
                       }`}
                     >
-                      {t === "sale" ? "For Sale" : "For Rent"}
+                      {t === "sale" ? "For Sale" : t === "rent" ? "For Rent" : "For Lease"}
                     </button>
                   ))}
                 </div>

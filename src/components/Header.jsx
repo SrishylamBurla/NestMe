@@ -24,9 +24,18 @@ export default function Header() {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
+  // ✅ reset when pathname changes
+  const currentPath = pathname;
+
   const unreadCount = notifications?.filter((n) => !n.isRead).length || 0;
 
   const [isMobile, setIsMobile] = useState(false);
+
+  const handleNavigate = (path) => {
+    setOpenDrawer(false);
+    setShowNotifications(false);
+    router.push(path);
+  };
 
   useEffect(() => {
     const checkScreen = () => {
@@ -39,14 +48,14 @@ export default function Header() {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  useEffect(() => {
-    setOpenDrawer(false);
-    setShowNotifications(false);
-  }, [pathname]);
+  // useEffect(() => {
+  //   setOpenDrawer(false);
+  //   setShowNotifications(false);
+  // }, [pathname]);
 
   const handleLogout = async () => {
     await logout();
-    router.push("/login");
+    handleNavigate("/login");
   };
 
   /* ================= GROUP NOTIFICATIONS ================= */
@@ -97,12 +106,14 @@ export default function Header() {
       <header className="sticky top-0 z-40 bg-white shadow-sm px-2 sm:px-6 py-1 flex justify-between items-center">
         {/* LEFT SIDE */}
 
-        <div className="flex items-center gap-2 cursor-pointer"
-        onClick={() => {
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => {
             if (!isMobile && user) {
               setOpenDrawer(true);
             }
-          }}>
+          }}
+        >
           <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
             <span className="font-bold text-purple-600 text-lg">
               {user?.name?.[0] || "G"}
@@ -120,19 +131,20 @@ export default function Header() {
         <div
           className="flex items-center gap-1 cursor-pointer"
           onClick={() => {
-            router.push("/");
+            handleNavigate("/");
           }}
         >
-          <img
+          <Image
             src={"/splashlogo.png"}
             alt="logo"
-            className="h-15 w-15 object-cover"
+            width={60}
+            height={60}
+            className="object-cover"
           />
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex items-center gap-3"
-        >
+        <div className="flex items-center gap-3">
           {user && (
             <>
               <FavoriteButton />
@@ -155,7 +167,7 @@ export default function Header() {
 
           {!user && !isLoading && (
             <button
-              onClick={() => router.push("/login")}
+              onClick={() => handleNavigate("/login")}
               className="text-sm font-semibold bg-indigo-600 text-white px-4 py-2 rounded-lg"
             >
               Login
@@ -192,29 +204,32 @@ export default function Header() {
 
         {/* NAVIGATION */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-          <DrawerItem label="My Profile" onClick={() => router.push("/me")} />
+          <DrawerItem
+            label="My Profile"
+            onClick={() => handleNavigate("/me")}
+          />
 
           {user?.role === "user" && (
             <>
               <DrawerItem
                 label="Add Property"
-                onClick={() => router.push("/add-property")}
+                onClick={() => handleNavigate("/add-property")}
               />
               <DrawerItem
                 label="My Properties"
-                onClick={() => router.push("/my-properties")}
+                onClick={() => handleNavigate("/my-properties")}
               />
               <DrawerItem
                 label="My Leads"
-                onClick={() => router.push("/my-leads")}
+                onClick={() => handleNavigate("/my-leads")}
               />
               {/* <DrawerItem
                 label="My Enquiries"
-                onClick={() => router.push("/my-enquiries")}
+                onClick={() => handleNavigate("/my-enquiries")}
               /> */}
               {/* <DrawerItem
                 label="Become Agent"
-                onClick={() => router.push("/subscribe")}
+                onClick={() => handleNavigate("/subscribe")}
               /> */}
             </>
           )}
@@ -224,24 +239,24 @@ export default function Header() {
               <DrawerItem
                 label="Dashboard"
                 onClick={() =>
-                  router.push(`/agents/${user.agentProfileId}/dashboard`)
+                  handleNavigate(`/agents/${user.agentProfileId}/dashboard`)
                 }
               />
               <DrawerItem
                 label="My Listings"
                 onClick={() =>
-                  router.push(`/agents/${user.agentProfileId}/properties`)
+                  handleNavigate(`/agents/${user.agentProfileId}/properties`)
                 }
               />
               <DrawerItem
                 label="Leads"
                 onClick={() =>
-                  router.push(`/agents/${user.agentProfileId}/leads`)
+                  handleNavigate(`/agents/${user.agentProfileId}/leads`)
                 }
               />
               <DrawerItem
                 label="Add Property"
-                onClick={() => router.push("/add-property")}
+                onClick={() => handleNavigate("/add-property")}
               />
             </>
           )}
@@ -250,19 +265,19 @@ export default function Header() {
             <>
               <DrawerItem
                 label="Dashboard"
-                onClick={() => router.push("/admin/dashboard")}
+                onClick={() => handleNavigate("/admin/dashboard")}
               />
               <DrawerItem
                 label="Users"
-                onClick={() => router.push("/admin/users")}
+                onClick={() => handleNavigate("/admin/users")}
               />
               <DrawerItem
                 label="Properties"
-                onClick={() => router.push("/admin/properties")}
+                onClick={() => handleNavigate("/admin/properties")}
               />
               <DrawerItem
                 label="Agents"
-                onClick={() => router.push("/admin/agents")}
+                onClick={() => handleNavigate("/admin/agents")}
               />
             </>
           )}
@@ -314,7 +329,7 @@ export default function Header() {
                       onClick={async () => {
                         await markRead(n._id);
                         setShowNotifications(false);
-                        router.push(n.link);
+                        handleNavigate(n.link);
                       }}
                       className={`flex gap-3 px-5 py-4 border-b cursor-pointer transition
                         ${
@@ -365,6 +380,7 @@ function DrawerItem({ label, onClick }) {
 }
 
 import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
+import Image from "next/image";
 
 function FavoriteButton() {
   const router = useRouter();

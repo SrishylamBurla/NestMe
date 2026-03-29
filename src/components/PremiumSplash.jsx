@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Loader from "./Loader";
 
 
@@ -22,9 +23,11 @@ export default function PremiumSplash() {
 
         {/* ===== Nest + Home Logo ===== */}
         <div className="flex justify-center animate-logoReveal">
-          <img
+          <Image
             src="/splashlogo.png"
             alt="NestMe Logo"
+            // width={192}
+            // height={192}
             className="w-40 md:w-48 drop-shadow-[0_0_40px_rgba(99,102,241,0.5)]"
           />
         </div>

@@ -25,7 +25,10 @@ const withPWA = nextPWA({
 
 export default withPWA({
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
+  images: {
+    domains: ["res.cloudinary.com"], // allow Cloudinary
   },
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
 });

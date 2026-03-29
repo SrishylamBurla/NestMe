@@ -1,3 +1,6 @@
+import React from "react";
+import FilterSidebar from "./FilterSidebar";
+
 export default function MobileFilterDrawer({
   open,
   onClose,

@@ -6,6 +6,7 @@ import {
   useGetPropertyByIdQuery,
 } from "@/store/services/PropertiesApi";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 
 export default function AdminPropertyDetails() {
@@ -82,7 +83,7 @@ const reject = async () => {
       {/* ================= IMAGES ================= */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {property.images?.map((img, i) => (
-          <img
+          <Image
             key={i}
             src={img.url}
             alt="property"

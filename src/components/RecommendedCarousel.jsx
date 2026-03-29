@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useGetPropertiesQuery } from "@/store/services/PropertiesApi";
+import Image from "next/image";
 
 export default function RecommendedCarousel({
   title,
@@ -69,10 +70,12 @@ function PropertyCard({ property }) {
 
       {/* IMAGE */}
       <div className="relative h-48 sm:h-52 lg:h-56 w-full overflow-hidden">
-        <img
+        <Image
           src={property.images?.[0]?.url || "/placeholder.jpg"}
+          width={400}
+          height={300}
           alt={property.title}
-          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+          className="object-cover transition duration-700 group-hover:scale-110"
         />
 
         {/* Soft gradient overlay */}

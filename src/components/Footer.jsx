@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import React from 'react';
@@ -13,10 +14,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* BRAND */}
           <div className="space-y-2">
-            <img
+            <Image
               src="/splashlogo.png"
               alt="NestMe Logo"
-              className="w-28 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+              width={112}
+              height={112}
+              className="drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             />
             <h2 className="text-6xl font-bold font-sans text-white tracking-tight">
               nestme<span className="text-gray-50">.in</span>

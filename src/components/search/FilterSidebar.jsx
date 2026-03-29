@@ -11,13 +11,13 @@ export default function FilterSidebar({ filters, setFilters }) {
   return (
     <div className="bg-white rounded-xl border p-4 space-y-6 sticky top-20">
       <FilterSection title="Listing Type">
-        {["sale", "rent"].map((t) => (
+        {["sale", "rent", "lease"].map((t) => (
           <FilterChip
             key={t}
             active={filters.listingType === t}
             onClick={() => setFilters({ ...filters, listingType: t })}
           >
-            {t === "sale" ? "Buy" : "Rent"}
+            {t === "sale" ? "Buy" : t === "lease" ? "Lease" : "Rent"}
           </FilterChip>
         ))}
       </FilterSection>

@@ -13,23 +13,26 @@ const FACING_OPTIONS = ["East", "West", "North", "South"];
 
 export default function EditPropertyPage() {
   const { id } = useParams();
-  
- const { data: user } = useGetMeQuery();
+
+  const { data: user } = useGetMeQuery();
   const router = useRouter();
 
   const { data, isLoading } = useGetPropertyByIdQuery(id);
   const [updateProperty, { isLoading: saving }] = useUpdatePropertyMutation();
 
-  const [listingType, setListingType] = useState("sale");
   const [form, setForm] = useState(null);
 
+  const [listingType, setListingType] = useState("sale");
+
   useEffect(() => {
-  if (data) {
+  if (!data) return;
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  setForm((prev) => {
+    // ✅ prevent repeated updates
+    if (prev && prev.title === data.title) return prev;
     const p = data;
 
-    setListingType(p.listingType || "sale");
-
-    setForm({
+    return {
       title: p.title || "",
       description: p.description || "",
       propertyType: p.propertyType || "apartment",
@@ -48,53 +51,49 @@ export default function EditPropertyPage() {
       lng: p.location?.lng || "",
       amenities: p.amenities || [],
       images: p.images?.length ? p.images : [""],
-      status: p.status || "pending",
-    });
-  }
+      listingType: p.listingType || "sale",
+    };
+  });
 }, [data]);
-
 
   if (isLoading || !form) return <p className="p-4">Loading property...</p>;
 
   const update = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
 
   const toggleAmenity = (amenity) => {
-  setForm((prev) => ({
-    ...prev,
-    amenities: prev.amenities.includes(amenity)
-      ? prev.amenities.filter((a) => a !== amenity)
-      : [...prev.amenities, amenity],
-  }));
-};
-
-  const submitHandler = async () => {
-  const payload = {
-    ...form,
-    listingType,
-    status: "pending",
-    priceValue: Number(form.priceValue),
-    location: {
-      lat: form.lat ? Number(form.lat) : null,
-      lng: form.lng ? Number(form.lng) : null,
-    },
-    images: form.images.filter(Boolean),
+    setForm((prev) => ({
+      ...prev,
+      amenities: prev.amenities.includes(amenity)
+        ? prev.amenities.filter((a) => a !== amenity)
+        : [...prev.amenities, amenity],
+    }));
   };
 
-  await updateProperty({ id, ...payload }).unwrap();
-  alert("Updated. Awaiting admin approval.");
-  if (user.role === "agent") {
-  router.push(`/agents/${user.agentProfileId}/properties`);
-} else {
-  router.push("/my-properties");
-}
+  const submitHandler = async () => {
+    const payload = {
+      ...form,
+      listingType: form.listingType || "sale", // Ensure listingType is included
+      status: "pending",
+      priceValue: Number(form.priceValue),
+      location: {
+        lat: form.lat ? Number(form.lat) : null,
+        lng: form.lng ? Number(form.lng) : null,
+      },
+      images: form.images.filter(Boolean),
+    };
 
-};
-
+    await updateProperty({ id, ...payload }).unwrap();
+    alert("Updated. Awaiting admin approval.");
+    if (user.role === "agent") {
+      router.push(`/agents/${user.agentProfileId}/properties`);
+    } else {
+      router.push("/my-properties");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f6f8f7] flex justify-center">
       <div className="w-full max-w-[1100px] flex flex-col">
-
         {/* HEADER */}
         <div className="sticky top-0 z-50 bg-white border-b">
           <div className="h-16 px-4 flex items-center justify-between">
@@ -116,15 +115,19 @@ export default function EditPropertyPage() {
               {/* LISTING TYPE */}
               <div className="p-4">
                 <div className="flex bg-gray-200 rounded-xl p-1">
-                  {["sale", "rent"].map((t) => (
+                  {["sale", "rent", "lease"].map((t) => (
                     <button
                       key={t}
-                      onClick={() => setListingType(t)}
+                      onClick={() => update("listingType", t)}
                       className={`flex-1 py-2 rounded-lg font-bold ${
                         listingType === t ? "bg-white shadow" : "text-gray-500"
                       }`}
                     >
-                      {t === "sale" ? "For Sale" : "For Rent"}
+                      {t === "sale"
+                        ? "For Sale"
+                        : t === "rent"
+                          ? "For Rent"
+                          : "For Lease"}
                     </button>
                   ))}
                 </div>
@@ -332,7 +335,6 @@ export default function EditPropertyPage() {
     </div>
   );
 }
-
 
 function Section({ title, children }) {
   return (

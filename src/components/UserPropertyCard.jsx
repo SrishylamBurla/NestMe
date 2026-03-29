@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDeletePropertyMutation } from "@/store/services/PropertiesApi";
+import Image from "next/image";
 
 export default function UserPropertyCard({ property }) {
   const router = useRouter();
@@ -83,7 +84,7 @@ export default function UserPropertyCard({ property }) {
 
         <div className="relative">
           {/* Property Image */}
-          <img
+          <Image
             src={
               property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
             }
@@ -197,7 +198,8 @@ export default function UserPropertyCard({ property }) {
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-3xl w-[95%] max-w-3xl shadow-2xl overflow-hidden"
           >
-            <img
+            <Image
+              alt="property preview"
               src={
                 previewProperty.images?.[0]?.url ||
                 "/propertyImg/placeholder-property.jpg"
