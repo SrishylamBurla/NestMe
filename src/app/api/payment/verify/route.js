@@ -1,0 +1,50 @@
+import crypto from "crypto";
+import { NextResponse } from "next/server";
+import connectDB from "@/lib/db";
+import User from "@/models/User";
+import AgentProfile from "@/models/AgentProfile"; // 👈 IMPORTANT
+import { getAuthUser } from "@/lib/getAuthUser";
+
+export async function POST(req) {
+  await connectDB();
+
+  const user = await getAuthUser();
+
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+  } = await req.json();
+
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+    .update(body)
+    .digest("hex");
+
+  if (expectedSignature !== razorpay_signature) {
+    return NextResponse.json({ success: false }, { status: 400 });
+  }
+
+  // ✅ MAKE USER AGENT
+  user.role = "agent";
+
+  // ✅ CREATE AGENT PROFILE IF NOT EXISTS
+  let agent = await AgentProfile.findOne({ user: user._id });
+
+  if (!agent) {
+    agent = await AgentProfile.create({
+      user: user._id,
+    });
+  }
+
+  user.agentProfileId = agent._id;
+
+  await user.save();
+
+  return NextResponse.json({
+    success: true,
+    agentProfileId: agent._id, // 🔥 THIS WAS MISSING
+  });
+}

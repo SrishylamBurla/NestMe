@@ -5,72 +5,50 @@ import SearchBar from "@/components/SearchBar";
 import RecommendedCarousel from "@/components/RecommendedCarousel";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import PremiumSplash from "@/components/PremiumSplash";
 import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
 
 export default function HomePage() {
-  const [showSplash, setShowSplash] = useState(() => {
-    if (typeof window === "undefined") return false;
-
-    const seen = sessionStorage.getItem("nestme_intro_seen");
-    return !seen;
-  });
-
-  const [checking, setChecking] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    if (!showSplash) return;
+    const seen = sessionStorage.getItem("nestme_intro_seen");
 
-    const timer = setTimeout(() => {
-      sessionStorage.setItem("nestme_intro_seen", "true");
-      setShowSplash(false);
-    }, 6000);
+    if (!seen) {
+      setShowSplash(true);
 
-    return () => clearTimeout(timer);
-  }, [showSplash]);
+      setTimeout(() => {
+        sessionStorage.setItem("nestme_intro_seen", "true");
+        setShowSplash(false);
+      }, 3000);
+    }
 
+    setChecking(false);
+  }, []);
+
+  // 🚨 Prevent hydration mismatch
   if (checking) return null;
+
+  // Splash
   if (showSplash) return <PremiumSplash />;
-
-  // const [showSplash, setShowSplash] = useState(false);
-  // const [checking, setChecking] = useState(true);
-
-  // useEffect(() => {
-  //   const seen = sessionStorage.getItem("nestme_intro_seen");
-
-  //   if (!seen) {
-  //     setShowSplash(true);
-
-  //     setTimeout(() => {
-  //       sessionStorage.setItem("nestme_intro_seen", "true");
-  //       setShowSplash(false);
-  //     }, 3500); // duration
-  //   }
-
-  //   setChecking(false);
-  // }, []);
-
-  // if (checking) return null;
-  // if (showSplash) return <SplashScreen />;
 
   return (
     <>
       <Header />
 
       <main className="bg-[#f9fafb] overflow-x-hidden">
-        {/* ================= HERO ================= */}
 
-        {/* ================= HERO ================= */}
+        {/* HERO */}
         <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
           <div className="max-w-full mx-auto text-center space-y-5">
-            <h1 className="text-3xl md:text-5xl font-bold font-sans">
+            <h1 className="text-3xl md:text-5xl font-bold">
               Find Your Perfect Property
             </h1>
 
-            <p className="font-sans text-md text-white/90">
+            <p className="text-md text-white/90">
               Buy, Rent or Lease verified homes across India
             </p>
 
@@ -78,7 +56,7 @@ export default function HomePage() {
               <SearchBar />
             </div>
 
-            <div className="flex justify-center gap-3 pt-3 flex-wrap font-sans">
+            <div className="flex justify-center gap-3 pt-3 flex-wrap">
               <PurposeChip label="Buy" type="sale" />
               <PurposeChip label="Rent" type="rent" />
               <PurposeChip label="Lease" type="lease" />
@@ -86,9 +64,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= PROPERTY TYPES ================= */}
+        {/* PROPERTY TYPES */}
         <section className="px-5 pt-8 pb-6 bg-indigo-50">
-          <h2 className="text-xl md:text-2xl font-sans font-bold mb-12 text-slate-800 text-center md:text-left">
+          <h2 className="text-xl md:text-2xl font-bold mb-12 text-slate-800 text-center md:text-left">
             Browse by Property Type
           </h2>
 
@@ -96,30 +74,24 @@ export default function HomePage() {
             <PropertyType icon="apartment" label="Apartment" type="apartment" />
             <PropertyType icon="holiday_village" label="Villa" type="villa" />
             <PropertyType icon="terrain" label="Plot" type="plot" />
-            <PropertyType
-              icon="storefront"
-              label="Commercial"
-              type="commercial"
-            />
+            <PropertyType icon="storefront" label="Commercial" type="commercial" />
           </div>
         </section>
 
-        {/* ================= NEWLY ADDED ================= */}
+        {/* CAROUSELS */}
         <section className="px-4 pt-4 pb-4 bg-gray-50">
           <RecommendedCarousel title="Newly Added" sortType="latest" />
         </section>
 
-        {/* ================= TRENDING ================= */}
         <section className="px-4 pt-4 pb-4 bg-indigo-100">
           <RecommendedCarousel title="Trending This Week" sortType="views" />
         </section>
 
-        {/* ================= PREMIUM ================= */}
         <section className="px-4 pt-4 pb-4 bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100">
           <RecommendedCarousel title="Premium Picks" minPrice={20000000} />
         </section>
 
-        {/* ================= CTA ================= */}
+        {/* CTA */}
         <ListingOptionsSection />
       </main>
 
@@ -128,6 +100,8 @@ export default function HomePage() {
     </>
   );
 }
+
+/* ================= HELPERS ================= */
 
 function PurposeChip({ label, type }) {
   const router = useRouter();
@@ -156,7 +130,7 @@ function PropertyType({ icon, label, type }) {
         </span>
       </div>
 
-      <p className="text-xs font-bold font-sans text-slate-700">{label}</p>
+      <p className="text-xs font-bold text-slate-700">{label}</p>
     </div>
   );
 }

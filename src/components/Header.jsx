@@ -8,6 +8,8 @@ import {
   useMarkReadMutation,
 } from "@/store/services/notificationApi";
 
+import { io } from "socket.io-client";
+
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
@@ -47,6 +49,27 @@ export default function Header() {
 
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
+
+  
+
+useEffect(() => {
+  if (!user) return;
+
+  const socket = io("http:/nestme.in");
+
+  socket.emit("join", user._id);
+
+  socket.on("notification", (data) => {
+    console.log("🔥 New notification:", data);
+
+    // Option 1: refetch notifications
+    refetch();
+
+    // Option 2: local state update (faster)
+  });
+
+  return () => socket.disconnect();
+}, [user]);
 
   // useEffect(() => {
   //   setOpenDrawer(false);

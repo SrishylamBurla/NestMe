@@ -26,9 +26,9 @@ export default function PremiumSplash() {
           <Image
             src="/splashlogo.png"
             alt="NestMe Logo"
-            // width={192}
-            // height={192}
-            className="w-40 md:w-48 drop-shadow-[0_0_40px_rgba(99,102,241,0.5)]"
+            width={192}
+            height={192}
+            className="drop-shadow-[0_0_40px_rgba(99,102,241,0.5)]"
           />
         </div>
 

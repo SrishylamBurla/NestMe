@@ -5,6 +5,7 @@ import Property from "@/models/Property";
 import { getAuthUser } from "@/lib/getAuthUser";
 import Notification from "@/models/Notification";
 import { sendLeadEmail } from "@/lib/sendLeadEmail";
+import { sendNotification } from "@/lib/socket"; 
 
 export async function POST(req) {
   await connectDB();
@@ -63,28 +64,31 @@ await Property.findByIdAndUpdate(propertyId, {
   $inc: { leadsCount: 1 },
 });
 
-
-  // /* ---------------- NOTIFICATION ---------------- */
-  // await Notification.create({
-  //   user: receiverUserId,
-  //   type: "lead-received",
-  //   title: "New Property Enquiry",
-  //   message: `You received a new enquiry for "${property.title}"`,
-  //   link:
-  //     receiverType === "agent"
-  //       ? `/agents/${property.agent._id}/leads`
-  //       : `/my-leads`,
-  // });
-
-  // 2. Create notification
-await Notification.create({
+// Create notification
+const notification = await Notification.create({
   user: receiverUserId,
   title: "New Lead Received",
   message: `New enquiry for ${property.title}`,
   type: "lead-received",
-  link: `${receiverType === "agent" ? `/agents/${property.agent._id}/leads` : `/my-leads`}`,
+  link:
+    receiverType === "agent"
+      ? `/agents/${property.agent._id}/leads`
+      : `/my-leads`,
   entityId: lead._id,
 });
+
+// 🔥 REAL-TIME EMIT
+sendNotification(receiverUserId.toString(), notification);
+
+  // Create notification
+// await Notification.create({
+//   user: receiverUserId,
+//   title: "New Lead Received",
+//   message: `New enquiry for ${property.title}`,
+//   type: "lead-received",
+//   link: `${receiverType === "agent" ? `/agents/${property.agent._id}/leads` : `/my-leads`}`,
+//   entityId: lead._id,
+// });
   /* ---------------- EMAIL ---------------- */
   const populatedLead = await Lead.findById(lead._id)
     .populate("user", "name email phone")

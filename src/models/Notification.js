@@ -6,7 +6,7 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      index: true, // ⚡ faster queries
+      index: true, // faster queries
     },
 
     title: { type: String, required: true },
