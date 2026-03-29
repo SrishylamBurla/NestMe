@@ -14,9 +14,10 @@ export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
   const [checking, setChecking] = useState(true);
 
-  useEffect(() => {
-    const seen = sessionStorage.getItem("nestme_intro_seen");
+ useEffect(() => {
+  const seen = sessionStorage.getItem("nestme_intro_seen");
 
+  Promise.resolve().then(() => {
     if (!seen) {
       setShowSplash(true);
 
@@ -27,7 +28,8 @@ export default function HomePage() {
     }
 
     setChecking(false);
-  }, []);
+  });
+}, []);
 
   // 🚨 Prevent hydration mismatch
   if (checking) return null;

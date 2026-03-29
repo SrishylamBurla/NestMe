@@ -27,20 +27,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-       {/* <link
-          href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        /> */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
         <Script
-  src="https://checkout.razorpay.com/v1/checkout.js"
-  strategy="afterInteractive"
-/>
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="afterInteractive"
+        />
       </head>
-      <body className={`${spline.className} bg-[#F2F4F3] text-gray-900 antialiased`}>
+      <body
+        className={`${spline.className} bg-[#F2F4F3] text-gray-900 antialiased`}
+      >
         <Providers>
           {children}
           <Toaster
