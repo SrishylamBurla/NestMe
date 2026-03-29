@@ -5,6 +5,13 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "NestMe",
+  description: "Find your perfect home",
+  manifest: "/manifest.json",
+  themeColor: "#0f172a",
+  icons: {
+    icon: "/icons/splash.png",
+    apple: "/icons/splash.png",
+  },
 };
 
 export default function RootLayout({ children }) {

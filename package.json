@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.8",
@@ -19,9 +18,10 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.2",
     "multer": "^2.0.2",
-    "next": "16.1.1",
-    "next-auth": "^4.24.13",
+    "next": "^15.5.14",
+    "next-auth": "^5.0.0-beta.30",
     "next-connect": "^1.0.0",
+    "next-pwa": "^5.6.0",
     "nodemailer": "^7.0.13",
     "react": "19.2.3",
     "react-dom": "19.2.3",

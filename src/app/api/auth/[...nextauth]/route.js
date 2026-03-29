@@ -1,13 +1,19 @@
+// app/api/auth/[...nextauth]/route.js
+
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import connectDB from "@/lib/db";
 import User from "@/models/User";
 
+// ✅ VERY IMPORTANT FIXES
+export const runtime = "nodejs";          // 👈 Fix 1
+export const dynamic = "force-dynamic";   // 👈 Fix 2
+
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
 
@@ -23,7 +29,7 @@ const handler = NextAuth({
         await User.create({
           name: user.name,
           email: user.email,
-          password: "google",
+          password: null,
           isVerified: true,
           loginProvider: "google",
         });
