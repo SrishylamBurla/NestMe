@@ -23,7 +23,7 @@ export async function POST(req) {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
-    console.log(process.env.RAZORPAY_KEY_ID);
+    // console.log(process.env.RAZORPAY_KEY_ID);
     
 
     const order = await razorpay.orders.create({
