@@ -2,8 +2,10 @@
   "name": "NestMe",
   "short_name": "NestMe",
   "start_url": "/",
+
   "display": "standalone",
-  "theme_color": "#0f172a",
+
+  "theme_color": "#F2F4F3",
   "background_color": "#F2F4F3",
 
   "icons": [

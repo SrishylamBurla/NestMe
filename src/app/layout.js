@@ -12,18 +12,16 @@ const spline = Spline_Sans({
 export const metadata = {
   title: "NestMe",
   description: "Find your perfect home",
-
   manifest: "/manifest.json",
-
   icons: {
     icon: "/favicon.ico",              // ✅ proper favicon
-    shortcut: "/favicon-16x16.png",    // ✅ small version
+    // shortcut: "/favicon-16x16.png",    // ✅ small version
     apple: "/icons/icon-192.png",      // ✅ for iOS
   },
 };
 
 export const viewport = {
-  themeColor: "#0f172a",
+  themeColor: "#f2f4f3",
 };
 
 export default function RootLayout({ children }) {
