@@ -3,10 +3,12 @@
 
 @layer base {
   body {
-    min-height: max(884px, 100dvh);
+    min-height: 100dvh;
     -webkit-tap-highlight-color: transparent;
+    padding-top: env(safe-area-inset-top);
   }
 }
+
 html, body {
   margin: 0;
   padding: 0;
