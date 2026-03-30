@@ -126,7 +126,7 @@ useEffect(() => {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-40 bg-white shadow-sm px-2 sm:px-6 py-1 flex justify-between items-center">
+      <header className="sticky top-0 z-40 bg-white shadow-sm px-2 sm:px-6 flex justify-between items-center">
         {/* LEFT SIDE */}
 
         <div
