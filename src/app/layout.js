@@ -12,15 +12,15 @@ const spline = Spline_Sans({
 export const metadata = {
   title: "NestMe",
   description: "Find your perfect home",
+
   manifest: "/manifest.json",
+
   icons: {
-    icon: "/icons/headerlogo.png",
-    shortcut: "/icons/headerlogo.png",
-    apple: "/icons/headerlogo.png",
+    icon: "/favicon.ico",              // ✅ proper favicon
+    shortcut: "/favicon-16x16.png",    // ✅ small version
+    apple: "/icons/icon-192.png",      // ✅ for iOS
   },
 };
-
-
 
 export const viewport = {
   themeColor: "#0f172a",
@@ -29,28 +29,26 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-
       <head>
+        {/* ❌ REMOVE GOOGLE FONT LINK (already using next/font) */}
+
         <link
-          href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1"
           rel="stylesheet"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
+
         <Script
           src="https://checkout.razorpay.com/v1/checkout.js"
           strategy="afterInteractive"
         />
-        
       </head>
+
       <body
         className={`${spline.className} bg-[#F2F4F3] text-gray-900 antialiased`}
       >
         <Providers>
           {children}
-          
+
           <Toaster
             position="top-right"
             toastOptions={{
