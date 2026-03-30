@@ -21,16 +21,16 @@ export default function DashboardHeader() {
         <div className="flex items-center gap-3">
 
           {/* 🔙 Back Button */}
-          {/* <button
-            onClick={() => router.back()}
-            className="h-10 w-10 flex items-center justify-center rounded-full"
-          >
-            <span className="material-symbols-outlined text-gray-800">
+           <button
+            onClick={() => router.push("/")}
+            className="h-10 w-35 flex items-center text-sm justify-center rounded-full cursor-pointer bg-gray-100 hover:bg-gray-200 transition"
+          ><span className="pr-2 material-symbols-outlined text-gray-800">
               arrow_back
-            </span>
-          </button> */}
+            </span> 
+          Go to Home
+          </button> 
 
-          <BackButton />
+          {/* <BackButton /> */}
 
           <h1 className="text-2xl font-sans font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Dashboard

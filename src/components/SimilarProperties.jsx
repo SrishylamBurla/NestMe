@@ -7,17 +7,17 @@ export default function SimilarProperties({ properties = [] }) {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold">Similar Properties</h2>
         <Link
           href="/properties"
-          className="text-sm font-semibold text-[#36e27b]"
+          className="text-sm text-black border border-2 px-2 py-1 rounded-full cursor-pointer"
         >
           View all
         </Link>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x snap-mandatory">
+      <div className="flex gap-4 py-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x snap-mandatory">
         {properties.map((p) => (
           <Link
             key={p._id}

@@ -3,19 +3,30 @@ export default function PropertyAmenities({ amenities = [] }) {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-4">Amenities</h2>
+      <h2 className="text-xl font-semibold mb-5 text-slate-900">
+        Amenities
+      </h2>
 
-      <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
         {amenities.map((a) => (
           <div
             key={a}
-            className="aspect-square rounded-2xl bg-gradient-to-br from-white to-indigo-50 border border-indigo-100 shadow-sm flex flex-col items-center justify-center gap-2 hover:shadow-lg hover:-translate-y-1 transition"
+            className="
+              rounded-2xl
+              bg-white
+              border border-slate-200
+              p-4
+              flex flex-col items-center justify-center
+              gap-2
+              hover:shadow-md hover:-translate-y-1
+              transition
+            "
           >
-            <span className="material-symbols-outlined text-indigo-600"
-              >
+            <span className="material-symbols-outlined text-indigo-600 text-[22px]">
               {a}
             </span>
-            <span className="text-xs text-gray-500 capitalize">
+
+            <span className="text-xs text-slate-600 text-center capitalize">
               {a.replace("_", " ")}
             </span>
           </div>

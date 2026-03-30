@@ -89,38 +89,38 @@ return (
       <div className="absolute inset-0 bg-black/20"></div>
 
       {/* Top Glass Bar */}
-      <div className="absolute top-0 left-0 w-full z-40 backdrop-blur-md bg-white/10 border-b border-white/20">
+      <div className="absolute top-0 left-0 w-full z-40">
         <div className="flex items-center justify-between px-4 sm:px-6 h-14 sm:h-16">
 
           {/* Back */}
           <button
             onClick={() => router.back()}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 shadow-md flex items-center justify-center"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full fixed top-4 left-4 z-50 shadow-lg border border-2 border-slate-800 flex items-center justify-center"
           >
-            <span className="material-symbols-outlined text-slate-700 text-[18px] sm:text-[20px]">
+            <span className="material-symbols-outlined text-slate-900 text-[18px] sm:text-[20px]">
               arrow_back
             </span>
           </button>
 
           {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 fixed top-4 right-4 z-50">
 
             <button
               onClick={handleShare}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 shadow-md flex items-center justify-center"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg border border-2 border-slate-800 flex items-center justify-center"
             >
-              <span className="material-symbols-outlined text-slate-700 text-[18px] sm:text-[20px]">
+              <span className="material-symbols-outlined text-slate-900 text-[18px] sm:text-[20px]">
                 share
               </span>
             </button>
 
             <button
               onClick={handleFavorite}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 shadow-md flex items-center justify-center"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg border border-2 border-slate-800 flex items-center justify-center"
             >
               <span
                 className={`material-symbols-outlined transition-all duration-300 ${
-                  isSaved ? "text-red-500 scale-110" : "text-slate-700"
+                  isSaved ? "text-red-500 scale-110" : "text-slate-900"
                 }`}
                 style={{
                   fontVariationSettings: isSaved ? "'FILL' 1" : "'FILL' 0",
@@ -137,26 +137,26 @@ return (
     </div>
 
     {/* CONTENT */}
-    <div className="relative -mt-8 sm:-mt-12 z-30 px-4 sm:px-6 max-w-5xl mx-auto space-y-8 sm:space-y-12 pb-16">
+    <div className="relative -mt-8 sm:-mt-12 z-30 px-4 sm:px-6 max-w-5xl mx-auto space-y-2 sm:space-y-6 pb-16">
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4">
         <PropertyOverview property={property} />
       </div>
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4  ">
         <PropertyAmenities amenities={property.amenities} />
       </div>
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200">
         <PropertyLocation location={property.location} />
       </div>
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4">
         <PropertyAgent property={property} />
       </div>
 
       {similar?.properties?.length > 0 && (
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4">
           <SimilarProperties properties={similar.properties} />
         </div>
       )}

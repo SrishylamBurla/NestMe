@@ -522,14 +522,21 @@ export default function SubscribePage() {
                 {loading ? "Processing..." : "Subscribe Now"}
               </button>
             </div>
-
+{/* 
             <div className="space-y-4 text-sm">
               <Feature text="Unlimited listings" />
               <Feature text="Verified leads" />
               <Feature text="Analytics dashboard" />
               <Feature text="Priority approval" />
               <Feature text="Direct buyer contact" />
-            </div>
+            </div> */}
+
+             <div className="space-y-3 text-sm">
+        <Feature text="Unlimited property listings" />
+        <Feature text="Verified buyer & tenant leads" />
+        <Feature text="Priority listing visibility" />
+        <Feature text="Direct buyer contact access" />
+      </div> 
 
           </div>
         </div>
@@ -541,22 +548,33 @@ export default function SubscribePage() {
 
 /* ================= COMPONENTS ================= */
 
-function Feature({ text }) {
-  return (
-    <div className="flex gap-3">
-      <div className="h-6 w-6 bg-indigo-500 rounded-full flex items-center justify-center">
-        ✓
-      </div>
-      <p className="text-slate-300">{text}</p>
-    </div>
-  );
-}
+// function Feature({ text }) {
+//   return (
+//     <div className="flex gap-3">
+//       <div className="h-6 w-6 bg-indigo-500 rounded-full flex items-center justify-center">
+//         ✓
+//       </div>
+//       <p className="text-slate-300">{text}</p>
+//     </div>
+//   );
+// }
 
 function Detail({ label, value }) {
   return (
     <div className="flex justify-between bg-white/5 rounded-lg p-3">
       <span className="text-slate-400">{label}</span>
       <span>{value}</span>
+    </div>
+  );
+}
+
+function Feature({ text }) {
+  return (
+    <div className="flex gap-3 items-center">
+      <div className="h-5 w-5 bg-indigo-500 rounded-full flex items-center justify-center text-xs">
+        ✓
+      </div>
+      <p className="text-slate-300">{text}</p>
     </div>
   );
 }

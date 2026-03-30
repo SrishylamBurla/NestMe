@@ -83,7 +83,7 @@ export default function PropertyCard({ property }) {
   >
     {/* Price */}
     <p className="text-xl font-bold text-slate-900">
-      ₹{property.priceValue?.toLocaleString()}
+      ₹{property.priceLabel?.toLocaleString()}
       {property.listingType === "rent" && (
         <span className="text-sm font-sans font-normal text-slate-500 ml-1">
           / month

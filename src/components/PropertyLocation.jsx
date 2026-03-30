@@ -3,18 +3,15 @@ export default function PropertyLocation({ location }) {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-3">Location</h2>
+      <h2 className="text-xl font-semibold mb-4 px-4 pt-4">Location</h2>
 
-
-      <div className="bg-white/70 backdrop-blur-xl border border-white/40 p-4 rounded-3xl shadow-lg">
-
+      <div className="rounded-b-2xl overflow-hidden border border-slate-200 shadow-sm">
         <iframe
-          className="w-full h-full"
+          className="w-full h-[300px] sm:h-[400px] rounded-b-2xl"
           loading="lazy"
           src={`https://www.google.com/maps?q=${location.lat},${location.lng}&output=embed`}
         />
-        </div>
-      
+      </div>
     </div>
   );
 }

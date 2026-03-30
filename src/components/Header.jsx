@@ -173,7 +173,7 @@ useEffect(() => {
               <FavoriteButton />
               <button
                 onClick={() => setShowNotifications(true)}
-                className="relative p-2 rounded-full hover:bg-gray-100 transition"
+                className="relative p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
               >
                 <span className="material-symbols-outlined text-gray-700">
                   notifications
@@ -395,7 +395,7 @@ function DrawerItem({ label, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium hover:bg-gray-100 transition"
+      className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gray-200 hover:bg-gray-400 transition"
     >
       {label}
     </button>
@@ -414,7 +414,7 @@ function FavoriteButton() {
   return (
     <button
       onClick={() => router.push("/saved")}
-      className="relative p-2 rounded-full hover:bg-gray-100 transition"
+      className="relative p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
     >
       <span className="material-symbols-outlined text-gray-700">favorite</span>
 

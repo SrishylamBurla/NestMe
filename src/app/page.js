@@ -85,7 +85,7 @@ export default function HomePage() {
           <RecommendedCarousel title="Newly Added" sortType="latest" />
         </section>
 
-        <section className="px-4 pt-4 pb-4 bg-indigo-100">
+        <section className="px-4 pt-4 pb-4 bg-gradient-to-r from-indigo-200 via-purple-200 to-gray-200">
           <RecommendedCarousel title="Trending This Week" sortType="views" />
         </section>
 
@@ -111,7 +111,7 @@ function PurposeChip({ label, type }) {
   return (
     <button
       onClick={() => router.push(`/search?listingType=${type}`)}
-      className="px-3 py-1 bg-white text-black rounded-full text-sm font-semibold shadow-sm hover:shadow-md transition"
+      className="px-3 py-1 bg-white text-black rounded-full cursor-pointer text-sm font-semibold shadow-sm hover:shadow-md transition"
     >
       {label}
     </button>

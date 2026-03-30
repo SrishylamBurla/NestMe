@@ -50,7 +50,7 @@ export default function CheckoutContent() {
             toast.dismiss(verifyToast);
 
             if (res.success) {
-              toast.success("🎉 Payment Successful!");
+              toast.success("Payment Successful!");
               await refetch();
               router.push(`/agents/${res.agentProfileId}/dashboard`);
             }
@@ -88,31 +88,120 @@ export default function CheckoutContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-indigo-950 text-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
+    // <div className="min-h-screen bg-gradient-to-br from-slate-950 to-indigo-950 text-white flex items-center justify-center px-4">
+    //   <div className="max-w-md w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
 
-        <h2 className="text-2xl font-bold text-center">Checkout</h2>
+    //     <h2 className="text-2xl font-bold text-center">Checkout</h2>
 
-        <div className="bg-indigo-600 rounded-2xl p-6 text-center">
-          <p className="text-sm uppercase opacity-80">Plan</p>
-          <p className="text-3xl font-bold capitalize">{plan}</p>
-          <p className="text-lg mt-2">₹{price}</p>
-        </div>
+    //     <div className="bg-indigo-600 rounded-2xl p-6 text-center">
+    //       <p className="text-sm uppercase opacity-80">Plan</p>
+    //       <p className="text-3xl font-bold capitalize">{plan}</p>
+    //       <p className="text-lg mt-2">₹{price}</p>
+    //     </div>
 
-        <button
-          onClick={handlePayment}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold"
-        >
-          Pay ₹{price}
-        </button>
+    //     <button
+    //       onClick={handlePayment}
+    //       className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold"
+    //     >
+    //       Pay ₹{price}
+    //     </button>
 
-        <button
-          onClick={() => router.back()}
-          className="w-full py-2 text-sm text-slate-400"
-        >
-          ← Back
-        </button>
-      </div>
+    //     <button
+    //       onClick={() => router.back()}
+    //       className="w-full py-2 text-sm text-slate-400"
+    //     >
+    //       ← Back
+    //     </button>
+    //   </div>
+    // </div>
+
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white flex items-center justify-center px-4">
+
+  <div className="max-w-md w-full space-y-6">
+
+    {/* HEADER */}
+    <div className="text-center space-y-2">
+      <h1 className="text-3xl font-bold">Secure Checkout</h1>
+      <p className="text-sm text-slate-400">
+        Complete your subscription in seconds
+      </p>
     </div>
+
+    {/* CARD */}
+    <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
+
+      {/* PLAN */}
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 text-center relative overflow-hidden">
+
+        {/* Glow */}
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-xl" />
+
+        <div className="relative space-y-2">
+          <p className="text-xs uppercase tracking-widest opacity-80">
+            NestMe Agent Plan
+          </p>
+
+          <h2 className="text-4xl font-bold">₹{price}</h2>
+
+          <p className="text-sm opacity-80">
+            Billed monthly • Cancel anytime
+          </p>
+        </div>
+      </div>
+
+      {/* FEATURES */}
+      {/* <div className="space-y-3 text-sm">
+        <Feature text="Unlimited property listings" />
+        <Feature text="Verified buyer & tenant leads" />
+        <Feature text="Priority listing visibility" />
+        <Feature text="Direct buyer contact access" />
+      </div> */}
+
+      {/* DIVIDER */}
+      <div className="border-t border-white/10" />
+
+      {/* TOTAL */}
+      <div className="flex justify-between items-center text-sm">
+        <span className="text-slate-400">Total</span>
+        <span className="text-lg font-semibold">₹{price}</span>
+      </div>
+
+      {/* CTA */}
+      <button
+        onClick={handlePayment}
+        className="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold text-lg hover:scale-[1.02] transition shadow-xl"
+      >
+        Pay ₹{price}
+      </button>
+
+      {/* TRUST */}
+      <div className="text-center text-xs text-slate-400 space-y-1">
+        <p>🔒 100% Secure Payments</p>
+        <p>Powered by Razorpay</p>
+      </div>
+
+    </div>
+
+    {/* BACK */}
+    <button
+      onClick={() => router.back()}
+      className="w-full text-sm text-slate-400 hover:text-white transition"
+    >
+      ← Back
+    </button>
+
+  </div>
+</div>
   );
 }
+
+// function Feature({ text }) {
+//   return (
+//     <div className="flex gap-3 items-center">
+//       <div className="h-5 w-5 bg-indigo-500 rounded-full flex items-center justify-center text-xs">
+//         ✓
+//       </div>
+//       <p className="text-slate-300">{text}</p>
+//     </div>
+//   );
+// }

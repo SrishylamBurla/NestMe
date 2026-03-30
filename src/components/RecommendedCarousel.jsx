@@ -83,8 +83,12 @@ function PropertyCard({ property }) {
 
         {/* Price Badge */}
         <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
-           ₹ {property.priceValue?.toLocaleString()}
+           ₹ {property.priceLabel?.toLocaleString()}
         </div>
+
+        <span className="absolute top-3 right-3 px-2 py-1 rounded-full bg-emerald-500 text-white text-xs font-semibold shadow">
+          {property.listingType === "sale" ? "For Sale" : "For Rent"}
+        </span>
       </div>
 
       {/* CONTENT */}
