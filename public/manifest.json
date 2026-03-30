@@ -1,10 +1,10 @@
 {
-  "name": "NestMe - Find Your Perfect Home",
+  "name": "NestMe",
   "short_name": "NestMe",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#0f172a",
-  "background_color": "#ffffff",
+  "background_color": "#F2F4F3",
 
   "icons": [
     {
@@ -16,12 +16,6 @@
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
-    {
-      "src": "/icons/icon-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }
