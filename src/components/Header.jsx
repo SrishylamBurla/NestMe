@@ -199,7 +199,7 @@ useEffect(() => {
           {!user && !isLoading && (
             <button
               onClick={() => handleNavigate("/login")}
-              className="text-sm font-semibold cursor-pointer bg-gradient-to-r from-indigo-800 via-gray-800 to-purple-800 text-white px-3 py-1.5 rounded-lg animate-bounce duration-400"
+              className="text-sm font-semibold cursor-pointer bg-gradient-to-r from-indigo-800 via-gray-800 to-purple-800 text-white px-4 py-2 rounded-lg animate-bounce duration-400"
             >
               Login
             </button>
