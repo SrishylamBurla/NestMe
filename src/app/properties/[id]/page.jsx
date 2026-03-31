@@ -82,14 +82,14 @@ return (
   <div className="relative min-h-screen bg-gradient-to-br from-[#f8fafc] via-[#eef2ff] to-[#e0e7ff] text-slate-800">
 
     {/* HERO AT TOP */}
-    <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden">
+    <div className="relative w-full overflow-hidden">
       <PropertyHero images={property.images} />
 
       {/* Soft dark overlay */}
       <div className="absolute inset-0 bg-black/20"></div>
 
       {/* Top Glass Bar */}
-      <div className="absolute top-0 left-0 w-full z-40">
+      <div className="absolute top-0 left-0 w-full z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur border-slate-200">
         <div className="flex items-center justify-between px-4 sm:px-6 h-14 sm:h-16">
 
           {/* Back */}
@@ -137,26 +137,26 @@ return (
     </div>
 
     {/* CONTENT */}
-    <div className="relative -mt-8 sm:-mt-12 z-30 px-4 sm:px-6 max-w-5xl mx-auto space-y-2 sm:space-y-6 pb-16">
+    <div className="relative -mt-10 sm:-mt-14 md:-mt-18 lg:-mt-22 z-30 px-4 sm:px-6 max-w-5xl mx-auto space-y-2 sm:space-y-6 pb-16">
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
         <PropertyOverview property={property} />
       </div>
-
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4  ">
+ 
+      <div className="p-4 sm:p-6">
         <PropertyAmenities amenities={property.amenities} />
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200">
+      <div className="">
         <PropertyLocation location={property.location} />
       </div>
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4">
+      <div className="py-4 sm:py-6">
         <PropertyAgent property={property} />
       </div>
 
       {similar?.properties?.length > 0 && (
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-2 sm:p-4">
+        <div className="p-4 sm:p-6">
           <SimilarProperties properties={similar.properties} />
         </div>
       )}

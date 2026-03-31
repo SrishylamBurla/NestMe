@@ -26,7 +26,7 @@ export default function PropertyAgent({ property }) {
         className="
           flex items-center gap-4
           p-4 rounded-2xl
-          border border-slate-200
+          shadow-sm bg-white
           hover:shadow-md transition
         "
       >

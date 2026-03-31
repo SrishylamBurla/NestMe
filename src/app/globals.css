@@ -199,18 +199,14 @@ body {
 .animate-orb2 {
   animation: orb2 22s ease-in-out infinite;
 }
-
-/* @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Swiper dots styling */
+.swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
 }
 
-.animate-fadeInUp {
-  animation: fadeInUp 0.8s ease forwards;
-} */
+.swiper-pagination-bullet-active {
+  background: white;
+  width: 18px;
+  border-radius: 999px;
+}
