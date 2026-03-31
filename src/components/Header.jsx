@@ -128,6 +128,13 @@ useEffect(() => {
       {/* ================= HEADER ================= */}
       <header className="sticky top-0 z-40 bg-white px-2 sm:px-6 py-1 flex justify-between items-center">
         {/* LEFT SIDE */}
+        <Image
+            src={"/splashlogo.png"}
+            alt="logo"
+            width={60}
+            height={60}
+            className="object-cover"
+          />
 { user && (
         <div
           className="flex items-center gap-2 cursor-pointer"
@@ -192,7 +199,7 @@ useEffect(() => {
           {!user && !isLoading && (
             <button
               onClick={() => handleNavigate("/login")}
-              className="text-sm font-semibold bg-gradient-to-r from-indigo-500 via-gray-800 to-purple-500 text-white px-4 py-2 rounded-lg"
+              className="text-sm font-semibold cursor-pointer bg-gradient-to-r from-indigo-800 via-gray-800 to-purple-800 text-white px-3 py-1.5 rounded-lg animate-bounce duration-400"
             >
               Login
             </button>
