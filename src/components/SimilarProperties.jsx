@@ -56,7 +56,7 @@ export default function SimilarProperties({ properties = [] }) {
                 <p className="font-semibold truncate">{p.title}</p>
 
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500 font-bold">
-                  ₹ {p.priceValue?.toLocaleString()}
+                  ₹ {p.priceLabel?.toLocaleString()}
                 </p>
 
                 <p className="text-xs text-gray-500 truncate">
