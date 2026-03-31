@@ -128,7 +128,7 @@ useEffect(() => {
       {/* ================= HEADER ================= */}
       <header className="sticky top-0 z-40 bg-white px-2 sm:px-6 py-1 flex justify-between items-center">
         {/* LEFT SIDE */}
-
+{ user && (
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => {
@@ -137,25 +137,16 @@ useEffect(() => {
             }
           }}
         >
-          <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+          {/* <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
             <span className="font-bold text-purple-600 text-lg">
               {user?.name?.[0] || "G"}
             </span>
-          </div>
-
-          <div>
-            <p className="text-xs text-gray-400">Welcome</p>
-            <h1 className="text-sm font-sans font-semibold capitalize">
-              {user?.name || "Guest"}
-            </h1>
-          </div>
-        </div>
-        {/* LEFT PROFILE */}
-        <div
+          </div> */}
+          <div
           className="flex items-center gap-1 cursor-pointer"
-          onClick={() => {
-            handleNavigate("/");
-          }}
+          // onClick={() => {
+          //   handleNavigate("/");
+          // }}
         >
           <Image
             src={"/splashlogo.png"}
@@ -165,6 +156,16 @@ useEffect(() => {
             className="object-cover"
           />
         </div>
+
+          <div>
+            <p className="text-xs text-gray-400">Welcome</p>
+            <h1 className="text-sm font-sans font-semibold capitalize">
+              {user?.name || "Guest"}
+            </h1>
+          </div>
+        </div>)}
+        {/* LEFT PROFILE */}
+        
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3">
@@ -191,7 +192,7 @@ useEffect(() => {
           {!user && !isLoading && (
             <button
               onClick={() => handleNavigate("/login")}
-              className="text-sm font-semibold bg-indigo-600 text-white px-4 py-2 rounded-lg"
+              className="text-sm font-semibold bg-gradient-to-r from-indigo-500 via-gray-800 to-purple-500 text-white px-4 py-2 rounded-lg"
             >
               Login
             </button>

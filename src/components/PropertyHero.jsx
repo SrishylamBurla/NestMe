@@ -57,12 +57,12 @@ export default function PropertyHero({ images = [] }) {
       </Swiper>
 
       {/* LEFT ARROW */}
-      <button className="hero-prev hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition">
+      <button className="hero-prev hidden text-3xl md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition">
         ‹
       </button>
 
       {/* RIGHT ARROW */}
-      <button className="hero-next hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition">
+      <button className="hero-next hidden md:flex text-3xl absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition">
         ›
       </button>
 
