@@ -128,13 +128,16 @@ useEffect(() => {
       {/* ================= HEADER ================= */}
       <header className="sticky top-0 z-40 bg-white px-2 sm:px-6 py-1 flex justify-between items-center">
         {/* LEFT SIDE */}
-        <Image
+        {!user && (
+          <div>
+          <Image
             src={"/splashlogo.png"}
             alt="logo"
             width={60}
             height={60}
             className="object-cover"
           />
+          </div>)}
 { user && (
         <div
           className="flex items-center gap-2 cursor-pointer"
