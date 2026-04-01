@@ -88,8 +88,10 @@ export default function UserPropertyCard({ property }) {
             src={
               property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
             }
+            width={400}
+            height={600}
             alt="property"
-            className={`w-full h-48 object-cover transition duration-300 ${
+            className={`object-cover transition duration-300 ${
               property.approvalStatus === "rejected" ? "brightness-75" : ""
             }`}
           />
@@ -204,7 +206,9 @@ export default function UserPropertyCard({ property }) {
                 previewProperty.images?.[0]?.url ||
                 "/propertyImg/placeholder-property.jpg"
               }
-              className="h-64 w-full object-cover"
+              width={1000}
+              height={400}
+              className="object-cover"
             />
 
             <div className="p-6 space-y-4">
