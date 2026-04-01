@@ -119,7 +119,7 @@ function PropertyCard({ property }) {
       {/* IMAGE */}
       <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden">
         <Image
-          src={property.images?.[0]?.url || "/placeholder.jpg"}
+          src={property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"}
           fill
           alt={property.title}
           className="object-cover transition duration-700 group-hover:scale-105"

@@ -30,7 +30,11 @@ export default function AgentPropertyCard({ property }) {
 
   const goToEdit = (e) => {
     e.stopPropagation();
-    router.push(`/agents/${property.agent}/properties/edit/${property._id}`);
+    if (property.agent) {
+      router.push(`/agent/properties/edit/${property._id}`);
+    } else {
+      router.push(`/my-properties/edit/${property._id}`);
+    }
   };
 
   return (
@@ -263,21 +267,18 @@ export default function AgentPropertyCard({ property }) {
               <div className="flex justify-between items-center gap-6 text-sm text-slate-600">
                 <div className="flex items-center gap-6">
                   <span>{previewProperty.beds} Beds</span>
-                <span>{previewProperty.baths} Baths</span>
-                {previewProperty.areaSqFt && (
-                  <span>{previewProperty.areaSqFt} ft²</span>
-                )}
+                  <span>{previewProperty.baths} Baths</span>
+                  {previewProperty.areaSqFt && (
+                    <span>{previewProperty.areaSqFt} ft²</span>
+                  )}
                 </div>
-                 <button
-                onClick={() => setPreviewProperty(null)}
-                className="px-6 py-2 bg-slate-200 rounded-full text-red-700 hover:bg-slate-300 transition"
-              >
-                Close
-              </button>
-
+                <button
+                  onClick={() => setPreviewProperty(null)}
+                  className="px-6 py-2 bg-slate-200 rounded-full text-red-700 hover:bg-slate-300 transition"
+                >
+                  Close
+                </button>
               </div>
-
-             
             </div>
           </div>
         </div>

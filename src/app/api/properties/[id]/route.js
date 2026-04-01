@@ -92,6 +92,8 @@ export async function PUT(req, context) {
     return NextResponse.json({ message: "Invalid status" }, { status: 400 });
   }
 
+  console.log("USER:", user);
+console.log("PROPERTY:", await Property.findById(id));
   let property;
 
   // ADMIN
@@ -101,14 +103,18 @@ export async function PUT(req, context) {
 
   // AGENT
   else if (user.role === "agent") {
-    property = await Property.findOne({
-      _id: id,
-      agent: user.agentProfileId,
-    });
+  property = await Property.findOne({
+    _id: id,
+    $or: [
+      { agent: user.agentProfileId }, // agent property
+      { owner: user._id }             // own property
+    ],
+  });
 
-    body.approvalStatus = "pending"; // re-review
-    body.rejectionReason = "";
-  }
+  body.approvalStatus = "pending";
+  body.rejectionReason = "";
+}
+
 
   // NORMAL USER
   else if (user.role === "user") {
