@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
-import Newsletter from "@/models/Newsletter";
+import Newsletter from "../../../models/Newsletter";
 
 export async function POST(req) {
   try {
@@ -28,7 +28,7 @@ export async function POST(req) {
     await Newsletter.create({ email });
 
     return NextResponse.json({
-      message: "Subscribed successfully 🎉",
+      message: "Subscribed successfully",
     });
   } catch (error) {
     console.error(error);
