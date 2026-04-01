@@ -26,9 +26,13 @@ const withPWA = nextPWA({
 export default withPWA({
   reactStrictMode: true,
   images: {
-    domains: ["res.cloudinary.com"], // allow Cloudinary
+    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
 });

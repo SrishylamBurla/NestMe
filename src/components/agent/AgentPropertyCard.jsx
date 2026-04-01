@@ -237,9 +237,9 @@ export default function AgentPropertyCard({ property }) {
                 previewProperty.images?.[0]?.url ||
                 "/propertyImg/placeholder-property.jpg"
               }
-              width={300}
+              width={1000}
               height={300}
-              className="object-cover w-full h-64"
+              className="object-cover"
             />
 
             <div className="p-6 space-y-4">

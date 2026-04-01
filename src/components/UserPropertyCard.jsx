@@ -207,7 +207,7 @@ export default function UserPropertyCard({ property }) {
                 "/propertyImg/placeholder-property.jpg"
               }
               width={1000}
-              height={400}
+              height={300}
               className="object-cover"
             />
 
@@ -222,7 +222,7 @@ export default function UserPropertyCard({ property }) {
                 ₹{previewProperty.priceLabel?.toLocaleString()}
               </p>
 
-              <div className="flex gap-6 text-sm text-slate-600">
+              <div className="flex justify-between items-center gap-6 text-sm text-slate-600">
                 <div className="flex items-center gap-4">
                   <span>{previewProperty.beds} Beds</span>
                 <span>{previewProperty.baths} Baths</span>

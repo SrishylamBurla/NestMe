@@ -3,27 +3,50 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import { useSubscribeMutation } from "@/store/services/SubscribeApi";
+import { useState } from "react";
 
 export default function Footer() {
+
+  const [email, setEmail] = useState("");
+  const [subscribe, { isLoading, isSuccess, isError, error }] =
+    useSubscribeMutation();
+
+  const handleSubscribe = async () => {
+    if (!email) return alert("Please enter email");
+
+    try {
+      await subscribe({ email }).unwrap();
+      setEmail("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+//   if (!/\S+@\S+\.\S+/.test(email)) {
+//   return alert("Invalid email");
+// }
   return (
     <footer className="bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 inset-shadow-md border-white/40">
       {/* ================= MAIN FOOTER ================= */}
       <div className="px-6 md:px-16 pt-6 pb-12 w-full mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* BRAND */}
-          <div className="space-y-2">
-            <Image
+          <div className="flex flex-col space-y-6">
+            <div className="flex items-center gap-2">
+              <Image
               src="/splashlogo.png"
               alt="NestMe Logo"
-              width={112}
-              height={112}
+              width={80}
+              height={80}
               className="drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             />
-            <h2 className="text-6xl font-bold font-sans text-white tracking-tight">
+            <h2 className="text-5xl font-bold font-sans text-white tracking-tight">
               nestme<span className="text-gray-50">.in</span>
             </h2>
+            </div>
 
             <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-lighter">
               Discover verified properties across India. Buy, Rent or Lease with
@@ -31,47 +54,46 @@ export default function Footer() {
             </p>
           </div>
 
-          
           <div className="col-span-2 grid grid-cols-2 gap-6">
-          {/* QUICK LINKS */}
+            {/* QUICK LINKS */}
             <div className="space-y-4 font-sans tracking-lighter md:pl-24">
-            <h3 className="font-semibold text-slate-800">Quick Links</h3>
+              <h3 className="font-semibold text-slate-800">Quick Links</h3>
 
-            <ul className="space-y-2 text-sm text-slate-600">
-              <li>
-                <Link href="/properties?listingType=sale">Buy Property</Link>
-              </li>
-              <li>
-                <Link href="/properties?listingType=rent">Rent Property</Link>
-              </li>
-              <li>
-                <Link href="/add-property">Post Property</Link>
-              </li>
-              <li>
-                <Link href="/search">Search Homes</Link>
-              </li>
-            </ul>
-          </div>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li>
+                  <Link href="/properties?listingType=sale">Buy Property</Link>
+                </li>
+                <li>
+                  <Link href="/properties?listingType=rent">Rent Property</Link>
+                </li>
+                <li>
+                  <Link href="/add-property">Post Property</Link>
+                </li>
+                <li>
+                  <Link href="/search">Search Homes</Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* COMPANY */}
-          <div className="space-y-4 font-sans tracking-lighter md:pl-16">
-            <h3 className="font-semibold text-slate-800">Company</h3>
+            {/* COMPANY */}
+            <div className="space-y-4 font-sans tracking-lighter md:pl-16">
+              <h3 className="font-semibold text-slate-800">Company</h3>
 
-            <ul className="space-y-2 text-sm text-slate-600">
-              <li>
-                <Link href="#">About Us</Link>
-              </li>
-              <li>
-                <Link href="#">Careers</Link>
-              </li>
-              <li>
-                <Link href="#">Contact</Link>
-              </li>
-              <li>
-                <Link href="#">Privacy Policy</Link>
-              </li>
-            </ul>
-          </div>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li>
+                  <Link href="#">About Us</Link>
+                </li>
+                <li>
+                  <Link href="#">Careers</Link>
+                </li>
+                <li>
+                  <Link href="#">Contact</Link>
+                </li>
+                <li>
+                  <Link href="#">Privacy Policy</Link>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* NEWSLETTER */}
@@ -84,28 +106,36 @@ export default function Footer() {
 
             <div className="flex items-center bg-white rounded-md shadow-sm overflow-hidden">
               <input
-                type="email"
-                placeholder="Enter email"
-                className="flex-1 px-4 py-2 text-sm focus:outline-none"
-              />
-              <button className="px-5 py-2 bg-gradient-to-r from-indigo-500 to-pink-500 text-white text-sm font-semibold">
-                Subscribe
-              </button>
+          type="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="flex-1 px-4 py-2 text-sm focus:outline-none"
+        />
+
+        <button
+          onClick={handleSubscribe}
+          disabled={isLoading}
+          className="px-5 py-2 bg-gradient-to-r from-indigo-500 to-pink-500 text-white text-sm font-semibold disabled:opacity-50"
+        >
+          {isLoading ? "Submitting..." : "Subscribe"}
+        </button>
             </div>
 
-            {/* SOCIALS */}
-            {/* <div className="flex gap-4 pt-2">
-              {["facebook", "instagram", "twitter", "linkedin"].map((icon) => (
-                <div
-                  key={icon}
-                  className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center hover:shadow-md transition cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-indigo-500 text-md font-sans">
-                    public
-                  </span>
-                </div>
-              ))}
-            </div> */}
+            {/* ✅ Success Message */}
+            {isSuccess && (
+              <p className="text-green-600 text-sm">
+                Subscribed successfully!
+              </p>
+            )}
+
+            {/* ❌ Error Message */}
+            {isError && (
+              <p className="text-red-500 text-sm">
+                {error?.data?.message || "Something went wrong"}
+              </p>
+            )}
+
             <Card />
           </div>
         </div>
@@ -121,24 +151,40 @@ export default function Footer() {
   );
 }
 
-
 const Card = () => {
   return (
     <StyledWrapper>
       <div className="card">
-        <a href="#" className="socialContainer containerOne bg-gradient-to-r from-pink-500 to-yellow-500">
-          <svg className="socialSvg instagramSvg" viewBox="0 0 16 16"> <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" /> </svg>
+        <a
+          href="#"
+          className="socialContainer containerOne bg-gradient-to-r from-pink-500 to-yellow-500"
+        >
+          <svg className="socialSvg instagramSvg" viewBox="0 0 16 16">
+            {" "}
+            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" />{" "}
+          </svg>
         </a>
-        <a href="#" className="socialContainer containerThree bg-gradient-to-r from-indigo-500 to-blue-500">
-          <svg className="socialSvg linkdinSvg" viewBox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" /></svg>
+        <a
+          href="#"
+          className="socialContainer containerThree bg-gradient-to-r from-indigo-500 to-blue-500"
+        >
+          <svg className="socialSvg linkdinSvg" viewBox="0 0 448 512">
+            <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
+          </svg>
         </a>
-        <a href="#" className="socialContainer containerFour bg-gradient-to-r from-green-400 to-green-500">
-          <svg className="socialSvg whatsappSvg" viewBox="0 0 16 16"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" /> </svg>
+        <a
+          href="#"
+          className="socialContainer containerFour bg-gradient-to-r from-green-400 to-green-500"
+        >
+          <svg className="socialSvg whatsappSvg" viewBox="0 0 16 16">
+            {" "}
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />{" "}
+          </svg>
         </a>
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .card {
@@ -147,46 +193,46 @@ const StyledWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px 5px;
+    padding: 10px 5px;
     gap: 20px;
   }
 
   /* for all social containers*/
   .socialContainer {
-    width: 42px;
-    height: 42px;
+    width: 30px;
+    height: 30px;
     background-color: rgb(44, 44, 44);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     overflow: hidden;
-    transition-duration: .3s;
+    transition-duration: 0.3s;
   }
   /* instagram*/
   .containerOne:hover {
     background-color: #d62976;
-    transition-duration: .3s;
+    transition-duration: 0.3s;
   }
   /* twitter*/
   .containerTwo:hover {
     background-color: #00acee;
-    transition-duration: .3s;
+    transition-duration: 0.3s;
   }
   /* linkdin*/
   .containerThree:hover {
     background-color: #0072b1;
-    transition-duration: .3s;
+    transition-duration: 0.3s;
   }
   /* Whatsapp*/
   .containerFour:hover {
-    background-color: #128C7E;
-    transition-duration: .3s;
+    background-color: #128c7e;
+    transition-duration: 0.3s;
   }
 
   .socialContainer:active {
     transform: scale(0.9);
-    transition-duration: .3s;
+    transition-duration: 0.3s;
   }
 
   .socialSvg {
@@ -211,5 +257,5 @@ const StyledWrapper = styled.div`
       transform: translateY(0);
       opacity: 1;
     }
-  }`;
-
+  }
+`;
