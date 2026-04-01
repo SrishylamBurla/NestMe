@@ -68,7 +68,7 @@ export default function RecommendedCarousel({
 <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-5">
 
   {isLoading &&
-    [...Array(6)].map((_, i) => (
+    [...Array(4)].map((_, i) => (
       <div
         key={i}
         className="h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"

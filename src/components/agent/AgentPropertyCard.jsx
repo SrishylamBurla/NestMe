@@ -89,7 +89,9 @@ export default function AgentPropertyCard({ property }) {
               "/propertyImg/placeholder-property.jpg"
             }
             alt="property"
-            className={`w-full h-48 object-cover transition duration-300 ${
+            width={400}
+            height={300}
+            className={`object-cover transition duration-300 ${
               property.approvalStatus === "rejected" ? "brightness-75" : ""
             }`}
           />
@@ -131,7 +133,7 @@ export default function AgentPropertyCard({ property }) {
           </p>
 
           <p className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-            ₹{property.priceValue?.toLocaleString()}
+            ₹{property.priceLabel?.toLocaleString()}
           </p>
 
           {/* PERFORMANCE */}
@@ -223,7 +225,7 @@ export default function AgentPropertyCard({ property }) {
       {previewProperty && (
         <div
           onClick={() => setPreviewProperty(null)}
-          className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 py-12"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -235,7 +237,9 @@ export default function AgentPropertyCard({ property }) {
                 previewProperty.images?.[0]?.url ||
                 "/propertyImg/placeholder-property.jpg"
               }
-              className="h-64 w-full object-cover"
+              width={300}
+              height={300}
+              className="object-cover w-full h-64"
             />
 
             <div className="p-6 space-y-4">
@@ -253,23 +257,27 @@ export default function AgentPropertyCard({ property }) {
               </p>
 
               <p className="text-3xl font-bold text-indigo-600">
-                ₹{previewProperty.priceValue?.toLocaleString()}
+                ₹{previewProperty.priceLabel?.toLocaleString()}
               </p>
 
-              <div className="flex gap-6 text-sm text-slate-600">
-                <span>{previewProperty.beds} Beds</span>
+              <div className="flex justify-between items-center gap-6 text-sm text-slate-600">
+                <div className="flex items-center gap-6">
+                  <span>{previewProperty.beds} Beds</span>
                 <span>{previewProperty.baths} Baths</span>
                 {previewProperty.areaSqFt && (
                   <span>{previewProperty.areaSqFt} ft²</span>
                 )}
-              </div>
-
-              <button
+                </div>
+                 <button
                 onClick={() => setPreviewProperty(null)}
-                className="mt-4 px-6 py-2 bg-slate-200 rounded-full"
+                className="px-6 py-2 bg-slate-200 rounded-full text-red-700 hover:bg-slate-300 transition"
               >
                 Close
               </button>
+
+              </div>
+
+             
             </div>
           </div>
         </div>

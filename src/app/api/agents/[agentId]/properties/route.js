@@ -37,7 +37,7 @@ export async function GET(req, context) {
       { agent: agentId }, // listed as agent
       { owner: userId },  // owned before becoming agent
     ],
-    approvalStatus: "approved",
+    // approvalStatus: "approved",
   }).sort({ createdAt: -1 });
 
   return Response.json({ properties });
