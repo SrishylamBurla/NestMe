@@ -100,7 +100,7 @@ export default function LoginPage() {
         email: form.email.trim(),
         password: form.password,
       }).unwrap();
-
+      
       router.push("/");
     } catch (err) {
       console.error("LOGIN FAILED", err);
