@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
             Privacy Policy
           </h1>
           <p className="text-sm text-slate-600 my-6">
-            <strong>NestMe</strong> ("we", "our", "us") respects your privacy and is committed to protecting your personal information.
+            <strong>NestMe</strong> (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) respects your privacy and is committed to protecting your personal information.
           </p>
         </div>
 
