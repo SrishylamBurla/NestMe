@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center font-sans">
