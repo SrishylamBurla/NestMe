@@ -50,26 +50,32 @@ export default function Header() {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  
+  useEffect(() => {
+    if (!user) return;
 
-useEffect(() => {
-  if (!user) return;
+    const socket = io("http:/nestme.in");
 
-  const socket = io("http:/nestme.in");
+    socket.emit("join", user._id);
 
-  socket.emit("join", user._id);
+    socket.on("notification", (data) => {
+      console.log("🔥 New notification:", data);
 
-  socket.on("notification", (data) => {
-    console.log("🔥 New notification:", data);
+      // Option 1: refetch notifications
+      refetch();
 
-    // Option 1: refetch notifications
-    refetch();
+      // Option 2: local state update (faster)
+    });
 
-    // Option 2: local state update (faster)
-  });
+    return () => socket.disconnect();
+  }, [user]);
 
-  return () => socket.disconnect();
-}, [user]);
+  const handleMarkAllRead = async () => {
+    const unread = notifications.filter((n) => !n.isRead);
+
+    for (const n of unread) {
+      await markRead(n._id);
+    }
+  };
 
   // useEffect(() => {
   //   setOpenDrawer(false);
@@ -130,52 +136,53 @@ useEffect(() => {
         {/* LEFT SIDE */}
         {!user && (
           <div>
-          <Image
-            src={"/splashlogo.png"}
-            alt="logo"
-            width={60}
-            height={60}
-            className="object-cover"
-          />
-          </div>)}
-{ user && (
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => {
-            if (!isMobile && user) {
-              setOpenDrawer(true);
-            }
-          }}
-        >
-          {/* <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+            <Image
+              src={"/splashlogo.png"}
+              alt="logo"
+              width={60}
+              height={60}
+              className="object-cover"
+            />
+          </div>
+        )}
+        {user && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => {
+              if (!isMobile && user) {
+                setOpenDrawer(true);
+              }
+            }}
+          >
+            {/* <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
             <span className="font-bold text-purple-600 text-lg">
               {user?.name?.[0] || "G"}
             </span>
           </div> */}
-          <div
-          className="flex items-center gap-1 cursor-pointer"
-          // onClick={() => {
-          //   handleNavigate("/");
-          // }}
-        >
-          <Image
-            src={"/splashlogo.png"}
-            alt="logo"
-            width={60}
-            height={60}
-            className="object-cover"
-          />
-        </div>
+            <div
+              className="flex items-center gap-1 cursor-pointer"
+              // onClick={() => {
+              //   handleNavigate("/");
+              // }}
+            >
+              <Image
+                src={"/splashlogo.png"}
+                alt="logo"
+                width={60}
+                height={60}
+                className="object-cover"
+              />
+            </div>
 
-          <div>
-            <p className="text-xs text-gray-400">Welcome</p>
-            <h1 className="text-sm font-sans font-semibold capitalize">
-              {user?.name || "Guest"}
-            </h1>
+            <div>
+              <p className="text-xs text-gray-400">Welcome</p>
+              <h1 className="text-sm font-sans font-semibold capitalize">
+                {user?.name || "Guest"}
+              </h1>
+            </div>
           </div>
-        </div>)}
+        )}
         {/* LEFT PROFILE */}
-        
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3">
@@ -332,67 +339,108 @@ useEffect(() => {
       {showNotifications && (
         <div
           onClick={() => setShowNotifications(false)}
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
         />
       )}
 
       {/* ================= RIGHT NOTIFICATION PANEL ================= */}
       <div
         className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col
-          ${showNotifications ? "translate-x-0" : "translate-x-full"}`}
+    ${showNotifications ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="flex justify-between items-center p-5 border-b">
-          <h2 className="text-lg font-semibold">Notifications</h2>
-          <button onClick={() => setShowNotifications(false)}>
-            <span className="material-symbols-outlined">close</span>
+        {/* Header */}
+        <div className="flex justify-between items-center px-6 py-5">
+          <h2 className="text-xl font-semibold text-gray-900">Notifications</h2>
+          <div className="flex items-center gap-4">
+          {unreadCount > 0 && (
+            <button
+              onClick={handleMarkAllRead}
+              className="text-xs text-gray-500 hover:text-gray-700 transition cursor-pointer"
+            >
+              Mark all read
+            </button>
+          )}
+          
+          <button
+            onClick={() => setShowNotifications(false)}
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+          >
+            <span className="material-symbols-outlined text-gray-600">
+              close
+            </span>
           </button>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-4 pb-6">
           {Object.entries(groupedNotifications).map(
             ([group, items]) =>
               items.length > 0 && (
-                <div key={group}>
-                  <p className="px-5 py-3 text-xs font-semibold text-gray-400 uppercase">
+                <div key={group} className="mb-6">
+                  {/* Group Title */}
+                  <p className="px-2 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     {group}
                   </p>
 
-                  {items.map((n) => (
-                    <div
-                      key={n._id}
-                      onClick={async () => {
-                        await markRead(n._id);
-                        setShowNotifications(false);
-                        handleNavigate(n.link);
-                      }}
-                      className={`flex gap-3 px-5 py-4 border-b cursor-pointer transition
-                        ${
-                          !n.isRead
-                            ? "bg-indigo-50 hover:bg-indigo-100"
-                            : "hover:bg-gray-50"
-                        }`}
-                    >
-                      <span className="material-symbols-outlined text-indigo-500 mt-1">
-                        {getIcon(n.type)}
-                      </span>
+                  {/* Notifications */}
+                  <div className="space-y-3">
+                    {items.map((n) => (
+                      <div
+                        key={n._id}
+                        onClick={async () => {
+                          await markRead(n._id);
+                          setShowNotifications(false);
+                          handleNavigate(n.link);
+                        }}
+                        className={`flex gap-3 p-4 rounded-xl cursor-pointer transition-all
+                    ${
+                      !n.isRead
+                        ? "bg-indigo-50 hover:bg-indigo-100"
+                        : "bg-gray-50 hover:bg-gray-100"
+                    }`}
+                      >
+                        {/* Icon */}
+                        <span className="material-symbols-outlined text-indigo-500 mt-1">
+                          {getIcon(n.type)}
+                        </span>
 
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold">{n.title}</p>
-                        <p className="text-xs text-gray-600 mt-1">
-                          {n.message}
-                        </p>
-                        <p className="text-[11px] text-gray-400 mt-2">
-                          {new Date(n.createdAt).toLocaleString()}
-                        </p>
+                        {/* Content */}
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-gray-900">
+                            {n.title}
+                          </p>
+
+                          <p className="text-xs text-gray-600 mt-1">
+                            {n.message}
+                          </p>
+
+                          <p className="text-[11px] text-gray-400 mt-2 flex justify-end">
+                            {new Date(n.createdAt).toLocaleString()}
+                          </p>
+                        </div>
+
+                        {/* Unread Dot */}
+                        {!n.isRead && (
+                          <span className="h-2 w-2 bg-indigo-600 rounded-full mt-2" />
+                        )}
                       </div>
-
-                      {!n.isRead && (
-                        <span className="h-2 w-2 bg-indigo-600 rounded-full mt-2" />
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               ),
+          )}
+
+          {/* Empty State */}
+          {Object.values(groupedNotifications).every(
+            (items) => items.length === 0,
+          ) && (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <span className="material-symbols-outlined text-4xl mb-2">
+                notifications_off
+              </span>
+              <p className="text-sm">No notifications yet</p>
+            </div>
           )}
         </div>
       </div>

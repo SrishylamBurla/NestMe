@@ -2,21 +2,27 @@ import React from "react";
 
 export default function AboutNestMe() {
   return (
-    <section className="max-w-5xl mx-auto px-6 py-10">
-      <div className="bg-white shadow-xl rounded-2xl p-8 space-y-6">
-
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-gray-900">
+    <section className="max-w-6xl mx-auto px-6 py-16">
+      
+      {/* Header */}
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
           About NestMe
         </h1>
+        <p className="text-lg text-gray-600 max-w-2xl">
+          Redefining how people discover, connect, and manage real estate in the digital era.
+        </p>
+      </div>
 
-        {/* Paragraphs */}
-        <p className="text-gray-700 leading-relaxed">
+      {/* Content */}
+      <div className="space-y-6 text-gray-700 leading-relaxed">
+
+        <p>
           NestMe was born from a simple idea — making property discovery easier,
           smarter, and more accessible for everyone.
         </p>
 
-        <p className="text-gray-700 leading-relaxed">
+        <p>
           The platform was built to solve common challenges people face while
           searching for properties — scattered listings, lack of trust, and poor
           user experience. As the vision evolved, iRealEstate transformed into{" "}
@@ -24,45 +30,54 @@ export default function AboutNestMe() {
           refined, user-focused, and scalable real estate ecosystem.
         </p>
 
-        <p className="text-gray-700 leading-relaxed">
+        <p>
           NestMe is designed to connect{" "}
-          <span className="font-semibold">
+          <span className="font-semibold text-gray-900">
             buyers, renters, and property agents
           </span>{" "}
           seamlessly in one place. Whether you are searching for your dream home,
-          listing a property, or managing leads as an agent, NestMe provides a
+          listing a property, or managing leads as an agent, NestMe delivers a
           smooth and intuitive experience.
         </p>
 
-        {/* Features List */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+      </div>
+
+      {/* Focus Section */}
+      <div className="mt-12 grid md:grid-cols-2 gap-8">
+
+        <div className="bg-gray-50 rounded-xl p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">
             What We Focus On
           </h2>
-          <ul className="list-disc pl-6 space-y-1 text-gray-700">
-            <li>Simplicity in property discovery</li>
-            <li>Transparency in listings</li>
-            <li>Efficient communication between users and agents</li>
-            <li>Smart notifications and updates</li>
+          <ul className="space-y-2 text-gray-700">
+            <li>• Simplicity in property discovery</li>
+            <li>• Transparency in listings</li>
+            <li>• Efficient communication</li>
+            <li>• Smart notifications & updates</li>
           </ul>
         </div>
 
-        {/* Mission */}
-        <p className="text-gray-700 leading-relaxed">
-          Our mission is to{" "}
-          <span className="font-semibold text-gray-900">
-            simplify real estate interactions using technology
-          </span>
-          , making property transactions faster, reliable, and user-friendly.
-        </p>
-
-        {/* Closing */}
-        <p className="text-gray-700 leading-relaxed">
-          NestMe is not just an app — it’s a growing platform aimed at
-          transforming how people find and manage properties in the digital era.
-        </p>
+        <div className="bg-gray-900 text-white rounded-xl p-6">
+          <h2 className="text-xl font-semibold mb-3">
+            Our Mission
+          </h2>
+          <p className="text-gray-300">
+            To simplify real estate interactions using technology — making
+            property transactions faster, reliable, and user-friendly.
+          </p>
+        </div>
 
       </div>
+
+      {/* Closing */}
+      <div className="mt-12 text-gray-700 leading-relaxed bg-purple-300 p-2 rounded-xs inline-block">
+        <p>
+          NestMe is not just an app — it’s a growing platform aimed at
+          transforming how people find and manage properties with confidence and
+          ease.
+        </p>
+      </div>
+
     </section>
   );
 }

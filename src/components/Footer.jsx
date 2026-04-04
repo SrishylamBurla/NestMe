@@ -90,7 +90,7 @@ export default function Footer() {
                   <Link href="#">Contact</Link>
                 </li>
                 <li>
-                  <Link href="https://srishylamburla.github.io/nestme-privacy/">Privacy Policy</Link>
+                  <Link href="/privacy-policy">Privacy Policy</Link>
                 </li>
               </ul>
             </div>
