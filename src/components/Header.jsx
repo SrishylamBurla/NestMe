@@ -53,7 +53,7 @@ export default function Header() {
   useEffect(() => {
     if (!user) return;
 
-    const socket = io("http:/nestme.in");
+    const socket = io("https:/nestme.in");
 
     socket.emit("join", user._id);
 
@@ -68,6 +68,20 @@ export default function Header() {
 
     return () => socket.disconnect();
   }, [user]);
+
+  useEffect(() => {
+  if (!user) return;
+
+  // 🔥 SEND USER DATA TO MOBILE APP
+  if (typeof window !== "undefined" && window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        type: "USER_DATA",
+        userId: user._id,
+      })
+    );
+  }
+}, [user]);
 
   const handleMarkAllRead = async () => {
     const unread = notifications.filter((n) => !n.isRead);
