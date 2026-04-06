@@ -322,7 +322,9 @@ export default function AddPropertyPage() {
                         <Image
                           src={URL.createObjectURL(file)}
                           alt="preview"
-                          className="h-28 w-full object-cover rounded-lg"
+                          width={1000}
+                          height={300}
+                          className="object-cover rounded-lg"
                         />
 
                         <button
