@@ -109,6 +109,7 @@ const userSchema = new mongoose.Schema(
       enum: ["active", "suspended", "deleted"],
       default: "active",
     },
+    pushTokens: [String],
   },
   { timestamps: true },
 );

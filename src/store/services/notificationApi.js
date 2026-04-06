@@ -13,6 +13,14 @@ export const notificationApi = api.injectEndpoints({
         method: "PUT",
       }),
 
+      savePushToken: builder.mutation({
+  query: (token) => ({
+    url: "/notifications/save-token",
+    method: "POST",
+    body: { token },
+  }),
+}),
+
       // ⚡ Optimistic UI
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
@@ -41,4 +49,5 @@ export const notificationApi = api.injectEndpoints({
 export const {
   useGetNotificationsQuery,
   useMarkReadMutation,
+  useSavePushTokenMutation,
 } = notificationApi;
