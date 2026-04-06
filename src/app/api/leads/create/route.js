@@ -20,9 +20,9 @@ export async function POST(req) {
   const property = await Property.findById(propertyId)
     .populate({
       path: "agent",
-      populate: { path: "user", select: "email name" },
+      populate: { path: "user", select: "email name pushTokens" },
     })
-    .populate("owner", "email name");
+    .populate("owner", "email name pushTokens");
 
   if (!property)
     return NextResponse.json(
@@ -78,36 +78,26 @@ export async function POST(req) {
     entityId: lead._id,
   });
 
-  // 🔥 REAL-TIME EMIT
-  // sendNotification(receiverUserId.toString(), notification);
+ 
 
   // 🔥 REAL-TIME (SOCKET)
   sendNotification(receiverUserId.toString(), notification);
+// 🔔 PUSH NOTIFICATION (OPTIMIZED)
+let pushTokens = [];
 
-  // 🔔 PUSH NOTIFICATION (NEW)
-  const receiver = await Property.findById(propertyId)
-    .populate({
-      path: "agent",
-      populate: { path: "user", select: "pushTokens" },
-    })
-    .populate("owner", "pushTokens");
+if (receiverType === "agent") {
+  pushTokens = property.agent?.user?.pushTokens || [];
+} else {
+  pushTokens = property.owner?.pushTokens || [];
+}
 
-  let pushTokens = [];
-
-  if (receiverType === "agent") {
-    pushTokens = receiver.agent?.user?.pushTokens || [];
-  } else {
-    pushTokens = receiver.owner?.pushTokens || [];
-  }
-
-  // 🔥 SEND PUSH
-  if (pushTokens.length > 0) {
-    await sendPush(
-      pushTokens,
-      "New Lead Received",
-      `New enquiry for ${property.title}`,
-    );
-  }
+if (pushTokens.length > 0) {
+  await sendPush(
+    pushTokens,
+    "New Lead Received",
+    `New enquiry for ${property.title}`
+  );
+}
 
   // Create notification
   // await Notification.create({
