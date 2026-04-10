@@ -43,12 +43,12 @@ export default function Footer() {
               height={80}
               className="drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             />
-            <h2 className="text-5xl font-bold font-sans text-white tracking-tight">
+            <h2 className="text-5xl font-bold text-white tracking-tight">
               nestme<span className="text-gray-50">.in</span>
             </h2>
             </div>
 
-            <p className="text-sm text-slate-600 leading-relaxed font-sans tracking-lighter">
+            <p className="text-sm text-slate-600 leading-relaxed tracking-lighter">
               Discover verified properties across India. Buy, Rent or Lease with
               confidence.
             </p>
@@ -56,7 +56,7 @@ export default function Footer() {
 
           <div className="col-span-2 grid grid-cols-2 gap-6">
             {/* QUICK LINKS */}
-            <div className="space-y-4 font-sans tracking-lighter md:pl-24">
+            <div className="space-y-4 tracking-lighter md:pl-24">
               <h3 className="font-semibold text-slate-800">Quick Links</h3>
 
               <ul className="space-y-2 text-sm text-slate-600">
@@ -76,7 +76,7 @@ export default function Footer() {
             </div>
 
             {/* COMPANY */}
-            <div className="space-y-4 font-sans tracking-lighter md:pl-16">
+            <div className="space-y-4 f tracking-lighter md:pl-16">
               <h3 className="font-semibold text-slate-800">Company</h3>
 
               <ul className="space-y-2 text-sm text-slate-600">
@@ -97,7 +97,7 @@ export default function Footer() {
           </div>
 
           {/* NEWSLETTER */}
-          <div className="space-y-4 font-sans">
+          <div className="space-y-4 f">
             <h3 className="font-semibold text-slate-800">Stay Updated</h3>
 
             <p className="text-sm text-slate-600 tracking-lighter">
@@ -143,7 +143,7 @@ export default function Footer() {
 
       {/* ================= BOTTOM STRIP ================= */}
       <div className="border-t border-white/50 bg-black backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-slate-100 font-sans">
+        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-slate-100 f">
           © {new Date().getFullYear()} NestMe. All rights reserved.
         </div>
       </div>

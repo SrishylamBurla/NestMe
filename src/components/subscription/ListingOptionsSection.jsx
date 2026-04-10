@@ -29,7 +29,7 @@ export default function ListingOptionsSection() {
         <div className="w-[900px] h-[900px] bg-indigo-500/10 rounded-full blur-[220px]" />
       </div>
       {/* ===== HEADER ===== */}
-      <div className="max-w-6xl mx-auto text-center mb-14 font-sans z-[1] relative">
+      <div className="max-w-6xl mx-auto text-center mb-14 z-[1] relative">
         <h2 className="text-3xl md:text-4xl font-bold">
           List Your Property on NestMe
         </h2>

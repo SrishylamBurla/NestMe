@@ -1,14 +1,12 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { useGetPropertiesQuery } from "@/store/services/PropertiesApi";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function RecommendedCarousel({
-  title,
-  sortType,
-  minPrice,
-}) {
+export default function RecommendedCarousel({ title, sortType, minPrice }) {
   const { data, isLoading } = useGetPropertiesQuery({
     page: 1,
     limit: 10,
@@ -16,16 +14,14 @@ export default function RecommendedCarousel({
     minPrice,
   });
 
+  const carouselRef = useRef();
   if (!data?.properties?.length && !isLoading) return null;
 
   return (
     <section className="space-y-4">
-
       {/* HEADER */}
       <div className="flex justify-between items-center px-1">
-        <h2 className="text-lg font-sans font-bold text-slate-800">
-          {title}
-        </h2>
+        <h2 className="text-lg font-bold text-slate-800">{title}</h2>
 
         <Link
           href="/properties"
@@ -36,57 +32,81 @@ export default function RecommendedCarousel({
       </div>
 
       {/* ================= UNIFIED CAROUSEL (ALL SCREENS) ================= */}
-    <div className="relative">
+      <div className="relative">
+        {/* ================= RESPONSIVE CAROUSEL ================= */}
 
-    {/* ================= RESPONSIVE CAROUSEL ================= */}
+        {/* MOBILE → SCROLL */}
+        <div className="sm:hidden">
+          <div className="flex gap-4 px-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 no-scrollbar">
+            {isLoading &&
+              [...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="snap-start min-w-[260px] h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"
+                />
+              ))}
 
-{/* MOBILE → SCROLL */}
-<div className="sm:hidden">
-  <div className="flex gap-4 px-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 no-scrollbar">
+            {data?.properties?.map((property) => (
+              <Link
+                key={property._id}
+                href={`/properties/${property._id}`}
+                className="snap-start min-w-[260px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+              >
+                <PropertyCard property={property} />
+              </Link>
+            ))}
+          </div>
+        </div>
 
-    {isLoading &&
-      [...Array(4)].map((_, i) => (
-        <div
-          key={i}
-          className="snap-start min-w-[260px] h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"
-        />
-      ))}
+        {/* TABLET + DESKTOP → GRID */}
 
-    {data?.properties?.map((property) => (
-      <Link
-        key={property._id}
-        href={`/properties/${property._id}`}
-        className="snap-start min-w-[260px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
-      >
-        <PropertyCard property={property} />
-      </Link>
-    ))}
-  </div>
-</div>
+        {/* ================= UNIFIED CAROUSEL (ALL SCREENS) ================= */}
+        <div className="relative">
+          {/* NAV BUTTONS */}
+          <button
+            onClick={() => {
+              carouselRef.current.scrollBy({ left: -300, behavior: "smooth" });
+            }}
+            className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full w-10 h-10 items-center justify-center hover:bg-gray-100"
+          >
+            <ChevronLeft size={20} strokeWidth={1.5} />
+          </button>
 
-{/* TABLET + DESKTOP → GRID */}
-<div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-5">
+          <button
+            onClick={() => {
+              carouselRef.current.scrollBy({ left: 300, behavior: "smooth" });
+            }}
+            className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full w-10 h-10 items-center justify-center hover:bg-gray-100"
+          >
+            <ChevronRight size={20} strokeWidth={1.5} />
+          </button>
 
-  {isLoading &&
-    [...Array(4)].map((_, i) => (
-      <div
-        key={i}
-        className="h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"
-      />
-    ))}
+          {/* CAROUSEL */}
+          <div
+            ref={carouselRef}
+            className="flex gap-4 px-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 no-scrollbar"
+          >
+            {isLoading &&
+              [...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="snap-start min-w-[260px] sm:min-w-[300px] md:min-w-[320px] lg:min-w-[360px] h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"
+                />
+              ))}
 
-  {data?.properties?.map((property) => (
-    <Link
-      key={property._id}
-      href={`/properties/${property._id}`}
-      className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
-    >
-      <PropertyCard property={property} />
-    </Link>
-  ))}
-</div>
+            {data?.properties?.map((property) => (
+              <Link
+                key={property._id}
+                href={`/properties/${property._id}`}
+                className="snap-start min-w-[260px] sm:min-w-[300px] md:min-w-[320px] lg:min-w-[360px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
+              >
+                <PropertyCard property={property} />
+              </Link>
+            ))}
+          </div>
+        </div>
 
-  {/* <div className="flex gap-4 px-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 no-scrollbar">
+        {/* <div className="flex gap-4 px-5 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3 no-scrollbar">
 
     {isLoading &&
       [...Array(4)].map((_, i) => (
@@ -106,20 +126,19 @@ export default function RecommendedCarousel({
       </Link>
     ))}
   </div> */}
-
-</div>
-
+      </div>
     </section>
   );
 }
 function PropertyCard({ property }) {
   return (
     <div className="group flex flex-col rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300">
-
       {/* IMAGE */}
       <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden">
         <Image
-          src={property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"}
+          src={
+            property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
+          }
           fill
           alt={property.title}
           className="object-cover transition duration-700 group-hover:scale-105"
