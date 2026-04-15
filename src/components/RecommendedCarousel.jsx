@@ -238,7 +238,7 @@ export default function RecommendedCarousel({ title, sortType, minPrice }) {
             [...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="snap-start min-w-[260px] sm:min-w-[300px] md:min-w-[320px] lg:min-w-[360px] h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"
+                className="snap-start flex-shrink-0 w-[260px] sm:w-[320px] lg:w-[360px] h-[280px] bg-white rounded-3xl animate-pulse shadow-sm"
               />
             ))}
 
@@ -246,7 +246,7 @@ export default function RecommendedCarousel({ title, sortType, minPrice }) {
             <Link
               key={property._id}
               href={`/properties/${property._id}`}
-              className="snap-start min-w-[260px] sm:min-w-[300px] md:min-w-[320px] lg:min-w-[360px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
+              className="snap-start flex-shrink-0 w-[260px] sm:w-[320px] lg:w-[360px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
             >
               <PropertyCard property={property} />
             </Link>
@@ -283,7 +283,7 @@ function PropertyCard({ property }) {
       </div>
 
       {/* CONTENT */}
-      <div className="p-4 sm:p-5 space-y-1.5">
+      <div className="px-5 py-2 space-y-1">
         <h3 className="font-semibold text-sm sm:text-base lg:text-lg text-slate-800 line-clamp-1">
           {property.title}
         </h3>
@@ -292,6 +292,83 @@ function PropertyCard({ property }) {
           {property.city}, {property.state}
         </p>
       </div>
+
+      <div className="flex gap-4 text-xs justify-between text-slate-500 px-5 py-2 border-t border-slate-200">
+      <span className="flex items-center gap-1">
+        <span className="material-symbols-outlined text-[14px] font-sans">
+          bed
+        </span>
+        {property.beds} Beds
+      </span>
+
+      <span className="flex items-center gap-1 font-sans">
+        <span className="material-symbols-outlined text-[14px] font-sans">
+          bathtub
+        </span>
+        {property.baths} Baths
+      </span>
+
+      {property.areaSqFt && (
+        <span className="flex items-center gap-1">
+          <span className="material-symbols-outlined text-[14px]">
+            square_foot
+          </span>
+          {property.areaSqFt} ft²
+        </span>
+      )}
+    </div>
     </div>
   );
 }
+
+// function PropertyCard({ property }) {
+//   return (
+//     <div className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+
+//       {/* IMAGE */}
+//       <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden">
+//         <Image
+//           src={property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"}
+//           fill
+//           alt={property.title}
+//           className="object-cover transition duration-700 group-hover:scale-105"
+//           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+//         />
+
+//         {/* Overlay */}
+//         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+//         {/* Price */}
+//         <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white text-xs sm:text-sm px-3 py-1 rounded-full font-semibold">
+//           ₹ {property.priceLabel?.toLocaleString()}
+//         </div>
+
+//         {/* Listing Type */}
+//         <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-emerald-500 text-white text-xs sm:text-sm font-semibold shadow">
+//           {property.listingType === "sale" ? "For Sale" : "For Rent"}
+//         </span>
+//       </div>
+
+//       {/* CONTENT */}
+//       <div className="p-4 sm:p-5 space-y-2">
+
+//         {/* Title */}
+//         <h3 className="font-semibold text-sm sm:text-base lg:text-lg text-slate-800 line-clamp-1 group-hover:text-black transition">
+//           {property.title}
+//         </h3>
+
+//         {/* Location */}
+//         <p className="text-xs sm:text-sm text-slate-500 line-clamp-1">
+//           📍 {property.city}, {property.state}
+//         </p>
+
+//         {/* EXTRA INFO (optional fields) */}
+//         <div className="flex items-center gap-4 text-xs sm:text-sm text-slate-600 pt-1">
+//           {property.beds && <span>🛏 {property.beds} Beds</span>}
+//           {property.baths && <span>🛁 {property.baths} Baths</span>}
+//           {property.areaSqFt && <span>📐 {property.areaSqFt} sqft</span>}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
