@@ -19,8 +19,9 @@ export async function POST(req) {
 
     const messages = user.pushTokens.map((token) => ({
       to: token,
-      title,
-      body,
+      sound: "default", // ✅ REQUIRED
+      title: title || "NestMe",
+      body: body || "New update",
       data: { url },
     }));
 
@@ -37,8 +38,12 @@ export async function POST(req) {
 
     const result = await response.json();
 
+    console.log("Push result:", result); // 🔥 debug
+
     return NextResponse.json(result);
   } catch (err) {
+    console.error("Push error:", err); // 🔥 debug
+
     return NextResponse.json(
       { error: err.message },
       { status: 500 }

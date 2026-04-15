@@ -96,11 +96,23 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      await login({
+      const data = await login({
         email: form.email.trim(),
         password: form.password,
       }).unwrap();
-      
+
+      console.log("Sending to React Native:", data.id);
+      // 🔥 SEND TO MOBILE APP
+      if (typeof window !== "undefined" && window.ReactNativeWebView) {
+         alert("Sending userId to app: " + data.id); 
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            type: "USER_DATA",
+            userId: data.id,
+          }),
+        );
+      }
+
       router.push("/");
     } catch (err) {
       console.error("LOGIN FAILED", err);
@@ -113,23 +125,18 @@ export default function LoginPage() {
       quote="Your next home is just a search away."
     >
       <form onSubmit={submitHandler} className="space-y-4">
-
         <Input
           label="Email Address"
           type="email"
           value={form.email}
-          onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
 
         <Input
           label="Password"
           type="password"
           value={form.password}
-          onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
 
         {error && (
@@ -151,7 +158,6 @@ export default function LoginPage() {
             Register
           </span>
         </p>
-
       </form>
     </AuthLayout>
   );
