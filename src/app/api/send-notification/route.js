@@ -11,30 +11,26 @@ export async function POST(req) {
     const user = await User.findById(userId);
 
     if (!user || !user.pushTokens?.length) {
-      return NextResponse.json(
-        { message: "No tokens found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "No tokens found" }, { status: 404 });
     }
 
     const messages = user.pushTokens.map((token) => ({
       to: token,
-      sound: "default", // ✅ REQUIRED
-      title: title || "NestMe",
-      body: body || "New update",
+      sound: "default",
+      priority: "high", // 🔥 ADD THIS
+      channelId: "default", // 🔥 ADD THIS
+      title,
+      body,
       data: { url },
     }));
 
-    const response = await fetch(
-      "https://exp.host/--/api/v2/push/send",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(messages),
-      }
-    );
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(messages),
+    });
 
     const result = await response.json();
 
@@ -44,9 +40,6 @@ export async function POST(req) {
   } catch (err) {
     console.error("Push error:", err); // 🔥 debug
 
-    return NextResponse.json(
-      { error: err.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
