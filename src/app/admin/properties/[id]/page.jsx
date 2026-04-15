@@ -87,7 +87,9 @@ const reject = async () => {
             key={i}
             src={img.url}
             alt="property"
-            className="rounded-xl h-48 w-full object-cover shadow"
+            width={1000}
+            height={300}
+            className="rounded-xl object-cover shadow"
           />
         ))}
       </div>
