@@ -55,7 +55,7 @@ export default function SupportChat({ onClose }) {
   useEffect(() => {
     if (!user?._id) return;
 
-    socketRef.current = io("http://localhost:3000");
+    socketRef.current = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000" );
     const socket = socketRef.current;
 
     socket.emit("join", user._id);
