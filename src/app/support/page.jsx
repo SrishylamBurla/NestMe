@@ -17,7 +17,9 @@ export default function SupportPage() {
   };
 
   useEffect(() => {
-    fetchTickets();
+    (async () => {
+    await fetchTickets();
+  })();
   }, []);
 
   // 📤 Create ticket
