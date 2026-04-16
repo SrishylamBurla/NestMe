@@ -337,7 +337,7 @@ export async function POST(req) {
     await sendPushNotificationToUsers({
       title: "🔥 New Property Listed",
       body: property.title,
-      url: `${process.env.CLIENT_URL}/property/${property._id}`,
+      url: `${process.env.CLIENT_URL}/properties/${property._id}`,
     });
     /* ==============================
        🔔 USER NOTIFICATION
