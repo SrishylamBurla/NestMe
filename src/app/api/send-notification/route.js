@@ -17,8 +17,8 @@ export async function POST(req) {
     const messages = user.pushTokens.map((token) => ({
       to: token,
       sound: "default",
-      priority: "high", // 🔥 ADD THIS
-      channelId: "default", // 🔥 ADD THIS
+      priority: "high", 
+      channelId: "default",
       title,
       body,
       data: { url },
@@ -34,12 +34,11 @@ export async function POST(req) {
 
     const result = await response.json();
 
-    console.log("Push result:", result); // 🔥 debug
+    // console.log("Push result:", result); 
 
     return NextResponse.json(result);
   } catch (err) {
-    console.error("Push error:", err); // 🔥 debug
-
+    console.error("Push error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

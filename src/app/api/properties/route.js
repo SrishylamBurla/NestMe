@@ -10,8 +10,7 @@ import { propertyUnderReviewTemplate } from "@/lib/propertyUnderReviewTemplate";
 import { sendEmail } from "@/lib/sendEmail";
 import upload from "@/lib/multer";
 import cloudinary from "@/lib/cloudinary";
-import streamifier from "streamifier"
-
+import streamifier from "streamifier";
 
 //GET – LIST PROPERTIES
 export async function GET(req) {
@@ -121,8 +120,6 @@ export async function GET(req) {
 
 // POST – ADD PROPERTY
 
-
-
 function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
@@ -132,6 +129,44 @@ function runMiddleware(req, res, fn) {
   });
 }
 
+async function sendPushNotificationToUsers({ title, body, url }) {
+  try {
+    const users = await User.find({
+      pushTokens: { $exists: true, $ne: [] },
+    }).select("pushTokens");
+
+    const tokens = users.flatMap((u) => u.pushTokens || []);
+
+    if (!tokens.length) {
+      console.log("No push tokens found");
+      return;
+    }
+
+    const messages = tokens.map((token) => ({
+      to: token,
+      sound: "default",
+      priority: "high",
+      channelId: "default",
+      title,
+      body,
+      data: { url },
+    }));
+
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(messages),
+    });
+
+    const result = await response.json();
+
+    console.log("Push sent:", result);
+  } catch (err) {
+    console.error("Push error:", err);
+  }
+}
 
 export async function POST(req) {
   try {
@@ -163,7 +198,7 @@ export async function POST(req) {
       if (existingCount >= 1) {
         return NextResponse.json(
           { message: "Upgrade to agent to post multiple properties" },
-          { status: 403 }
+          { status: 403 },
         );
       }
     }
@@ -181,7 +216,7 @@ export async function POST(req) {
       if (!agentProfile) {
         return NextResponse.json(
           { message: "Agent profile not found" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -202,7 +237,7 @@ export async function POST(req) {
     if (imageFiles.length > 6) {
       return NextResponse.json(
         { message: "Maximum 6 images allowed" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -218,7 +253,7 @@ export async function POST(req) {
       if (!file.type.startsWith("image/")) {
         return NextResponse.json(
           { message: "Only image files are allowed" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -226,7 +261,7 @@ export async function POST(req) {
       if (file.size > 5 * 1024 * 1024) {
         return NextResponse.json(
           { message: "Each image must be less than 5MB" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -245,7 +280,7 @@ export async function POST(req) {
             (error, result) => {
               if (result) resolve(result);
               else reject(error);
-            }
+            },
           );
 
           streamifier.createReadStream(buffer).pipe(stream);
@@ -281,12 +316,8 @@ export async function POST(req) {
       listingStatus: formData.get("listingStatus"),
       amenities: formData.getAll("amenities[]"),
       location: {
-        lat: formData.get("lat")
-          ? Number(formData.get("lat"))
-          : null,
-        lng: formData.get("lng")
-          ? Number(formData.get("lng"))
-          : null,
+        lat: formData.get("lat") ? Number(formData.get("lat")) : null,
+        lng: formData.get("lng") ? Number(formData.get("lng")) : null,
       },
       images: uploadedImages,
       owner: user._id,
@@ -303,6 +334,11 @@ export async function POST(req) {
       });
     }
 
+    await sendPushNotificationToUsers({
+      title: "🔥 New Property Listed",
+      body: property.title,
+      url: `${process.env.CLIENT_URL}/property/${property._id}`,
+    });
     /* ==============================
        🔔 USER NOTIFICATION
     ============================== */
@@ -317,9 +353,7 @@ export async function POST(req) {
     /* ==============================
        🔔 ADMIN NOTIFICATIONS
     ============================== */
-    const admins = await User.find({ role: "admin" }).select(
-      "_id email name"
-    );
+    const admins = await User.find({ role: "admin" }).select("_id email name");
 
     if (admins.length) {
       await Notification.insertMany(
@@ -329,7 +363,7 @@ export async function POST(req) {
           message: `New property "${property.title}" submitted by ${user.name}`,
           type: "system",
           link: "/admin/properties",
-        }))
+        })),
       );
     }
 
@@ -385,12 +419,11 @@ export async function POST(req) {
     }
 
     return NextResponse.json(property, { status: 201 });
-
   } catch (error) {
     console.error("CREATE PROPERTY ERROR:", error);
     return NextResponse.json(
       { message: "Failed to create property" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
