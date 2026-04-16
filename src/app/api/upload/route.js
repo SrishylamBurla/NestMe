@@ -3,27 +3,45 @@ import cloudinary from "@/lib/cloudinary";
 
 export async function POST(req) {
   try {
-    const { image } = await req.json();
+    const formData = await req.formData();
+    const file = formData.get("file");
 
-    if (!image) {
+    if (!file) {
       return NextResponse.json(
-        { message: "Image is required" },
+        { error: "File is required" },
         { status: 400 }
       );
     }
 
-    const uploadedImage = await cloudinary.uploader.upload(image, {
-      folder: "NestMe", // ✅ THIS CREATES FOLDER
+    // ✅ Convert file → buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // ✅ Upload to Cloudinary
+    const uploadRes = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder: "NestMe/support",
+            resource_type: "auto",
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        )
+        .end(buffer);
     });
 
     return NextResponse.json({
-      url: uploadedImage.secure_url,
-      public_id: uploadedImage.public_id,
+      url: uploadRes.secure_url,
     });
 
   } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+
     return NextResponse.json(
-      { message: error.message },
+      { error: "Upload failed" },
       { status: 500 }
     );
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react"
 
 export default function AdminLayout({ children }) {
   return (
@@ -15,9 +16,7 @@ export default function AdminLayout({ children }) {
           href="/"
           className="flex items-center gap-2 text-sm text-gray-300 bg-gray-800 rounded-full p-2 hover:text-white transition"
         >
-          <span className="material-symbols-outlined text-lg">
-            arrow_back
-          </span>
+          <ChevronLeft size={18} strokeWidth={2} />
         </Link>
 
         {/* Heading */}
@@ -35,6 +34,7 @@ export default function AdminLayout({ children }) {
           <Nav link="/admin/leads" label="Leads" />
           <Nav link="/admin/subscriptions" label="Subscriptions" />
           <Nav link="/admin/pending-properties" label="Pending Approvals" />
+          <Nav link="/admin/support" label="Support" />
         </nav>
       </aside>
 

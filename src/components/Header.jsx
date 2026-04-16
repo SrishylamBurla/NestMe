@@ -17,7 +17,7 @@ export default function Header() {
   const { data: user, isLoading } = useGetMeQuery();
   const [logout] = useLogoutMutation();
 
-  const { data: notifications } = useGetNotificationsQuery(undefined, {
+  const { data: notifications, refetch } = useGetNotificationsQuery(undefined, {
     skip: !user,
   });
 
@@ -51,23 +51,20 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    if (!user) return;
+  if (!user) return;
 
-    const socket = io("https:/nestme.in");
+  const socket = io("https://nestme.in");
 
-    socket.emit("join", user._id);
+  socket.emit("join", user._id);
 
-    socket.on("notification", (data) => {
-      console.log("🔥 New notification:", data);
+  socket.on("notification", (data) => {
+    console.log("🔥 Real-time notification:", data);
 
-      // Option 1: refetch notifications
-      refetch();
+    refetch(); // 🔥 refresh instantly
+  });
 
-      // Option 2: local state update (faster)
-    });
-
-    return () => socket.disconnect();
-  }, [user]);
+  return () => socket.disconnect();
+}, [user]);
 
   useEffect(() => {
   if (!user) return;
@@ -363,7 +360,7 @@ export default function Header() {
     ${showNotifications ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-5">
+        <div className="flex justify-between items-center px-3 py-4 shadow-sm">
           <h2 className="text-xl font-semibold text-gray-900">Notifications</h2>
           <div className="flex items-center gap-4">
           {unreadCount > 0 && (
@@ -393,12 +390,12 @@ export default function Header() {
               items.length > 0 && (
                 <div key={group} className="mb-6">
                   {/* Group Title */}
-                  <p className="px-2 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  <p className="px-2 mb-2 mt-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     {group}
                   </p>
 
                   {/* Notifications */}
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {items.map((n) => (
                       <div
                         key={n._id}
@@ -411,11 +408,11 @@ export default function Header() {
                     ${
                       !n.isRead
                         ? "bg-indigo-50 hover:bg-indigo-100"
-                        : "bg-gray-50 hover:bg-gray-100"
+                        : "bg-gray-100 hover:bg-gray-200"
                     }`}
                       >
                         {/* Icon */}
-                        <span className="material-symbols-outlined text-indigo-500 mt-1">
+                        <span className="material-symbols-outlined text-violet-500 mt-1 pt-2">
                           {getIcon(n.type)}
                         </span>
 
@@ -436,7 +433,7 @@ export default function Header() {
 
                         {/* Unread Dot */}
                         {!n.isRead && (
-                          <span className="h-2 w-2 bg-indigo-600 rounded-full mt-2" />
+                          <span className="h-2 w-2 bg-red-600 rounded-full mt-5" />
                         )}
                       </div>
                     ))}

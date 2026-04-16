@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import PremiumSplash from "@/components/PremiumSplash";
 import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
+import HelpWidget from "@/components/HelpWidget";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
@@ -40,7 +41,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-
+      <HelpWidget />
       <main className="bg-[#f9fafb] overflow-x-hidden">
 
         {/* HERO */}

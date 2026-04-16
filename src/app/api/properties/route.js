@@ -12,6 +12,7 @@ import upload from "@/lib/multer";
 import cloudinary from "@/lib/cloudinary";
 import streamifier from "streamifier";
 
+
 //GET – LIST PROPERTIES
 export async function GET(req) {
   try {
@@ -339,6 +340,7 @@ export async function POST(req) {
       body: property.title,
       url: `${process.env.CLIENT_URL}/properties/${property._id}`,
     });
+
     /* ==============================
        🔔 USER NOTIFICATION
     ============================== */
@@ -350,6 +352,9 @@ export async function POST(req) {
       link: "/my-properties",
     });
 
+    io.to(user._id.toString()).emit("notification", {
+      title: "New Notification",
+    });
     /* ==============================
        🔔 ADMIN NOTIFICATIONS
     ============================== */

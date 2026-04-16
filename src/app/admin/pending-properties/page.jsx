@@ -31,7 +31,9 @@ export default function PendingPropertiesPage() {
                 key={i}
                 src={img.url}
                 alt="Property Image"
-                className="h-32 w-full object-cover rounded-lg"
+                width={300}
+                height={200}
+                className="object-cover rounded-lg"
               />
             ))}
           </div>
