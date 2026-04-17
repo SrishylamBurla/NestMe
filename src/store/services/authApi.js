@@ -30,6 +30,7 @@ export const authApi = api.injectEndpoints({
 
     getMe: builder.query({
       query: () => "/auth/me",
+      keepUnusedDataFor: 300, // important for auth
       providesTags: ["User"],
     }),
 
