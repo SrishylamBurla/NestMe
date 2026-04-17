@@ -77,6 +77,8 @@ const userSchema = new mongoose.Schema(
       default: "active",
     },
     pushTokens: [String],
+    resetToken: String,
+    resetTokenExpiry: Date,
   },
   { timestamps: true },
 );

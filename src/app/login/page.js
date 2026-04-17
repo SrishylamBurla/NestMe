@@ -104,7 +104,7 @@ export default function LoginPage() {
       console.log("Sending to React Native:", data.id);
       // 🔥 SEND TO MOBILE APP
       if (typeof window !== "undefined" && window.ReactNativeWebView) {
-         alert("Sending userId to app: " + data.id); 
+        alert("Sending userId to app: " + data.id);
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
             type: "USER_DATA",
@@ -144,7 +144,12 @@ export default function LoginPage() {
             {error?.data?.message || "Invalid credentials"}
           </p>
         )}
-
+        <p
+          onClick={() => router.push("/forgot-password")}
+          className="text-sm text-right text-indigo-400 cursor-pointer hover:underline"
+        >
+          Forgot Password?
+        </p>
         <Button disabled={isLoading}>
           {isLoading ? "Signing In..." : "Login"}
         </Button>
