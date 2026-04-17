@@ -53,7 +53,10 @@ export default function Header() {
   useEffect(() => {
   if (!user) return;
 
-  const socket = io("https://nestme.in");
+  const socket = io("https://nestme.in", {
+    withCredentials: true,
+    transports: ["websocket"],
+  });
 
   socket.emit("join", user._id);
 
