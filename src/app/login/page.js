@@ -12,14 +12,20 @@ import { auth } from "@/lib/firebase";
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+
+import {
+  GoogleAuthProvider,
+  signInWithRedirect,
+} from "firebase/auth";
+import { getRedirectResult } from "firebase/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const recaptchaRef = useRef(null);
   const [login, { isLoading, error }] = useLoginMutation();
+  const savedEmail = localStorage.getItem("google_email");
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [phone, setPhone] = useState("");
@@ -46,28 +52,28 @@ export default function LoginPage() {
   };
 
   // ================= SEND OTP =================
-const sendOtp = async () => {
-  try {
-    if (!phone) return alert("Enter phone");
+  const sendOtp = async () => {
+    try {
+      if (!phone) return alert("Enter phone");
 
-    if (!window.recaptchaVerifier) {
-      alert("Recaptcha not ready");
-      return;
+      if (!window.recaptchaVerifier) {
+        alert("Recaptcha not ready");
+        return;
+      }
+
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        "+91" + phone,
+        window.recaptchaVerifier
+      );
+
+      setConfirm(confirmation);
+      console.log("OTP SENT");
+    } catch (err) {
+      console.error("OTP ERROR:", err);
+      alert(err.message);
     }
-
-    const confirmation = await signInWithPhoneNumber(
-      auth,
-      "+91" + phone,
-      window.recaptchaVerifier
-    );
-
-    setConfirm(confirmation);
-    console.log("OTP SENT");
-  } catch (err) {
-    console.error("OTP ERROR:", err);
-    alert(err.message);
-  }
-};
+  };
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
     try {
@@ -88,7 +94,7 @@ const sendOtp = async () => {
           "Content-Type": "application/json",
         },
         credentials: "include", // 🔥 important
-        body: JSON.stringify({ phone, email:user?.email }), // send email for potential merge
+        body: JSON.stringify({ phone, email: savedEmail || undefined }), // send email for potential merge
       });
 
       const data = await res.json();
@@ -104,35 +110,14 @@ const sendOtp = async () => {
     }
   };
   // ================= GOOGLE LOGIN =================
-  const googleLogin = async () => {
-    console.log("GOOGLE CLICKED");
 
+
+  const googleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
 
-      const result = await signInWithPopup(auth, provider);
-
-      const user = result.user;
-
-      const res = await fetch("/api/auth/google-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // 🔥 important
-        body: JSON.stringify({
-          email: user.email,
-          name: user.displayName,
-          image: user.photoURL,
-        }),
-      });
-
-      if (!res.ok) throw new Error("Google backend failed");
-
-      const data = await res.json();
-
-      sendToApp(data.id);
-      router.push("/");
+      // 🔥 ALWAYS USE REDIRECT (NO POPUP)
+      await signInWithRedirect(auth, provider);
     } catch (err) {
       console.error("GOOGLE ERROR:", err);
       alert(err.message);
@@ -151,34 +136,76 @@ const sendOtp = async () => {
     }
   };
 
+
   useEffect(() => {
-  if (mode !== "phone") return;
+    const handleRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
 
-  if (typeof window === "undefined") return;
+        console.log("REDIRECT RESULT:", result);
 
-  const timer = setTimeout(() => {
-    try {
-      // 🔥 CLEAR OLD INSTANCE
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
+        if (!result || !result.user) return;
+
+        const user = result.user;
+
+        // ✅ store email for merge
+        localStorage.setItem("google_email", user.email);
+
+        const res = await fetch("/api/auth/google-login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email: user.email,
+            name: user.displayName,
+            image: user.photoURL,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message);
+
+        console.log("GOOGLE LOGIN SUCCESS:", data);
+
+        router.push("/");
+      } catch (err) {
+        console.error("REDIRECT ERROR:", err);
       }
+    };
 
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha",
-        {
-          size: "invisible",
+    handleRedirect();
+  }, []);
+  useEffect(() => {
+    if (mode !== "phone") return;
+
+    if (typeof window === "undefined") return;
+
+    const timer = setTimeout(() => {
+      try {
+        // 🔥 CLEAR OLD INSTANCE
+        if (window.recaptchaVerifier) {
+          window.recaptchaVerifier.clear();
         }
-      );
 
-      console.log("✅ Recaptcha initialized");
-    } catch (err) {
-      console.error("Recaptcha init error:", err);
-    }
-  }, 500);
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          auth,
+          "recaptcha",
+          {
+            size: "invisible",
+          }
+        );
 
-  return () => clearTimeout(timer);
-}, [mode]);
+        console.log("✅ Recaptcha initialized");
+      } catch (err) {
+        console.error("Recaptcha init error:", err);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [mode]);
 
   return (
     <AuthLayout
