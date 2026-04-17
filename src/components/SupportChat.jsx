@@ -145,7 +145,7 @@ export default function SupportChat({ onClose }) {
   if (isLoading) return null;
 
   return (
-    <div className="fixed bottom-0 right-0 w-full h-[100dvh] sm:bottom-20 sm:right-6 sm:w-80 sm:h-[500px] z-[50] bg-white rounded-none sm:rounded-2xl flex flex-col overflow-hidden shadow-lg">
+    <div className="fixed bottom-0 right-0 w-full h-[100dvh] sm:bottom-20 sm:right-6 sm:w-80 sm:h-[500px] z-[999] bg-white rounded-none sm:rounded-2xl flex flex-col overflow-hidden shadow-lg">
       {/* Header */}
       <div className="text-white bg-gradient-to-r from-violet-800 to-pink-800 p-3 flex justify-between items-center">
         <div className="flex items-center gap-2">
