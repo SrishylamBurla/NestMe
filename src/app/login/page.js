@@ -26,6 +26,7 @@ export default function LoginPage() {
   const [otp, setOtp] = useState("");
   const [confirm, setConfirm] = useState(null);
   const [mode, setMode] = useState("email");
+  const [code, setCode] = useState("");
 
   // ================= EMAIL LOGIN =================
   const submitHandler = async (e) => {
@@ -73,13 +74,13 @@ export default function LoginPage() {
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
   try {
+    if (!code) return alert("Enter OTP");
+
     const result = await confirm.confirm(code);
 
-    const user = result.user;
+    const phone = result.user.phoneNumber;
 
-    const phone = user.phoneNumber;
-
-    console.log("PHONE:", phone); // 🔥 check this
+    console.log("PHONE:", phone);
 
     const res = await fetch("/api/auth/phone-login", {
       method: "POST",
@@ -94,11 +95,13 @@ export default function LoginPage() {
     if (!res.ok) throw new Error(data.message);
 
     console.log("LOGIN SUCCESS:", data);
+
+    router.push("/"); // ✅ redirect after login
   } catch (err) {
     console.error("VERIFY OTP ERROR:", err);
+    alert(err.message);
   }
 };
-
   // ================= GOOGLE LOGIN =================
   const googleLogin = async () => {
     console.log("GOOGLE CLICKED");
@@ -261,8 +264,8 @@ export default function LoginPage() {
 
           <Input
             label="Enter OTP"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
           />
 
           <button
