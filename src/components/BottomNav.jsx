@@ -2,17 +2,16 @@
 
 import { useGetMeQuery } from "@/store/services/authApi";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 
 export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
-  
- const user = useSelector((state) => state.auth.user);
-  const agentId = user?.agentProfileId;
 
-  if (!user) return null;
-  
+  const { data: user, isLoading, isError } = useGetMeQuery();
+
+  if (isLoading || isError || !user) return null;
+
+  const agentId = user?.agentProfileId;
 
   const navConfig = {
     user: [
@@ -38,7 +37,8 @@ export default function BottomNav() {
     ],
   };
 
-  const items = navConfig[user.role];
+  const role = user.role || "user";
+  const items = navConfig[role] || [];
 
   return (
     <nav className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
