@@ -14,6 +14,7 @@ import {
   signInWithPhoneNumber,
   GoogleAuthProvider,
   signInWithPopup,
+  getAuth
 } from "firebase/auth";
 
 export default function LoginPage() {
@@ -22,7 +23,7 @@ export default function LoginPage() {
   const [login, { isLoading, error }] = useLoginMutation();
 
   const [form, setForm] = useState({ email: "", password: "" });
-
+  const auth = getAuth();
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [confirm, setConfirm] = useState(null);
@@ -50,20 +51,22 @@ export default function LoginPage() {
   console.log("OTP CLICKED");
 
   try {
-    if (!phone) return alert("Enter phone number");
+    if (!phone) return alert("Enter phone");
 
-    if (!recaptchaRef.current) {
+    const appVerifier = window.recaptchaVerifier;
+
+    if (!appVerifier) {
       return alert("Recaptcha not ready");
     }
 
     const confirmation = await signInWithPhoneNumber(
       auth,
-      "+91" + phone.replace(/\D/g, "").slice(-10),
-      recaptchaRef.current
+      "+91" + phone,
+      appVerifier
     );
 
-    console.log("OTP SENT");
     setConfirm(confirmation);
+    console.log("OTP SENT");
   } catch (err) {
     console.error("OTP ERROR:", err);
     alert(err.message);
@@ -148,23 +151,24 @@ export default function LoginPage() {
   };
 
 useEffect(() => {
-  if (mode !== "phone") return; // 🔥 important
+  if (mode !== "phone") return;
+  if (typeof window === "undefined") return;
 
-  if (!recaptchaRef.current) {
-    setTimeout(() => {
-      try {
-        recaptchaRef.current = new RecaptchaVerifier(
-          "recaptcha",
-          { size: "invisible" },
-          auth
-        );
+  if (!window.recaptchaVerifier) {
+    try {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha",
+        {
+          size: "invisible",
+        },
+        auth
+      );
 
-        recaptchaRef.current.render();
-        console.log("✅ Recaptcha initialized");
-      } catch (err) {
-        console.error("Recaptcha init error:", err);
-      }
-    }, 500); // 🔥 wait for DOM render
+      window.recaptchaVerifier.render();
+      console.log("✅ Recaptcha initialized");
+    } catch (err) {
+      console.error("Recaptcha init error:", err);
+    }
   }
 }, [mode]);
 
