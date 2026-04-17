@@ -73,35 +73,38 @@ export default function LoginPage() {
   };
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
-  try {
-    if (!code) return alert("Enter OTP");
+    try {
+      if (!code) return alert("Enter OTP");
 
-    const result = await confirm.confirm(code);
+      const result = await confirm.confirm(code);
 
-    const phone = result.user.phoneNumber;
+      const rawPhone = result.user.phoneNumber;
 
-    console.log("PHONE:", phone);
+      // normalize same as backend
+      const phone = rawPhone.replace(/\D/g, "").slice(-10);
 
-    const res = await fetch("/api/auth/phone-login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ phone }),
-    });
+      console.log("NORMALIZED PHONE:", phone);
 
-    const data = await res.json();
+      const res = await fetch("/api/auth/phone-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone }),
+      });
 
-    if (!res.ok) throw new Error(data.message);
+      const data = await res.json();
 
-    console.log("LOGIN SUCCESS:", data);
+      if (!res.ok) throw new Error(data.message);
 
-    router.push("/"); // ✅ redirect after login
-  } catch (err) {
-    console.error("VERIFY OTP ERROR:", err);
-    alert(err.message);
-  }
-};
+      console.log("LOGIN SUCCESS:", data);
+
+      router.push("/"); // ✅ redirect after login
+    } catch (err) {
+      console.error("VERIFY OTP ERROR:", err);
+      alert(err.message);
+    }
+  };
   // ================= GOOGLE LOGIN =================
   const googleLogin = async () => {
     console.log("GOOGLE CLICKED");
@@ -187,8 +190,8 @@ export default function LoginPage() {
         <button
           onClick={() => setMode("email")}
           className={`flex-1 py-2 rounded ${mode === "email"
-              ? "bg-indigo-600 text-white"
-              : "bg-gray-700"
+            ? "bg-indigo-600 text-white"
+            : "bg-gray-700"
             }`}
         >
           Email
@@ -196,8 +199,8 @@ export default function LoginPage() {
         <button
           onClick={() => setMode("phone")}
           className={`flex-1 py-2 rounded ${mode === "phone"
-              ? "bg-indigo-600 text-white"
-              : "bg-gray-700"
+            ? "bg-indigo-600 text-white"
+            : "bg-gray-700"
             }`}
         >
           Phone

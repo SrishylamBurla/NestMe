@@ -19,12 +19,11 @@ const userSchema = new mongoose.Schema(
     },
 
     phone: {
-      type: String,
-      required: false,
-      unique: true,
-      sparse: true,
-    },
-
+  type: String,
+  unique: true,
+  sparse: true,
+  set: (val) => val.replace(/\D/g, "").slice(-10), // 🔥 FORCE ALWAYS
+},
     avatar: String,
 
     /* ===== ROLE SYSTEM ===== */

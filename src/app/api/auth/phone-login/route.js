@@ -10,24 +10,17 @@ const generateToken = (id) => {
   });
 };
 
+// ✅ normalize function
+const normalizePhone = (phone) => {
+  return phone.replace(/\D/g, "").slice(-10); // last 10 digits only
+};
+
 export async function POST(req) {
   try {
     await connectDB();
 
-    // ✅ parse ONCE
-    let body;
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json(
-        { message: "Invalid JSON" },
-        { status: 400 }
-      );
-    }
-
-    console.log("BODY:", body);
-
-    const { phone } = body;
+    const body = await req.json();
+    let { phone } = body;
 
     if (!phone) {
       return NextResponse.json(
@@ -36,9 +29,13 @@ export async function POST(req) {
       );
     }
 
+    // 🔥 FIX HERE
+    phone = normalizePhone(phone);
+
+    console.log("NORMALIZED PHONE:", phone);
+
     let user = await User.findOne({ phone });
 
-    // ✅ create user if not exists
     if (!user) {
       user = await User.create({
         phone,
@@ -49,14 +46,13 @@ export async function POST(req) {
 
     const token = generateToken(user._id);
 
-    // ✅ set cookie (correct way)
     const cookieStore = await cookies();
 
     cookieStore.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      sameSite: "lax", // 🔥 important
+      sameSite: "lax",
     });
 
     return NextResponse.json({
@@ -65,7 +61,7 @@ export async function POST(req) {
     });
 
   } catch (err) {
-    console.error("PHONE LOGIN ERROR FULL:", err);
+    console.error("PHONE LOGIN ERROR:", err);
 
     return NextResponse.json(
       { message: err.message || "Something went wrong" },
