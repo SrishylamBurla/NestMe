@@ -1,21 +1,3 @@
-// import nextPWA from "next-pwa";
-
-// const withPWA = nextPWA({
-//   dest: "public",
-//   register: true,
-//   skipWaiting: true,
-//   disable: process.env.NODE_ENV === "development",
-//   fallbacks: {
-//     document: "/offline.html",
-//   },
-// });
-
-// const nextConfig = {
-//   reactStrictMode: true,
-// };
-
-// export default withPWA(nextConfig);
-
 import nextPWA from "next-pwa";
 
 const withPWA = nextPWA({
@@ -23,8 +5,9 @@ const withPWA = nextPWA({
   disable: process.env.NODE_ENV === "development",
 });
 
-export default withPWA({
+const nextConfig = {
   reactStrictMode: true,
+
   images: {
     domains: ["res.cloudinary.com"],
     remotePatterns: [
@@ -35,4 +18,21 @@ export default withPWA({
       },
     ],
   },
-});
+
+  // 🔥 ADD THIS BLOCK
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
+          },
+        ],
+      },
+    ];
+  },
+};
+
+export default withPWA(nextConfig);

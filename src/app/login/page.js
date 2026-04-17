@@ -1,97 +1,34 @@
-// "use client";
-
-// import { useLoginMutation } from "@/store/services/authApi";
-// import { useRouter } from "next/navigation";
-// import { useState } from "react";
-// import AuthLayout from "@/components/AuthLayout";
-// import Input from "@/components/Input";
-// import Button from "@/components/Button";
-
-// export default function LoginPage() {
-//   const router = useRouter();
-//   const [login, { isLoading, error }] = useLoginMutation();
-
-//   const [form, setForm] = useState({ email: "", password: "" });
-
-//   const submitHandler = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       await login({
-//         email: form.email.trim(),
-//         password: form.password,
-//       }).unwrap();
-
-//       router.push("/");
-//     } catch (err) {
-//       // handled by error UI
-//       console.error("LOGIN FAILED", err);
-//     }
-//   };
-
-//   return (
-//     <AuthLayout title="Welcome Back">
-//       <form onSubmit={submitHandler} className="space-y-4 font-sans">
-//         <Input
-//           label="Email"
-//           type="email"
-//           value={form.email}
-//           onChange={(e) =>
-//             setForm({ ...form, email: e.target.value })
-//           }
-//         />
-
-//         <Input
-//           label="Password"
-//           type="password"
-//           value={form.password}
-//           onChange={(e) =>
-//             setForm({ ...form, password: e.target.value })
-//           }
-//         />
-
-//         {error && (
-//           <p className="text-sm text-red-600">
-//             {error?.data?.message || "Invalid email or password"}
-//           </p>
-//         )}
-
-//         <Button disabled={isLoading}>
-//           {isLoading ? "Signing in..." : "Login"}
-//         </Button>
-
-//         <p className="text-sm text-center text-gray-500">
-//           Don’t have an account?{" "}
-//           <span
-//             className="font-semibold text-black cursor-pointer"
-//             onClick={() => router.push("/register")}
-//           >
-//             Register
-//           </span>
-//         </p>
-//       </form>
-//     </AuthLayout>
-//   );
-// }
-
 "use client";
 
 import { useLoginMutation } from "@/store/services/authApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useEffect, useRef } from "react";
 import AuthLayout from "@/components/AuthLayout";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
+import { auth } from "@/lib/firebase";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+
 export default function LoginPage() {
   const router = useRouter();
+  const recaptchaRef = useRef(null);
   const [login, { isLoading, error }] = useLoginMutation();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
 
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [confirm, setConfirm] = useState(null);
+  const [mode, setMode] = useState("email");
+
+  // ================= EMAIL LOGIN =================
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -101,69 +38,258 @@ export default function LoginPage() {
         password: form.password,
       }).unwrap();
 
-      console.log("Sending to React Native:", data.id);
-      // 🔥 SEND TO MOBILE APP
-      if (typeof window !== "undefined" && window.ReactNativeWebView) {
-        alert("Sending userId to app: " + data.id);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            type: "USER_DATA",
-            userId: data.id,
-          }),
-        );
-      }
-
+      sendToApp(data.id);
       router.push("/");
     } catch (err) {
-      console.error("LOGIN FAILED", err);
+      console.error("LOGIN ERROR:", err);
     }
   };
+
+  // ================= SEND OTP =================
+ const sendOtp = async () => {
+  console.log("OTP CLICKED");
+
+  try {
+    if (!phone) return alert("Enter phone number");
+
+    if (!recaptchaRef.current) {
+      return alert("Recaptcha not ready");
+    }
+
+    const confirmation = await signInWithPhoneNumber(
+      auth,
+      "+91" + phone.replace(/\D/g, "").slice(-10),
+      recaptchaRef.current
+    );
+
+    console.log("OTP SENT");
+    setConfirm(confirmation);
+  } catch (err) {
+    console.error("OTP ERROR:", err);
+    alert(err.message);
+  }
+};
+  // ================= VERIFY OTP =================
+  const verifyOtp = async () => {
+    try {
+      if (!confirm) return alert("Send OTP first");
+      if (!otp) return alert("Enter OTP");
+
+      const result = await confirm.confirm(otp);
+      const user = result.user;
+
+      const res = await fetch("/api/auth/phone-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // 🔥 important
+        body: JSON.stringify({ phone: user.phoneNumber }),
+      });
+
+      if (!res.ok) throw new Error("Phone login failed");
+
+      const data = await res.json();
+
+      sendToApp(data.id);
+      router.push("/");
+    } catch (err) {
+      console.error("VERIFY OTP ERROR:", err);
+      alert(err.message);
+    }
+  };
+
+  // ================= GOOGLE LOGIN =================
+  const googleLogin = async () => {
+    console.log("GOOGLE CLICKED");
+
+    try {
+      const provider = new GoogleAuthProvider();
+
+      const result = await signInWithPopup(auth, provider);
+
+      const user = result.user;
+
+      const res = await fetch("/api/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // 🔥 important
+        body: JSON.stringify({
+          email: user.email,
+          name: user.displayName,
+          image: user.photoURL,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Google backend failed");
+
+      const data = await res.json();
+
+      sendToApp(data.id);
+      router.push("/");
+    } catch (err) {
+      console.error("GOOGLE ERROR:", err);
+      alert(err.message);
+    }
+  };
+
+  // ================= MOBILE SYNC =================
+  const sendToApp = (userId) => {
+    if (typeof window !== "undefined" && window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          type: "USER_DATA",
+          userId,
+        })
+      );
+    }
+  };
+
+useEffect(() => {
+  if (mode !== "phone") return; // 🔥 important
+
+  if (!recaptchaRef.current) {
+    setTimeout(() => {
+      try {
+        recaptchaRef.current = new RecaptchaVerifier(
+          "recaptcha",
+          { size: "invisible" },
+          auth
+        );
+
+        recaptchaRef.current.render();
+        console.log("✅ Recaptcha initialized");
+      } catch (err) {
+        console.error("Recaptcha init error:", err);
+      }
+    }, 500); // 🔥 wait for DOM render
+  }
+}, [mode]);
 
   return (
     <AuthLayout
       title="Welcome Back"
       quote="Your next home is just a search away."
     >
-      <form onSubmit={submitHandler} className="space-y-4">
-        <Input
-          label="Email Address"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-
-        <Input
-          label="Password"
-          type="password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-
-        {error && (
-          <p className="text-sm text-red-400 text-center">
-            {error?.data?.message || "Invalid credentials"}
-          </p>
-        )}
-        <p
-          onClick={() => router.push("/forgot-password")}
-          className="text-sm text-right text-indigo-400 cursor-pointer hover:underline"
+      {/* TOGGLE */}
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => setMode("email")}
+          className={`flex-1 py-2 rounded ${
+            mode === "email"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-700"
+          }`}
         >
-          Forgot Password?
-        </p>
-        <Button disabled={isLoading}>
-          {isLoading ? "Signing In..." : "Login"}
-        </Button>
+          Email
+        </button>
+        <button
+          onClick={() => setMode("phone")}
+          className={`flex-1 py-2 rounded ${
+            mode === "phone"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-700"
+          }`}
+        >
+          Phone
+        </button>
+      </div>
 
-        <p className="text-sm text-center text-white/60">
-          Don’t have an account?{" "}
-          <span
-            className="font-semibold text-indigo-400 cursor-pointer hover:underline"
-            onClick={() => router.push("/register")}
+      {/* EMAIL */}
+      {mode === "email" && (
+        <form onSubmit={submitHandler} className="space-y-4">
+          <Input
+            label="Email"
+            type="email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            value={form.password}
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
+          />
+
+          {error && (
+            <p className="text-sm text-red-400 text-center">
+              {error?.data?.message || "Invalid credentials"}
+            </p>
+          )}
+
+          <p
+            onClick={() => router.push("/forgot-password")}
+            className="text-sm text-right text-indigo-400 cursor-pointer"
           >
-            Register
-          </span>
-        </p>
-      </form>
+            Forgot Password?
+          </p>
+
+          <Button disabled={isLoading}>
+            {isLoading ? "Signing In..." : "Login"}
+          </Button>
+        </form>
+      )}
+
+      {/* PHONE */}
+      {mode === "phone" && (
+        <div className="space-y-4">
+          <Input
+            label="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+
+          <button
+            onClick={sendOtp}
+            className="w-full h-11 bg-black text-white rounded-lg font-bold"
+          >
+            Send OTP
+          </button>
+
+          <div id="recaptcha"></div>
+
+          <Input
+            label="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
+
+          <button
+            onClick={verifyOtp}
+            className="w-full h-11 bg-black text-white rounded-lg font-bold"
+          >
+            Verify OTP
+          </button>
+        </div>
+      )}
+
+      {/* GOOGLE */}
+      <div className="mt-6">
+        <button
+          onClick={googleLogin}
+          className="w-full h-11 bg-black text-white rounded-lg font-bold"
+        >
+          Continue with Google
+        </button>
+      </div>
+
+      {/* REGISTER */}
+      <p className="text-sm text-center text-white/60 mt-4">
+        Don’t have an account?{" "}
+        <span
+          className="text-indigo-400 cursor-pointer"
+          onClick={() => router.push("/register")}
+        >
+          Register
+        </span>
+      </p>
     </AuthLayout>
   );
 }

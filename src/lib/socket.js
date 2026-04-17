@@ -5,9 +5,16 @@ let io;
 export const initSocket = (server) => {
   if (!io) {
     io = new Server(server, {
-      cors: { origin: "*" },
+      cors: {
+        origin: [
+          "http://localhost:3000",
+          "https://nestme.in",
+          "https://www.nestme.in",
+        ],
+        methods: ["GET", "POST"],
+        credentials: true,
+      },
     });
-
     io.on("connection", (socket) => {
       console.log("⚡ Connected:", socket.id);
 
