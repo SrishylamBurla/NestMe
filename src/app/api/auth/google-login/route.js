@@ -23,20 +23,37 @@ export async function POST(req) {
       );
     }
 
-    // 🔥 STEP 1: Check existing user
+    // 🔥 STEP 1: Find by email
     let user = await User.findOne({ email });
 
-    // 🔥 STEP 2: Create only if not exists
+    // 🔥 STEP 2: If NOT found → check if phone user exists (merge case)
     if (!user) {
+      user = await User.findOne({
+        phone: { $exists: true },
+        email: { $exists: false },
+      });
+    }
+
+    // 🔥 STEP 3: If user exists → UPDATE (merge)
+    if (user) {
+      user.email = email;
+      user.name = user.name || name;
+      user.avatar = image;
+      user.loginProvider = "google";
+
+      await user.save();
+    } else {
+      // 🔥 STEP 4: Create new user
       user = await User.create({
         email,
         name: name || "User",
         avatar: image,
         loginProvider: "google",
+        role: "user",
       });
     }
 
-    // 🔥 STEP 3: Generate token
+    // 🔥 STEP 5: Token
     const token = generateToken(user._id);
 
     const cookieStore = await cookies();
@@ -54,7 +71,7 @@ export async function POST(req) {
     });
 
   } catch (err) {
-    console.error("GOOGLE LOGIN ERROR:", err); // 👈 IMPORTANT
+    console.error("GOOGLE MERGE ERROR:", err);
 
     return NextResponse.json(
       { message: err.message || "Server error" },

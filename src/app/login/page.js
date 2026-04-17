@@ -88,7 +88,7 @@ const sendOtp = async () => {
           "Content-Type": "application/json",
         },
         credentials: "include", // 🔥 important
-        body: JSON.stringify({ phone }),
+        body: JSON.stringify({ phone, email:user?.email }), // send email for potential merge
       });
 
       const data = await res.json();
