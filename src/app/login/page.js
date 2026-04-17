@@ -14,7 +14,6 @@ import {
   signInWithPhoneNumber,
   GoogleAuthProvider,
   signInWithPopup,
-  getAuth
 } from "firebase/auth";
 
 export default function LoginPage() {
@@ -23,7 +22,6 @@ export default function LoginPage() {
   const [login, { isLoading, error }] = useLoginMutation();
 
   const [form, setForm] = useState({ email: "", password: "" });
-  const auth = getAuth();
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [confirm, setConfirm] = useState(null);
