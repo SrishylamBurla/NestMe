@@ -46,31 +46,28 @@ export default function LoginPage() {
   };
 
   // ================= SEND OTP =================
-  const sendOtp = async () => {
-    console.log("OTP CLICKED");
+const sendOtp = async () => {
+  try {
+    if (!phone) return alert("Enter phone");
 
-    try {
-      if (!phone) return alert("Enter phone");
-
-      const appVerifier = window.recaptchaVerifier;
-
-      if (!appVerifier) {
-        return alert("Recaptcha not ready");
-      }
-
-      const confirmation = await signInWithPhoneNumber(
-        auth,
-        "+91" + phone,
-        appVerifier
-      );
-
-      setConfirm(confirmation);
-      console.log("OTP SENT");
-    } catch (err) {
-      console.error("OTP ERROR:", err);
-      alert(err.message);
+    if (!window.recaptchaVerifier) {
+      alert("Recaptcha not ready");
+      return;
     }
-  };
+
+    const confirmation = await signInWithPhoneNumber(
+      auth,
+      "+91" + phone,
+      window.recaptchaVerifier
+    );
+
+    setConfirm(confirmation);
+    console.log("OTP SENT");
+  } catch (err) {
+    console.error("OTP ERROR:", err);
+    alert(err.message);
+  }
+};
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
     try {
@@ -90,6 +87,7 @@ export default function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // 🔥 important
         body: JSON.stringify({ phone }),
       });
 
@@ -154,31 +152,33 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    if (mode !== "phone") return;
+  if (mode !== "phone") return;
 
-    if (typeof window === "undefined") return;
+  if (typeof window === "undefined") return;
 
-    // 🔥 wait for DOM + Firebase
-    const timer = setTimeout(() => {
-      try {
-        if (!window.recaptchaVerifier) {
-          window.recaptchaVerifier = new RecaptchaVerifier(
-            auth, // ✅ NEW SDK FORMAT (IMPORTANT)
-            "recaptcha",
-            {
-              size: "invisible",
-            }
-          );
-
-          console.log("✅ Recaptcha initialized");
-        }
-      } catch (err) {
-        console.error("Recaptcha init error:", err);
+  const timer = setTimeout(() => {
+    try {
+      // 🔥 CLEAR OLD INSTANCE
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
       }
-    }, 500); // 🔥 delay fixes hydration timing
 
-    return () => clearTimeout(timer);
-  }, [mode]);
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha",
+        {
+          size: "invisible",
+        }
+      );
+
+      console.log("✅ Recaptcha initialized");
+    } catch (err) {
+      console.error("Recaptcha init error:", err);
+    }
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [mode]);
 
   return (
     <AuthLayout
