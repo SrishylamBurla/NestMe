@@ -45,31 +45,31 @@ export default function LoginPage() {
   };
 
   // ================= SEND OTP =================
- const sendOtp = async () => {
-  console.log("OTP CLICKED");
+  const sendOtp = async () => {
+    console.log("OTP CLICKED");
 
-  try {
-    if (!phone) return alert("Enter phone");
+    try {
+      if (!phone) return alert("Enter phone");
 
-    const appVerifier = window.recaptchaVerifier;
+      const appVerifier = window.recaptchaVerifier;
 
-    if (!appVerifier) {
-      return alert("Recaptcha not ready");
+      if (!appVerifier) {
+        return alert("Recaptcha not ready");
+      }
+
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        "+91" + phone,
+        appVerifier
+      );
+
+      setConfirm(confirmation);
+      console.log("OTP SENT");
+    } catch (err) {
+      console.error("OTP ERROR:", err);
+      alert(err.message);
     }
-
-    const confirmation = await signInWithPhoneNumber(
-      auth,
-      "+91" + phone,
-      appVerifier
-    );
-
-    setConfirm(confirmation);
-    console.log("OTP SENT");
-  } catch (err) {
-    console.error("OTP ERROR:", err);
-    alert(err.message);
-  }
-};
+  };
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
     try {
@@ -148,27 +148,32 @@ export default function LoginPage() {
     }
   };
 
-useEffect(() => {
-  if (mode !== "phone") return;
-  if (typeof window === "undefined") return;
+  useEffect(() => {
+    if (mode !== "phone") return;
 
-  if (!window.recaptchaVerifier) {
-    try {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha",
-        {
-          size: "invisible",
-        },
-        auth
-      );
+    if (typeof window === "undefined") return;
 
-      window.recaptchaVerifier.render();
-      console.log("✅ Recaptcha initialized");
-    } catch (err) {
-      console.error("Recaptcha init error:", err);
-    }
-  }
-}, [mode]);
+    // 🔥 wait for DOM + Firebase
+    const timer = setTimeout(() => {
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            auth, // ✅ NEW SDK FORMAT (IMPORTANT)
+            "recaptcha",
+            {
+              size: "invisible",
+            }
+          );
+
+          console.log("✅ Recaptcha initialized");
+        }
+      } catch (err) {
+        console.error("Recaptcha init error:", err);
+      }
+    }, 500); // 🔥 delay fixes hydration timing
+
+    return () => clearTimeout(timer);
+  }, [mode]);
 
   return (
     <AuthLayout
@@ -179,21 +184,19 @@ useEffect(() => {
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setMode("email")}
-          className={`flex-1 py-2 rounded ${
-            mode === "email"
+          className={`flex-1 py-2 rounded ${mode === "email"
               ? "bg-indigo-600 text-white"
               : "bg-gray-700"
-          }`}
+            }`}
         >
           Email
         </button>
         <button
           onClick={() => setMode("phone")}
-          className={`flex-1 py-2 rounded ${
-            mode === "phone"
+          className={`flex-1 py-2 rounded ${mode === "phone"
               ? "bg-indigo-600 text-white"
               : "bg-gray-700"
-          }`}
+            }`}
         >
           Phone
         </button>

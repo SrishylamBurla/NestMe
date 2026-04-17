@@ -44,6 +44,7 @@ export async function POST(req) {
 
         return NextResponse.json({
             id: user._id,
+            token,
         });
     } catch (err) {
         console.error("PHONE LOGIN ERROR:", err);
