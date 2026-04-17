@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useMemo } from "react";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetAgentPropertiesQuery } from "@/store/services/agentApi";
@@ -7,7 +8,9 @@ import AgentPropertyCard from "@/components/agent/AgentPropertyCard";
 import { useRouter } from "next/navigation";
 
 export default function AgentPropertiesPage() {
-  const { data: user, isLoading: userLoading } = useGetMeQuery();
+  // ✅ FIXED: correct structure
+  const { data, isLoading: userLoading } = useGetMeQuery();
+  const user = data?.user;
   const agentId = user?.agentProfileId;
 
   const router = useRouter();
@@ -16,27 +19,22 @@ export default function AgentPropertiesPage() {
   const [sort, setSort] = useState("latest");
 
   const {
-    data,
+    data: propertiesData,
     isLoading: propertiesLoading,
     isError,
   } = useGetAgentPropertiesQuery(agentId ?? skipToken);
 
   const processedProperties = useMemo(() => {
-    if (!data?.properties) return [];
+    if (!propertiesData?.properties) return [];
 
-    let props = [...data.properties];
+    let props = [...propertiesData.properties];
 
-    // FILTER LOGIC (Same as User Page)
+    // FILTER
     if (filter !== "all") {
       props = props.filter((p) => {
-        // approval filters
         if (filter === "pending") return p.approvalStatus === "pending";
-
         if (filter === "rejected") return p.approvalStatus === "rejected";
-
-        // approved + listing
         if (filter === "approved") return p.approvalStatus === "approved";
-
         return true;
       });
     }
@@ -45,7 +43,7 @@ export default function AgentPropertiesPage() {
     props = props.filter(
       (p) =>
         p.title?.toLowerCase().includes(search.toLowerCase()) ||
-        p.city?.toLowerCase().includes(search.toLowerCase()),
+        p.city?.toLowerCase().includes(search.toLowerCase())
     );
 
     // SORT
@@ -60,8 +58,9 @@ export default function AgentPropertiesPage() {
     }
 
     return props;
-  }, [data, filter, search, sort]);
+  }, [propertiesData, filter, search, sort]);
 
+  // ✅ LOADING FIX
   if (userLoading || propertiesLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-slate-500">
@@ -70,24 +69,28 @@ export default function AgentPropertiesPage() {
     );
   }
 
+  if (!user) {
+    return <p className="p-4">Not logged in</p>;
+  }
+
   if (isError) {
     return <p className="p-4 text-red-500">Failed to load properties</p>;
   }
+
   return (
     <section className="min-h-screen bg-gradient-to-br from-indigo-200 via-violet-200 to-purple-200 p-4">
       <div className="max-w-7xl mx-auto space-y-3">
-        {/* Header */}
+
+        {/* HEADER */}
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 px-1 py-1 rounded-full bg-gray-600 shadow hover:shadow-md text-gray-100 hover:bg-gray-700 transition"
+            className="flex items-center gap-2 px-1 py-1 rounded-full bg-gray-600 text-white hover:bg-gray-700"
           >
-            <span className="material-symbols-outlined text-[18px]">
-              arrow_back
-            </span>
+            ←
           </button>
 
-          <h1 className="text-2xl font-sans font-bold text-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold text-center text-indigo-600">
             My Properties
           </h1>
 
@@ -96,86 +99,65 @@ export default function AgentPropertiesPage() {
           </div>
         </div>
 
-        {/* Search + Sort */}
-        <div className="rounded-lg">
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
-            {/* Search */}
-            <div className="relative flex-1 bg-white rounded-lg">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                search
-              </span>
+        {/* SEARCH + SORT */}
+        <div className="flex flex-col md:flex-row gap-4">
 
-              <input
-                type="text"
-                placeholder="Search properties..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-11 pl-12 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:shadow-md focus:ring-gray-500 text-sm"
-              />
-            </div>
+          <input
+            type="text"
+            placeholder="Search properties..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 h-11 px-4 rounded-lg border"
+          />
 
-            {/* Sort */}
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="h-11 px-4 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:shadow-sm focus:ring-gray-500 min-w-[180px]"
-            >
-              <option value="latest">Sort: Latest</option>
-              <option value="oldest">Sort: Oldest</option>
-              <option value="priceHigh">Price: High → Low</option>
-              <option value="priceLow">Price: Low → High</option>
-            </select>
-          </div>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="h-11 px-4 rounded-lg border"
+          >
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+            <option value="priceHigh">High → Low</option>
+            <option value="priceLow">Low → High</option>
+          </select>
         </div>
 
-        <div className="flex gap-3 flex-wrap pt-2">
+        {/* FILTER */}
+        <div className="flex gap-3 flex-wrap">
           {["all", "approved", "pending", "rejected"].map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}
-              className={`px-5 py-2 rounded-lg text-sm font-medium font-sans transition ${
+              className={`px-4 py-2 rounded-lg ${
                 filter === status
-                  ? "bg-indigo-600 text-white shadow-sm"
-                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  ? "bg-indigo-600 text-white"
+                  : "bg-white border"
               }`}
             >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {status}
             </button>
           ))}
         </div>
 
-        {/* Empty State */}
+        {/* EMPTY */}
         {processedProperties.length === 0 && (
-          <div className="bg-white/70 backdrop-blur-xl border border-white/40 p-8 rounded-3xl shadow-md text-center space-y-3">
-            <div className="text-4xl">
-              {filter === "pending" && "⏳"}
-              {filter === "rejected" && "❌"}
-              {filter === "approved" && "✅"}
-              {filter === "all" && "📦"}
-            </div>
-
-            <h3 className="text-lg font-semibold text-slate-700">
-              No {filter} properties
-            </h3>
-
-            <p className="text-sm text-slate-500">
-              {filter === "all"
-                ? "You haven't added any properties yet."
-                : `You don't have any ${filter} properties right now.`}
-            </p>
+          <div className="text-center py-10 text-gray-500">
+            No properties found
           </div>
         )}
 
-        {/* Masonry Grid */}
+        {/* ✅ FIXED GRID (NO EXTRA DIV) */}
         {processedProperties.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
             {processedProperties.map((property) => (
-              <div key={property._id}>
-                <AgentPropertyCard property={property} />
-              </div>
+              <AgentPropertyCard
+                key={property._id}
+                property={property}
+              />
             ))}
           </div>
         )}
+
       </div>
     </section>
   );

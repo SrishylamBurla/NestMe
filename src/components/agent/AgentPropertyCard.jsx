@@ -85,7 +85,7 @@ export default function AgentPropertyCard({ property }) {
             </span>
           </div>
         </div> */}
-        <div className="relative font-sans">
+        <div className="relative font-sans w-full h-44">
           {/* Property Image */}
           <Image
             src={
@@ -93,8 +93,7 @@ export default function AgentPropertyCard({ property }) {
               "/propertyImg/placeholder-property.jpg"
             }
             alt="property"
-            width={400}
-            height={300}
+            fill
             className={`object-cover transition duration-300 ${
               property.approvalStatus === "rejected" ? "brightness-75" : ""
             }`}

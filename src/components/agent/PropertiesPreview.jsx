@@ -4,39 +4,60 @@ import { useRouter } from "next/navigation";
 import { useGetAgentPropertiesQuery } from "@/store/services/agentApi";
 import { useGetMeQuery } from "@/store/services/authApi";
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, agentId }) => {
   const router = useRouter();
 
-  const statusColor =
-    property.approvalStatus === "pending"
-      ? "bg-yellow-100 text-yellow-700"
-      : property.approvalStatus === "rejected"
-      ? "bg-red-100 text-red-700"
-      : property.listingStatus === "sold" ||
-        property.listingStatus === "rented"
-      ? "bg-gray-300 text-gray-800"
-      : "bg-green-100 text-green-700";
+  const handleClick = () => {
+    if (!agentId) return;
+    router.push(`/agents/${agentId}/properties/${property._id}`);
+  };
 
-  const statusText =
-    property.approvalStatus === "pending"
-      ? "Pending"
-      : property.approvalStatus === "rejected"
-      ? "Rejected"
-      : property.listingStatus === "sold"
-      ? "Sold"
-      : property.listingStatus === "rented"
-      ? "Rented"
-      : "Available";
+  const isPending = property.approvalStatus === "pending";
+  const isRejected = property.approvalStatus === "rejected";
+
+  const statusConfig = {
+    pending: {
+      text: "Pending Approval",
+      color: "bg-yellow-100 text-yellow-700",
+      overlay: "bg-yellow-500/20",
+    },
+    rejected: {
+      text: "Rejected",
+      color: "bg-red-100 text-red-700",
+      overlay: "bg-red-500/20",
+    },
+    approved: {
+      text:
+        property.listingStatus === "sold"
+          ? "Sold"
+          : property.listingStatus === "rented"
+          ? "Rented"
+          : "Available",
+      color:
+        property.listingStatus === "sold" ||
+        property.listingStatus === "rented"
+          ? "bg-gray-300 text-gray-800"
+          : "bg-green-100 text-green-700",
+    },
+  };
+
+  const status =
+    isPending
+      ? statusConfig.pending
+      : isRejected
+      ? statusConfig.rejected
+      : statusConfig.approved;
 
   return (
     <div
-      onClick={() =>
-        router.push(`/agents/${property.agent}/properties/${property._id}`)
-      }
-      className="min-w-[240px] bg-white rounded-xl overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition"
+      onClick={handleClick}
+      className="min-w-[260px] bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col"
     >
+      {/* IMAGE */}
       <div
-        className="h-32 bg-gray-300 bg-cover bg-center relative"
+        className={`h-36 bg-gray-300 bg-cover bg-center relative ${
+          isPending || isRejected ? "grayscale" : ""
+        }`}
         style={{
           backgroundImage: `url(${
             property.images?.[0]?.url ||
@@ -44,41 +65,69 @@ const PropertyCard = ({ property }) => {
           })`,
         }}
       >
+        {/* STATUS BADGE */}
         <span
-          className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${statusColor}`}
+          className={`absolute top-3 right-3 text-xs px-3 py-1 rounded-full font-semibold shadow ${status.color}`}
         >
-          {statusText}
+          {status.text}
         </span>
+
+        {/* OVERLAY (pending / rejected) */}
+        {(isPending || isRejected) && (
+          <div
+            className={`absolute inset-0 ${status.overlay} flex items-center justify-center`}
+          >
+            <p className="text-sm font-semibold text-white bg-black/50 px-3 py-1 rounded">
+              {status.text}
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="p-3 space-y-1">
-        <p className="font-bold text-lg">
-          ₹{property.priceValue?.toLocaleString()}
-        </p>
-        <p className="text-sm truncate">{property.title}</p>
-        <p className="text-xs text-gray-500">
-          {property.city}, {property.state}
-        </p>
+      {/* CONTENT */}
+      <div className="p-4 flex flex-col flex-1 justify-between">
+        <div>
+          <p className="text-xl font-bold text-slate-900">
+            ₹{property.priceValue?.toLocaleString()}
+          </p>
+
+          <h4 className="font-semibold text-slate-800 line-clamp-2 min-h-[44px]">
+            {property.title}
+          </h4>
+
+          <p className="text-xs text-gray-500 mt-1">
+            {property.city}, {property.state}
+          </p>
+        </div>
+
+        {/* FOOTER ACTION HINT */}
+        <div className="mt-3 text-xs text-gray-400">
+          {isPending && "Waiting for admin approval"}
+          {isRejected && "Tap to edit & resubmit"}
+          {!isPending && !isRejected && "Tap to manage"}
+        </div>
       </div>
     </div>
   );
 };
 
 export default function PropertiesPreview() {
-  const { data: user } = useGetMeQuery();
+  const { data, isLoading: userLoading } = useGetMeQuery();
+  const user = data?.user;
   const agentId = user?.agentProfileId;
 
-  const { data, isLoading } = useGetAgentPropertiesQuery(agentId, {
-    skip: !agentId,
-  });
+  const { data: propertiesData, isLoading } =
+    useGetAgentPropertiesQuery(agentId, {
+      skip: !agentId,
+    });
 
-  const properties = data?.properties?.slice(0, 5) || [];
+  const properties = propertiesData?.properties?.slice(0, 5) || [];
 
   return (
     <div className="px-4 py-4">
       <h3 className="text-lg font-bold mb-3">Your Properties</h3>
 
-      {isLoading && (
+      {(userLoading || isLoading) && (
         <p className="text-sm text-gray-500">
           Loading properties...
         </p>
@@ -92,7 +141,11 @@ export default function PropertiesPreview() {
 
       <div className="flex gap-4 overflow-x-auto no-scrollbar p-2">
         {properties.map((p) => (
-          <PropertyCard key={p._id} property={p} />
+          <PropertyCard
+            key={p._id}
+            property={p}
+            agentId={agentId}
+          />
         ))}
       </div>
     </div>

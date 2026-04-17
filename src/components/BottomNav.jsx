@@ -1,13 +1,12 @@
 "use client";
-
-import { useGetMeQuery } from "@/store/services/authApi";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: user, isLoading, isError } = useGetMeQuery();
+  const { data: user, isLoading, isError } = useAuth();
 
   if (isLoading || isError || !user) return null;
 

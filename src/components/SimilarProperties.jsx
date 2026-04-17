@@ -42,7 +42,7 @@ export default function SimilarProperties({ properties = [] }) {
                 className="h-36 w-full bg-gray-100 bg-cover bg-center relative"
                 style={{
                   backgroundImage: `url(${
-                    p.images?.[0]?.url || "/placeholder-property.jpg"
+                    p.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
                   })`,
                 }}
               >

@@ -5,7 +5,7 @@ import {
   useCreateOrderMutation,
   useVerifyPaymentMutation,
 } from "@/store/services/SubscribeApi";
-import { useGetMeQuery } from "@/store/services/authApi";
+
 import { toast } from "react-hot-toast";
 
 export default function CheckoutContent() {
@@ -14,7 +14,7 @@ export default function CheckoutContent() {
 
   const plan = params.get("plan");
 
-  const { data: user, refetch } = useGetMeQuery();
+  const { data: user, refetch } = useAuth();
 
   const [createOrder] = useCreateOrderMutation();
   const [verifyPayment] = useVerifyPaymentMutation();

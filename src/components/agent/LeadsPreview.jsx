@@ -2,24 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import { useGetAgentLeadsQuery } from "@/store/services/agentApi";
-import { useGetMeQuery } from "@/store/services/authApi";
+import { useAuth } from "@/hooks/useAuth";
+
 
 const LeadItem = ({ lead, agentId }) => {
   const router = useRouter();
 
   return (
     <div
-      onClick={() => router.push(`/agents/${agentId}/leads`)}
+      onClick={() => {
+        if (!agentId) return;
+        router.push(`/agents/${agentId}/leads`);
+      }}
       className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-md cursor-pointer"
     >
       <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center font-bold">
-        {lead.user?.name?.[0]}
+        {lead.user?.name?.[0] || "U"}
       </div>
 
       <div className="flex-1">
-        <p className="font-bold">{lead.user?.name}</p>
+        <p className="font-bold">{lead.user?.name || "Unknown"}</p>
         <p className="text-xs text-gray-500 line-clamp-1">
-          {lead.property?.title}
+          {lead.property?.title || "No property"}
         </p>
       </div>
 
@@ -31,24 +35,25 @@ const LeadItem = ({ lead, agentId }) => {
 };
 
 export default function LeadsPreview() {
-  const { data: user } = useGetMeQuery();
-
-//   console.log("LOGGED USER:", user);
-// console.log("AGENT PROFILE ID:", user?.agentProfileId);
-
+  // ✅ FIXED
+  const { data, isLoading: userLoading } = useAuth();
+  const user = data?.user;
   const agentId = user?.agentProfileId;
 
-  const { data, isLoading } = useGetAgentLeadsQuery(agentId, {
-    skip: !agentId,
-  });
+  const { data: leadsData, isLoading } =
+    useGetAgentLeadsQuery(agentId, {
+      skip: !agentId,
+    });
 
-  const leads = data?.leads?.slice(0, 3) || [];
+  const leads = leadsData?.leads?.slice(0, 3) || [];
 
   return (
     <div className="px-4 py-4">
       <h3 className="text-lg font-bold mb-3">New Leads</h3>
 
-      {isLoading && <p className="text-sm text-gray-500">Loading leads...</p>}
+      {(userLoading || isLoading) && (
+        <p className="text-sm text-gray-500">Loading leads...</p>
+      )}
 
       {!isLoading && leads.length === 0 && (
         <p className="text-sm text-gray-400">No leads yet</p>
@@ -56,7 +61,11 @@ export default function LeadsPreview() {
 
       <div className="space-y-3">
         {leads.map((lead) => (
-          <LeadItem key={lead._id} lead={lead} agentId={agentId} />
+          <LeadItem
+            key={lead._id}
+            lead={lead}
+            agentId={agentId} // ✅ FIXED
+          />
         ))}
       </div>
     </div>

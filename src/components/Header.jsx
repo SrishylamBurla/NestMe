@@ -14,7 +14,8 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: user, isLoading } = useGetMeQuery();
+  const { data, isLoading } = useGetMeQuery();
+const user = data?.user;
   const [logout] = useLogoutMutation();
 
   const { data: notifications, refetch } = useGetNotificationsQuery(undefined, {

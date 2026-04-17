@@ -17,7 +17,7 @@ export default function EditPropertyPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  const { data, isLoading } = useGetPropertyByIdQuery(id);
+  const { data: property, isLoading } = useGetPropertyByIdQuery(id);
   const [updateProperty, { isLoading: saving }] = useUpdatePropertyMutation();
 
   const [form, setForm] = useState(null);
@@ -25,16 +25,17 @@ export default function EditPropertyPage() {
   // ✅ FIX: safe access
   const listingType = form?.listingType || "sale";
 
-  const { data: user } = useGetMeQuery();
+  const { data } = useGetMeQuery();
 
+  const user = data?.user;
   useEffect(() => {
-    if (!data) return;
+    if (!property) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm((prev) => {
       // prevent repeated updates
-      if (prev && prev.title === data.title) return prev;
+      if (prev && prev.title === property.title) return prev;
 
-      const p = data;
+      const p = property;
 
       return {
         title: p.title || "",
@@ -58,7 +59,7 @@ export default function EditPropertyPage() {
         listingType: p.listingType || "sale",
       };
     });
-  }, [data]);
+  }, [property]);
 
   if (isLoading || !form) return <p className="p-4">Loading property...</p>;
   if (user?.role !== "admin") return <p>Unauthorized</p>;
@@ -100,7 +101,7 @@ export default function EditPropertyPage() {
             <button onClick={() => router.back()}>✕</button>
             <h2 className="font-bold">Edit Property</h2>
 
-            {data?.approvalStatus === "rejected" && (
+            {property?.approvalStatus === "rejected" && (
               <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 p-3 rounded-lg mb-4 text-sm">
                 This property was rejected. Please fix the issues and submit
                 again.
@@ -388,305 +389,3 @@ function Counter({ label, value, onChange }) {
     </div>
   );
 }
-
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { useParams, useRouter } from "next/navigation";
-// import {
-//   useGetPropertyByIdQuery,
-//   useUpdatePropertyMutation,
-// } from "@/store/services/PropertiesApi";
-// import { useGetMeQuery } from "@/store/services/authApi";
-// import toast from "react-hot-toast";
-
-// const AMENITIES = ["pool", "gym", "parking", "security", "garden", "lift"];
-// const FACING_OPTIONS = ["East", "West", "North", "South"];
-
-// export default function EditPropertyPage() {
-//   const { id } = useParams();
-//   const router = useRouter();
-
-//   const { data, isLoading } = useGetPropertyByIdQuery(id);
-//   const [updateProperty, { isLoading: saving }] =
-//     useUpdatePropertyMutation();
-
-//   const { data: user } = useGetMeQuery();
-
-//   const [listingType, setListingType] = useState("sale");
-
-//   const [form, setForm] = useState({
-//     title: "",
-//     description: "",
-//     propertyType: "apartment",
-//     priceLabel: "",
-//     priceValue: "",
-//     pricePerSqFt: "",
-//     beds: 2,
-//     baths: 2,
-//     areaSqFt: "",
-//     furnishing: "semi",
-//     facing: "",
-//     address: "",
-//     city: "",
-//     state: "",
-//     lat: "",
-//     lng: "",
-//     amenities: [],
-//     images: [""],
-//     status: "pending",
-//   });
-
-//   // ✅ Populate form safely
-//   useEffect(() => {
-//     if (!data) return;
-
-//     setListingType(data.listingType || "sale");
-
-//     setForm({
-//       title: data.title || "",
-//       description: data.description || "",
-//       propertyType: data.propertyType || "apartment",
-//       priceLabel: data.priceLabel || "",
-//       priceValue: data.priceValue || "",
-//       pricePerSqFt: data.pricePerSqFt || "",
-//       beds: data.beds || 2,
-//       baths: data.baths || 2,
-//       areaSqFt: data.areaSqFt || "",
-//       furnishing: data.furnishing || "semi",
-//       facing: data.facing || "",
-//       address: data.address || "",
-//       city: data.city || "",
-//       state: data.state || "",
-//       lat: data.location?.lat || "",
-//       lng: data.location?.lng || "",
-//       amenities: data.amenities || [],
-//       images: data.images?.length ? data.images : [""],
-//       status: data.status || "pending",
-//     });
-//   }, [data]);
-
-//   if (isLoading) return <p className="p-4">Loading property...</p>;
-//   if (user?.role !== "admin") return <p className="p-4">Unauthorized</p>;
-
-//   const update = (key, value) =>
-//     setForm((prev) => ({ ...prev, [key]: value }));
-
-//   const toggleAmenity = (amenity) => {
-//     setForm((prev) => ({
-//       ...prev,
-//       amenities: prev.amenities.includes(amenity)
-//         ? prev.amenities.filter((a) => a !== amenity)
-//         : [...prev.amenities, amenity],
-//     }));
-//   };
-
-//   const submitHandler = async () => {
-//     try {
-//       const payload = {
-//         ...form,
-//         listingType,
-//         priceValue: Number(form.priceValue),
-//         location: {
-//           lat: form.lat ? Number(form.lat) : null,
-//           lng: form.lng ? Number(form.lng) : null,
-//         },
-//         images: form.images.filter(Boolean),
-//       };
-
-//       await updateProperty({ id, ...payload }).unwrap();
-
-//       toast.success("Property updated successfully");
-//       router.push("/admin/properties");
-//     } catch (err) {
-//       toast.error("Failed to update property");
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-[#f6f8f7] flex justify-center">
-//       <div className="w-full max-w-[1100px] flex flex-col">
-
-//         {/* HEADER */}
-//         <div className="sticky top-0 z-50 bg-white border-b">
-//           <div className="h-16 px-4 flex items-center justify-between">
-//             <button onClick={() => router.back()}>✕</button>
-
-//             <h2 className="font-bold">Edit Property</h2>
-
-//             {data?.approvalStatus === "rejected" && (
-//               <div className="text-yellow-600 text-sm">
-//                 Property was rejected. Fix & resubmit.
-//               </div>
-//             )}
-
-//             <button onClick={submitHandler} disabled={saving}>
-//               {saving ? "Saving..." : "Update"}
-//             </button>
-//           </div>
-//         </div>
-
-//         <div className="flex flex-1">
-
-//           {/* FORM */}
-//           <div className="flex-1 overflow-y-auto">
-//             <div className="max-w-[720px] mx-auto pb-24">
-
-//               {/* LISTING TYPE */}
-//               <div className="p-4">
-//                 <div className="flex bg-gray-200 rounded-xl p-1">
-//                   {["sale", "rent"].map((t) => (
-//                     <button
-//                       key={t}
-//                       onClick={() => setListingType(t)}
-//                       className={`flex-1 py-2 rounded-lg font-bold ${
-//                         listingType === t
-//                           ? "bg-white shadow"
-//                           : "text-gray-500"
-//                       }`}
-//                     >
-//                       {t === "sale" ? "For Sale" : "For Rent"}
-//                     </button>
-//                   ))}
-//                 </div>
-//               </div>
-
-//               {/* BASIC */}
-//               <Section title="Basic Information">
-//                 <Input
-//                   label="Title"
-//                   value={form.title}
-//                   onChange={(e) => update("title", e.target.value)}
-//                 />
-//                 <Input
-//                   label="Price Label"
-//                   value={form.priceLabel}
-//                   onChange={(e) => update("priceLabel", e.target.value)}
-//                 />
-//                 <Input
-//                   label="Price Value"
-//                   type="number"
-//                   value={form.priceValue}
-//                   onChange={(e) => update("priceValue", e.target.value)}
-//                 />
-
-//                 <Select
-//                   label="Property Type"
-//                   value={form.propertyType}
-//                   options={["apartment", "villa", "plot", "office"]}
-//                   onChange={(e) =>
-//                     update("propertyType", e.target.value)
-//                   }
-//                 />
-//               </Section>
-
-//               {/* DETAILS */}
-//               <Section title="Details">
-//                 <Counter
-//                   label="Bedrooms"
-//                   value={form.beds}
-//                   onChange={(v) => update("beds", v)}
-//                 />
-//                 <Counter
-//                   label="Bathrooms"
-//                   value={form.baths}
-//                   onChange={(v) => update("baths", v)}
-//                 />
-//               </Section>
-
-//               {/* AMENITIES */}
-//               <Section title="Amenities">
-//                 <div className="flex flex-wrap gap-2">
-//                   {AMENITIES.map((a) => (
-//                     <button
-//                       key={a}
-//                       onClick={() => toggleAmenity(a)}
-//                       className={`px-4 py-2 rounded-full border ${
-//                         form.amenities.includes(a)
-//                           ? "bg-black text-white"
-//                           : ""
-//                       }`}
-//                     >
-//                       {a}
-//                     </button>
-//                   ))}
-//                 </div>
-//               </Section>
-
-//               {/* IMAGES */}
-//               <Section title="Images">
-//                 {form.images.map((img, i) => (
-//                   <Input
-//                     key={i}
-//                     label={`Image ${i + 1}`}
-//                     value={img}
-//                     onChange={(e) => {
-//                       const arr = [...form.images];
-//                       arr[i] = e.target.value;
-//                       update("images", arr);
-//                     }}
-//                   />
-//                 ))}
-//               </Section>
-//             </div>
-//           </div>
-
-//           {/* PREVIEW */}
-//           <div className="hidden lg:block w-[360px] border-l bg-white">
-//             <div className="sticky top-16 p-6">
-//               <p className="font-bold">{form.title || "Preview"}</p>
-//               <p>{form.city}</p>
-//               <p>{form.priceLabel}</p>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// /* UI Components */
-
-// function Section({ title, children }) {
-//   return (
-//     <div className="p-4 space-y-4">
-//       <h3 className="font-bold">{title}</h3>
-//       {children}
-//     </div>
-//   );
-// }
-
-// function Input({ label, ...props }) {
-//   return (
-//     <div>
-//       <label className="text-sm">{label}</label>
-//       <input {...props} className="w-full border p-2 rounded" />
-//     </div>
-//   );
-// }
-
-// function Select({ label, options, ...props }) {
-//   return (
-//     <div>
-//       <label className="text-sm">{label}</label>
-//       <select {...props} className="w-full border p-2 rounded">
-//         {options.map((o) => (
-//           <option key={o}>{o}</option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// }
-
-// function Counter({ label, value, onChange }) {
-//   return (
-//     <div className="flex justify-between">
-//       <span>{label}</span>
-//       <div>
-//         <button onClick={() => onChange(value - 1)}>-</button>
-//         <span>{value}</span>
-//         <button onClick={() => onChange(value + 1)}>+</button>
-//       </div>
-//     </div>
-//   );
-// }

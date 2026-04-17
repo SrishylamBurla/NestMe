@@ -7,41 +7,53 @@ import { useGetAgentLeadsQuery } from "@/store/services/agentApi";
 import { useGetMeQuery } from "@/store/services/authApi";
 import { useCreateAgentLeadMutation } from "@/store/services/LeadApi";
 
-// const ActionBtn = ({ icon, label, primary, onClick }) => (
-//   <button
-//     onClick={onClick}
-//     className={`flex flex-col gap-2 p-4 rounded-xl items-start transition ${
-//       primary
-//         ? "bg-blue-600 text-white shadow-lg"
-//         : "bg-white shadow-sm hover:shadow-md"
-//     }`}
-//   >
-//     <span className="material-symbols-outlined text-2xl">{icon}</span>
-//     <span className="text-sm font-bold">{label}</span>
-//   </button>
-// );
+/* ================= PREMIUM BUTTON ================= */
+const ActionBtn = ({ icon, label, primary, onClick, disabled, sub }) => {
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={`relative rounded-2xl p-[1px] transition group
+        ${
+          primary
+            ? "bg-gradient-to-br from-blue-500 to-indigo-600"
+            : "bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-xl"
+        }
+      `}
+    >
+      <div
+        className={`rounded-2xl p-4 h-full flex flex-col justify-between
+        ${primary ? "bg-transparent text-white" : "bg-white/80"}
+        ${
+          disabled
+            ? "opacity-50 cursor-not-allowed"
+            : "group-hover:shadow-lg"
+        }
+      `}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <span
+            className={`material-symbols-outlined text-2xl ${
+              primary ? "text-white" : "text-indigo-600"
+            }`}
+          >
+            {icon}
+          </span>
 
-const ActionBtn = ({ icon, label, primary, onClick, disabled }) => (
-  <button
-    onClick={disabled ? undefined : onClick}
-    disabled={disabled}
-    className={`flex flex-col gap-2 p-4 rounded-xl items-start transition 
-      ${primary ? "bg-blue-600 text-white shadow-lg" : "bg-white shadow-sm"}
-      ${
-        disabled
-          ? "opacity-50 cursor-not-allowed pointer-events-none"
-          : "hover:shadow-md"
-      }
-    `}
-  >
-    <span className="material-symbols-outlined text-2xl">{icon}</span>
-    <span className="text-sm font-bold">{label}</span>
-  </button>
-);
+          {!primary && sub && (
+            <span className="text-xs text-gray-400">{sub}</span>
+          )}
+        </div>
+
+        <p className="text-sm font-semibold">{label}</p>
+      </div>
+    </button>
+  );
+};
 
 export default function QuickActions() {
   const [showLeadModal, setShowLeadModal] = useState(false);
-  const [createLead] = useCreateAgentLeadMutation();
+  const [createLead, { isLoading }] = useCreateAgentLeadMutation();
 
   const [form, setForm] = useState({
     propertyId: "",
@@ -52,7 +64,8 @@ export default function QuickActions() {
   });
 
   const router = useRouter();
-  const { data: user, isLoading: userLoading } = useGetMeQuery();
+  const { data } = useGetMeQuery();
+  const user = data?.user;
 
   const agentId = user?.agentProfileId;
 
@@ -66,16 +79,16 @@ export default function QuickActions() {
 
   const props = properties?.properties || [];
   const pendingCount = props.filter(
-    (p) => p.approvalStatus === "pending",
+    (p) => p.approvalStatus === "pending"
   ).length;
 
-  /* ---------------- HANDLERS ---------------- */
+  /* ================= HANDLERS ================= */
 
   const handleAddListing = () => {
     if (!agentId) return;
 
     if (pendingCount >= 3) {
-      alert("You already have 3 properties waiting for approval.");
+      alert("Max 3 pending listings allowed.");
       return;
     }
 
@@ -85,7 +98,6 @@ export default function QuickActions() {
   const handleAddLead = () => {
     if (!agentId) return;
     setShowLeadModal(true);
-    // router.push(`/agents/${agentId}/leads`);
   };
 
   const handleScheduleVisit = () => {
@@ -97,24 +109,36 @@ export default function QuickActions() {
     router.push("/map");
   };
 
-  /* ---------------- UI ---------------- */
-
-  if (userLoading) return null; // prevent early render
+  if (!user) return null;
 
   return (
     <div className="px-4 py-4">
-      <h4 className="text-xs text-gray-500 font-bold mb-3">Quick Actions</h4>
 
-      <div className="grid grid-cols-2 gap-3">
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-sm font-bold text-slate-800">
+          Quick Actions
+        </h4>
+        <span className="text-xs text-gray-400">
+          Manage faster ⚡
+        </span>
+      </div>
+
+      {/* GRID */}
+      <div className="grid grid-cols-2 gap-4">
+
         <ActionBtn
           icon="add_home"
           label="Add Listing"
+          sub={`${pendingCount} pending`}
           onClick={handleAddListing}
+          primary
         />
 
         <ActionBtn
           icon="person_add"
-          label={`Leads (${leads?.leads?.length || 0})`}
+          label="Add Lead"
+          sub={`${leads?.leads?.length || 0} total`}
           onClick={handleAddLead}
         />
 
@@ -125,17 +149,30 @@ export default function QuickActions() {
           disabled
         />
 
-        <ActionBtn icon="map" label="View Map" onClick={handleMapView} disabled />
+        <ActionBtn
+          icon="map"
+          label="Map View"
+          onClick={handleMapView}
+          disabled
+        />
       </div>
 
+      {/* ================= PREMIUM MODAL ================= */}
       {showLeadModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl w-[95%] max-w-md space-y-4">
-            <h3 className="font-bold text-lg">Create Lead</h3>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-50">
+
+          <div className="bg-white w-full max-w-md rounded-t-3xl p-5 space-y-4 animate-slideUp">
+
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-lg">Create Lead</h3>
+              <button onClick={() => setShowLeadModal(false)}>✕</button>
+            </div>
 
             <select
-              className="w-full border p-2 rounded"
-              onChange={(e) => setForm({ ...form, propertyId: e.target.value })}
+              className="w-full border p-3 rounded-xl"
+              onChange={(e) =>
+                setForm({ ...form, propertyId: e.target.value })
+              }
             >
               <option value="">Select Property</option>
               {props.map((p) => (
@@ -147,46 +184,46 @@ export default function QuickActions() {
 
             <input
               placeholder="Client Name"
-              className="w-full border p-2 rounded"
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="w-full border p-3 rounded-xl"
+              onChange={(e) =>
+                setForm({ ...form, name: e.target.value })
+              }
             />
 
             <input
-              placeholder="Client Email"
-              className="w-full border p-2 rounded"
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="Email"
+              className="w-full border p-3 rounded-xl"
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
             />
 
             <input
-              placeholder="Client Phone"
-              className="w-full border p-2 rounded"
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="Phone"
+              className="w-full border p-3 rounded-xl"
+              onChange={(e) =>
+                setForm({ ...form, phone: e.target.value })
+              }
             />
 
             <textarea
               placeholder="Notes"
-              className="w-full border p-2 rounded"
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              className="w-full border p-3 rounded-xl"
+              onChange={(e) =>
+                setForm({ ...form, message: e.target.value })
+              }
             />
 
-            <div className="flex gap-3">
-              <button
-                className="flex-1 border rounded py-2"
-                onClick={() => setShowLeadModal(false)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className="flex-1 bg-blue-600 text-white rounded py-2"
-                onClick={async () => {
-                  await createLead({ agentId, ...form }).unwrap();
-                  setShowLeadModal(false);
-                }}
-              >
-                Create
-              </button>
-            </div>
+            <button
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold shadow-md"
+              onClick={async () => {
+                await createLead({ agentId, ...form }).unwrap();
+                setShowLeadModal(false);
+              }}
+            >
+              {isLoading ? "Creating..." : "Create Lead"}
+            </button>
           </div>
         </div>
       )}

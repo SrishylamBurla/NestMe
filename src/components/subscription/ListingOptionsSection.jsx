@@ -1,10 +1,10 @@
 "use client";
 
-import { useGetMeQuery } from "@/store/services/authApi";
+import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 
 export default function ListingOptionsSection() {
-  const { data: user, isLoading } = useGetMeQuery();
+  const { user, isLoading } = useAuth();
 
   const isAgent = user?.role === "agent";
   const isLoggedIn = !!user;

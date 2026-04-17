@@ -50,7 +50,7 @@ export async function POST(req) {
       city: "",
     }
   },
-  { new: true, upsert: true }
+  { returnDocument: "after", upsert: true }
 );
 
   /* ================= UPDATE EXISTING PROPERTIES ================= */

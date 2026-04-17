@@ -7,6 +7,7 @@ import {
   useGetPropertyByIdQuery,
   useUpdatePropertyMutation,
 } from "@/store/services/PropertiesApi";
+import { useAuth } from "@/hooks/useAuth";
 
 const AMENITIES = ["pool", "gym", "parking", "security", "garden", "lift"];
 const FACING_OPTIONS = ["East", "West", "North", "South"];
@@ -14,7 +15,7 @@ const FACING_OPTIONS = ["East", "West", "North", "South"];
 export default function EditPropertyPage() {
   const { id } = useParams();
 
-  const { data: user } = useGetMeQuery();
+  const { data: user } = useAuth();
   const router = useRouter();
 
   const { data, isLoading } = useGetPropertyByIdQuery(id);

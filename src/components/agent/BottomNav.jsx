@@ -1,15 +1,16 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { useGetMeQuery } from "@/store/services/authApi";
 import { useGetAgentLeadsQuery } from "@/store/services/agentApi";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { useAuth } from "@/hooks/useAuth";
+
 
 export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: user, isLoading } = useGetMeQuery();
+  const { data: user, isLoading } = useAuth();
   const agentId = user?.agentProfileId;
 
   const { data: leads } = useGetAgentLeadsQuery(agentId ?? skipToken,

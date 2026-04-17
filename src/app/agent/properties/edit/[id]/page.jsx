@@ -14,10 +14,11 @@ const FACING_OPTIONS = ["East", "West", "North", "South"];
 export default function EditPropertyPage() {
   const { id } = useParams();
 
-  const { data: user } = useGetMeQuery();
+  const { data } = useGetMeQuery();
+  const user = data?.user;
   const router = useRouter();
 
-  const { data, isLoading } = useGetPropertyByIdQuery(id);
+  const { data: propertyData, isLoading } = useGetPropertyByIdQuery(id);
   const [updateProperty, { isLoading: saving }] = useUpdatePropertyMutation();
 
   const [form, setForm] = useState(null);
@@ -25,12 +26,12 @@ export default function EditPropertyPage() {
   const [listingType, setListingType] = useState("sale");
 
   useEffect(() => {
-  if (!data) return;
+  if (!propertyData) return;
   // eslint-disable-next-line react-hooks/set-state-in-effect
   setForm((prev) => {
     // ✅ prevent repeated updates
-    if (prev && prev.title === data.title) return prev;
-    const p = data;
+    if (prev && prev.title === propertyData.title) return prev;
+    const p = propertyData;
 
     return {
       title: p.title || "",
@@ -54,7 +55,7 @@ export default function EditPropertyPage() {
       listingType: p.listingType || "sale",
     };
   });
-}, [data]);
+}, [propertyData]);
 
   if (isLoading || !form) return <p className="p-4">Loading property...</p>;
 

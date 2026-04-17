@@ -1,10 +1,10 @@
 "use client";
 
-import { useGetMeQuery } from "@/store/services/authApi";
 import { useGetAgentAppointmentsQuery } from "@/store/services/agentApi";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Appointments() {
-  const { data: user } = useGetMeQuery();
+  const { data: user } = useAuth();
 
   const { data, isLoading } = useGetAgentAppointmentsQuery(
     user?.agentProfileId,

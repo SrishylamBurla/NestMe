@@ -22,10 +22,12 @@ export default function AgentDashboardPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { data: userData, isLoading: userLoading } = useGetMeQuery();
+  // ✅ FIXED
+  const { data, isLoading: userLoading } = useGetMeQuery();
+  const user = data?.user;
 
   const agentId =
-    params?.agentId || userData?.agentProfileId;
+    params?.agentId || user?.agentProfileId;
 
   // 🚦 Prevent invalid agentId requests
   const { data: propertiesData } =
@@ -38,6 +40,14 @@ export default function AgentDashboardPage() {
     return (
       <div className="p-6">
         <p>Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="p-6">
+        <p>Not logged in</p>
       </div>
     );
   }
@@ -69,7 +79,9 @@ export default function AgentDashboardPage() {
 
   return (
     <div className="bg-[#f6f7f8] min-h-screen pb-28 font-sans">
-      <DashboardHeader user={userData} />
+
+      {/* ✅ FIXED: pass correct user */}
+      <DashboardHeader user={user} />
 
       {/* STATS */}
       <StatsScroll
@@ -77,15 +89,14 @@ export default function AgentDashboardPage() {
         pendingListings={pendingListings}
         newLeads={newLeads}
       />
+
       <ProfileStats />
+
       {/* ACTIONS */}
       <QuickActions agentId={agentId} />
 
-      {/* <Appointments agentId={agentId} /> */}
-
       {/* PREVIEWS */}
       <LeadsPreview agentId={agentId} />
-
       <PropertiesPreview agentId={agentId} />
 
       <BottomNav />

@@ -18,7 +18,18 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const body = await req.json();
+    // ✅ CORRECT way to read body
+    let body;
+
+    try {
+      body = await req.json();
+    } catch (e) {
+      return NextResponse.json(
+        { message: "Invalid JSON" },
+        { status: 400 }
+      );
+    }
+
     let { phone, email } = body;
 
     if (!phone) {
@@ -58,10 +69,10 @@ export async function POST(req) {
       });
     }
 
-    // 🔥 STEP 4: Generate token AFTER final user
+    // 🔥 STEP 4: Generate token
     const token = generateToken(user._id);
 
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
 
     cookieStore.set("token", token, {
       httpOnly: true,

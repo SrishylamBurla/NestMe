@@ -16,8 +16,9 @@ export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
   const [checking, setChecking] = useState(true);
 
-  const { data: user } = useGetMeQuery();
+  const { data } = useGetMeQuery();
 
+  const user = data?.user;
  useEffect(() => {
   const seen = sessionStorage.getItem("nestme_intro_seen");
 

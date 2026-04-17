@@ -24,7 +24,7 @@ export async function POST(req) {
     //   phoneOTP: otp,
     //   phoneOTPExpiry: Date.now() + 10 * 60 * 1000,
     },
-    { new: true, upsert: true }
+    { returnDocument: "after", upsert: true }
   );
 
   await sendEmail(email, "NestMe OTP", `Your OTP is ${otp}`);

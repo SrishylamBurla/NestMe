@@ -15,7 +15,7 @@ export default function PropertyHero({ images = [] }) {
   const slides =
     images.length > 0
       ? images
-      : [{ url: "/placeholder-property.jpg" }];
+      : [{ url: "/propertyImg/placeholder-property.jpg" }];
 
   return (
     <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] xl:h-[80vh] overflow-hidden rounded-none md:rounded-b-3xl">

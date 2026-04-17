@@ -2,64 +2,58 @@
 
 import { useLoginMutation } from "@/store/services/authApi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import AuthLayout from "@/components/AuthLayout";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+import { useDispatch } from "react-redux";
+import { authApi } from "@/store/services/authApi";
 
 import { auth } from "@/lib/firebase";
+ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  signInWithPopup,
 } from "firebase/auth";
+import { initAuth } from "@/lib/firebase";
 
-import {
-  GoogleAuthProvider,
-  signInWithRedirect,
-} from "firebase/auth";
-import { getRedirectResult } from "firebase/auth";
+
 
 export default function LoginPage() {
+  useEffect(() => {
+  initAuth();
+}, []);
   const router = useRouter();
-  const recaptchaRef = useRef(null);
   const [login, { isLoading, error }] = useLoginMutation();
-  const savedEmail = localStorage.getItem("google_email");
-
+const dispatch = useDispatch();
   const [form, setForm] = useState({ email: "", password: "" });
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
   const [confirm, setConfirm] = useState(null);
   const [mode, setMode] = useState("email");
   const [code, setCode] = useState("");
+  
 
   // ================= EMAIL LOGIN =================
   const submitHandler = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const data = await login({
-        email: form.email.trim(),
-        password: form.password,
-      }).unwrap();
+  try {
+    const data = await login({
+      email: form.email.trim(),
+      password: form.password,
+    }).unwrap();
 
-      sendToApp(data.id);
-      router.push("/");
-    } catch (err) {
-      console.error("LOGIN ERROR:", err);
-    }
-  };
+    dispatch(authApi.util.resetApiState()); // 🔥 refresh user
+    router.push("/");
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   // ================= SEND OTP =================
   const sendOtp = async () => {
     try {
       if (!phone) return alert("Enter phone");
-
-      if (!window.recaptchaVerifier) {
-        alert("Recaptcha not ready");
-        return;
-      }
 
       const confirmation = await signInWithPhoneNumber(
         auth,
@@ -68,143 +62,97 @@ export default function LoginPage() {
       );
 
       setConfirm(confirmation);
-      console.log("OTP SENT");
     } catch (err) {
       console.error("OTP ERROR:", err);
-      alert(err.message);
     }
   };
+
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
-    try {
-      if (!code) return alert("Enter OTP");
+  try {
+    const result = await confirm.confirm(code);
 
-      const result = await confirm.confirm(code);
+    const phone = result.user.phoneNumber.replace(/\D/g, "").slice(-10);
 
-      const rawPhone = result.user.phoneNumber;
+    const savedEmail =
+      typeof window !== "undefined"
+        ? localStorage.getItem("google_email")
+        : null;
 
-      // normalize same as backend
-      const phone = rawPhone.replace(/\D/g, "").slice(-10);
+    const res = await fetch("/api/auth/phone-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        phone,
+        email: savedEmail || undefined,
+      }),
+    });
 
-      console.log("NORMALIZED PHONE:", phone);
+    const data = await res.json();
 
-      const res = await fetch("/api/auth/phone-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // 🔥 important
-        body: JSON.stringify({ phone, email: savedEmail || undefined }), // send email for potential merge
-      });
+    if (!res.ok) throw new Error(data.message);
 
-      const data = await res.json();
+    localStorage.removeItem("google_email");
 
-      if (!res.ok) throw new Error(data.message);
+    dispatch(authApi.util.resetApiState()); // 🔥 IMPORTANT
+    router.push("/");
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-      console.log("LOGIN SUCCESS:", data);
-
-      router.push("/"); // ✅ redirect after login
-    } catch (err) {
-      console.error("VERIFY OTP ERROR:", err);
-      alert(err.message);
-    }
-  };
   // ================= GOOGLE LOGIN =================
 
+const googleLogin = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
 
-  const googleLogin = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-      // 🔥 ALWAYS USE REDIRECT (NO POPUP)
-      await signInWithRedirect(auth, provider);
-    } catch (err) {
-      console.error("GOOGLE ERROR:", err);
-      alert(err.message);
-    }
-  };
+    localStorage.setItem("google_email", user.email);
 
-  // ================= MOBILE SYNC =================
-  const sendToApp = (userId) => {
-    if (typeof window !== "undefined" && window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({
-          type: "USER_DATA",
-          userId,
-        })
-      );
-    }
-  };
+    const res = await fetch("/api/auth/google-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        email: user.email,
+        name: user.displayName,
+        image: user.photoURL,
+      }),
+    });
 
+    const data = await res.json();
 
-  useEffect(() => {
-    const handleRedirect = async () => {
-      try {
-        const result = await getRedirectResult(auth);
+    if (!res.ok) throw new Error(data.message);
 
-        console.log("REDIRECT RESULT:", result);
-
-        if (!result || !result.user) return;
-
-        const user = result.user;
-
-        // ✅ store email for merge
-        localStorage.setItem("google_email", user.email);
-
-        const res = await fetch("/api/auth/google-login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            email: user.email,
-            name: user.displayName,
-            image: user.photoURL,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data.message);
-
-        console.log("GOOGLE LOGIN SUCCESS:", data);
-
-        router.push("/");
-      } catch (err) {
-        console.error("REDIRECT ERROR:", err);
-      }
-    };
-
-    handleRedirect();
-  }, []);
+    dispatch(authApi.util.resetApiState()); // 🔥 KEY FIX
+    router.push("/");
+  } catch (err) {
+    console.error(err);
+  }
+};
+  // ================= RECAPTCHA =================
   useEffect(() => {
     if (mode !== "phone") return;
 
-    if (typeof window === "undefined") return;
-
-    const timer = setTimeout(() => {
-      try {
-        // 🔥 CLEAR OLD INSTANCE
-        if (window.recaptchaVerifier) {
-          window.recaptchaVerifier.clear();
-        }
-
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          auth,
-          "recaptcha",
-          {
-            size: "invisible",
-          }
-        );
-
-        console.log("✅ Recaptcha initialized");
-      } catch (err) {
-        console.error("Recaptcha init error:", err);
+    setTimeout(() => {
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
       }
-    }, 500);
 
-    return () => clearTimeout(timer);
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha",
+        { size: "invisible" }
+      );
+    }, 500);
   }, [mode]);
 
   return (
