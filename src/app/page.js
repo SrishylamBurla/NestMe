@@ -10,10 +10,13 @@ import { useState, useEffect } from "react";
 import PremiumSplash from "@/components/PremiumSplash";
 import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
 import HelpWidget from "@/components/HelpWidget";
+import { useGetMeQuery } from "@/store/services/authApi";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
   const [checking, setChecking] = useState(true);
+
+  const { data: user } = useGetMeQuery();
 
  useEffect(() => {
   const seen = sessionStorage.getItem("nestme_intro_seen");
@@ -41,7 +44,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <HelpWidget />
+      {user && <HelpWidget />}
       <main className="bg-[#f9fafb] overflow-x-hidden">
 
         {/* HERO */}

@@ -5,6 +5,7 @@ import { useGetPropertiesQuery } from "@/store/services/PropertiesApi";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import PropertyCard from "@/components/PropertyCard";
+import { ChevronLeft } from "lucide-react";
 
 export default function SearchContent() {
   const searchParams = useSearchParams();
@@ -91,16 +92,23 @@ export default function SearchContent() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             {/* COLLAPSIBLE TITLE */}
             <div
-              className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                showTitle
-                  ? "max-h-[120px] opacity-100 translate-y-0"
-                  : "max-h-0 opacity-0 -translate-y-6"
-              }`}
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${showTitle
+                ? "max-h-[120px] opacity-100 translate-y-0"
+                : "max-h-0 opacity-0 -translate-y-6"
+                }`}
             >
               <div className="pt-6 pb-2">
-                <h2 className="text-2xl font-bold font-sans text-white">
-                  Search Properties
-                </h2>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2 text-sm text-gray-300 bg-gray-800 rounded-full p-2 hover:text-white transition cursor-pointer"
+                  >
+                    <ChevronLeft size={18} strokeWidth={2} />
+                  </button>
+                  <h2 className="text-2xl font-bold font-sans text-white">
+                    Search Properties
+                  </h2>
+                </div>
                 {data && (
                   <p className="text-sm text-slate-400 mt-1">
                     {data.properties.length} results found
@@ -157,11 +165,10 @@ export default function SearchContent() {
                         listingType: type,
                       }))
                     }
-                    className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
-                      filters.listingType === type
-                        ? "bg-indigo-600 text-white shadow-lg"
-                        : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                    }`}
+                    className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${filters.listingType === type
+                      ? "bg-indigo-600 text-white shadow-lg"
+                      : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                      }`}
                   >
                     {type === "sale" ? "Buy" : "Rent"}
                   </button>
@@ -183,11 +190,10 @@ export default function SearchContent() {
                     onClick={() =>
                       setFilters((prev) => ({ ...prev, propertyType: type }))
                     }
-                    className={`w-full text-left px-4 py-2 rounded-lg text-sm transition ${
-                      filters.propertyType === type
-                        ? "bg-indigo-600 text-white"
-                        : "bg-slate-700 hover:bg-slate-600"
-                    }`}
+                    className={`w-full text-left px-4 py-2 rounded-lg text-sm transition ${filters.propertyType === type
+                      ? "bg-indigo-600 text-white"
+                      : "bg-slate-700 hover:bg-slate-600"
+                      }`}
                   >
                     {type}
                   </button>
@@ -201,11 +207,10 @@ export default function SearchContent() {
                   <button
                     key={b}
                     onClick={() => toggleBed(b)}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      filters.beds.includes(b)
-                        ? "bg-indigo-600 text-white"
-                        : "bg-slate-700"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${filters.beds.includes(b)
+                      ? "bg-indigo-600 text-white"
+                      : "bg-slate-700"
+                      }`}
                   >
                     {b} BHK
                   </button>
