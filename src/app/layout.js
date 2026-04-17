@@ -3,6 +3,7 @@ import { Providers } from "./Providers";
 import { Toaster } from "react-hot-toast";
 import { Spline_Sans } from "next/font/google";
 import Script from "next/script";
+import { useGetMeQuery } from "@/store/services/authApi";
 
 const spline = Spline_Sans({
   subsets: ["latin"],
@@ -25,6 +26,8 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
+
+  const { data: user } = useGetMeQuery();
   return (
     <html lang="en">
       <head>

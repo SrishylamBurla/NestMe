@@ -2,15 +2,17 @@
 
 import { useGetMeQuery } from "@/store/services/authApi";
 import { usePathname, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: user } = useGetMeQuery();
-
+  
+ const user = useSelector((state) => state.auth.user);
   const agentId = user?.agentProfileId;
 
   if (!user) return null;
+  
 
   const navConfig = {
     user: [
