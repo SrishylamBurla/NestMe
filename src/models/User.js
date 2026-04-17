@@ -8,17 +8,21 @@ const userSchema = new mongoose.Schema(
 
     email: {
       type: String,
-      required: true,
+      required: false,
+      sparse: true,
       unique: true,
-      lowercase: true,
-      trim: true,
     },
 
-    password: { type: String, required: true },
+    password: {
+      type: String,
+      required: false,
+    },
 
     phone: {
       type: String,
-      trim: true,
+      required: false,
+      unique: true,
+      sparse: true,
     },
 
     avatar: String,
@@ -46,11 +50,6 @@ const userSchema = new mongoose.Schema(
 
     phoneOTP: String,
     phoneOTPExpiry: Date,
-    phone: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
 
 
     /* ===== PASSWORD RESET ===== */

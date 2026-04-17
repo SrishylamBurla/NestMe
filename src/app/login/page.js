@@ -72,33 +72,32 @@ export default function LoginPage() {
   };
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
-    try {
-      if (!confirm) return alert("Send OTP first");
-      if (!otp) return alert("Enter OTP");
+  try {
+    const result = await confirm.confirm(code);
 
-      const result = await confirm.confirm(otp);
-      const user = result.user;
+    const user = result.user;
 
-      const res = await fetch("/api/auth/phone-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // 🔥 important
-        body: JSON.stringify({ phone: user.phoneNumber }),
-      });
+    const phone = user.phoneNumber;
 
-      if (!res.ok) throw new Error("Phone login failed");
+    console.log("PHONE:", phone); // 🔥 check this
 
-      const data = await res.json();
+    const res = await fetch("/api/auth/phone-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ phone }),
+    });
 
-      sendToApp(data.id);
-      router.push("/");
-    } catch (err) {
-      console.error("VERIFY OTP ERROR:", err);
-      alert(err.message);
-    }
-  };
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    console.log("LOGIN SUCCESS:", data);
+  } catch (err) {
+    console.error("VERIFY OTP ERROR:", err);
+  }
+};
 
   // ================= GOOGLE LOGIN =================
   const googleLogin = async () => {
