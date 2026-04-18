@@ -11,11 +11,12 @@ import {
   useCancelSubscriptionMutation,
 } from "@/store/services/SubscribeApi";
 import { toast } from "react-hot-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function SubscribePage() {
   const router = useRouter();
 
-  const { data: user, isLoading, refetch } = useAuth();
+  const { user, isLoading, refetch } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const { data } = useGetAgentSubscriptionQuery();

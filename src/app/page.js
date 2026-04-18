@@ -99,7 +99,7 @@ export default function HomePage() {
   />
 
   <PropertyType 
-    image="/icons/office.png" 
+    image="/icons/commercial.png" 
     label="Commercial" 
     type="commercial" 
   />

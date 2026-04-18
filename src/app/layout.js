@@ -16,7 +16,7 @@ export const metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",              // ✅ proper favicon
-    // shortcut: "/favicon-16x16.png",    // ✅ small version
+    shortcut: "/favicon.png",    // ✅ small version
     apple: "/icons/icon-192.png",      // ✅ for iOS
   },
 };

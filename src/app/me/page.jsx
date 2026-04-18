@@ -8,9 +8,8 @@ import ProfileFooter from "@/components/profile/ProfileFooter";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function AccountCenterPage() {
-  const { data, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
 
-  const user = data?.user;
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
