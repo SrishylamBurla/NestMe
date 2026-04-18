@@ -64,11 +64,11 @@ export async function POST(req) {
       path: "/",
       sameSite: "lax",
     });
-
-    return NextResponse.json({
-      id: user._id,
-      token,
-    });
+    return NextResponse.redirect("nestme://login-success");
+    // return NextResponse.json({
+    //   id: user._id,
+    //   token,
+    // });
 
   } catch (err) {
     console.error("GOOGLE MERGE ERROR:", err);
