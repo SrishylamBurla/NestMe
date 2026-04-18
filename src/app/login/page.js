@@ -105,9 +105,19 @@ const dispatch = useDispatch();
 };
 
   // ================= GOOGLE LOGIN =================
-
 const googleLogin = async () => {
   try {
+    const isApp =
+      typeof window !== "undefined" &&
+      window.ReactNativeWebView;
+
+    // ✅ MOBILE APP → OPEN EXTERNAL BROWSER
+    if (isApp) {
+      window.location.href = "https://nestme.in/login";
+      return;
+    }
+
+    // ✅ WEB → NORMAL GOOGLE LOGIN
     const provider = new GoogleAuthProvider();
 
     const result = await signInWithPopup(auth, provider);
@@ -132,12 +142,13 @@ const googleLogin = async () => {
 
     if (!res.ok) throw new Error(data.message);
 
-    dispatch(authApi.util.resetApiState()); // 🔥 KEY FIX
+    dispatch(authApi.util.resetApiState());
     router.push("/");
   } catch (err) {
     console.error(err);
   }
 };
+
   // ================= RECAPTCHA =================
   useEffect(() => {
     if (mode !== "phone") return;

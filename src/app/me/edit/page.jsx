@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useGetMeQuery } from "@/store/services/authApi";
 import {
   useUpdateProfileMutation,
   useChangePasswordMutation,
 } from "@/store/services/userApi";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function EditProfilePage() {
   const router = useRouter();
 
-  const { data: user } = useGetMeQuery();
+  const { user } = useAuth()
 
   const [updateProfile, { isLoading: updating }] = useUpdateProfileMutation();
 
