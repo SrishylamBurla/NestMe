@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetAgentPropertiesQuery } from "@/store/services/agentApi";
 import { useGetAgentLeadsQuery } from "@/store/services/agentApi";
-import { useGetMeQuery } from "@/store/services/authApi";
 import { useCreateAgentLeadMutation } from "@/store/services/LeadApi";
+import { useAuth } from "@/hooks/useAuth";
 
 /* ================= PREMIUM BUTTON ================= */
 const ActionBtn = ({ icon, label, primary, onClick, disabled, sub }) => {
@@ -64,8 +64,7 @@ export default function QuickActions() {
   });
 
   const router = useRouter();
-  const { data } = useGetMeQuery();
-  const user = data?.user;
+  const { user } = useAuth()
 
   const agentId = user?.agentProfileId;
 

@@ -11,6 +11,7 @@ import PremiumSplash from "@/components/PremiumSplash";
 import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
 import HelpWidget from "@/components/HelpWidget";
 import { useGetMeQuery } from "@/store/services/authApi";
+import Image from "next/image";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
@@ -78,11 +79,32 @@ export default function HomePage() {
           </h2>
 
           <div className="grid grid-cols-4 gap-4 text-center max-w-4xl mx-auto">
-            <PropertyType icon="apartment" label="Apartment" type="apartment" />
-            <PropertyType icon="holiday_village" label="Villa" type="villa" />
-            <PropertyType icon="terrain" label="Plot" type="plot" />
-            <PropertyType icon="storefront" label="Commercial" type="commercial" />
-          </div>
+
+  <PropertyType 
+    image="/icons/apartments.png" 
+    label="Apartment" 
+    type="apartment" 
+  />
+
+  <PropertyType 
+    image="/icons/villa.png" 
+    label="Villa" 
+    type="villa" 
+  />
+
+  <PropertyType 
+    image="/icons/space.png" 
+    label="Plot" 
+    type="plot" 
+  />
+
+  <PropertyType 
+    image="/icons/office.png" 
+    label="Commercial" 
+    type="commercial" 
+  />
+
+</div>
         </section>
 
         {/* CAROUSELS */}
@@ -123,21 +145,29 @@ function PurposeChip({ label, type }) {
   );
 }
 
-function PropertyType({ icon, label, type }) {
+function PropertyType({ image, label, type }) {
   const router = useRouter();
 
   return (
     <div
       onClick={() => router.push(`/search?propertyType=${type}`)}
-      className="cursor-pointer space-y-2"
+      className="cursor-pointer space-y-2 group"
     >
-      <div className="w-14 h-14 mx-auto rounded-full bg-white shadow-sm flex items-center justify-center">
-        <span className="material-symbols-outlined text-black text-2xl">
-          {icon}
-        </span>
+      <div className="w-14 h-14 mx-auto rounded-full bg-white shadow-sm flex items-center justify-center transition group-hover:scale-110 group-hover:shadow-md">
+        
+        <Image
+          src={image}
+          alt={label}
+          width={38}
+          height={38}
+          className="object-contain"
+        />
+
       </div>
 
-      <p className="text-xs font-bold text-slate-700">{label}</p>
+      <p className="text-sm font-bold text-slate-700 group-hover:text-black transition">
+        {label}
+      </p>
     </div>
   );
 }

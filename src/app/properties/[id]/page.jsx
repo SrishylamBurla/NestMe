@@ -17,6 +17,7 @@ import PropertyAmenities from "@/components/PropertyAmenities";
 import PropertyLocation from "@/components/PropertyLocation";
 import PropertyAgent from "@/components/PropertyAgent";
 import SimilarProperties from "@/components/SimilarProperties";
+import { ChevronLeft } from "lucide-react";
 
 
 export default function PropertyDetailsPage() {
@@ -89,17 +90,15 @@ return (
       <div className="absolute inset-0 bg-black/20"></div>
 
       {/* Top Glass Bar */}
-      <div className="absolute top-0 left-0 w-full z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur border-slate-200">
+      <div className="absolute fixed top-0 left-0 w-full z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur border-slate-200">
         <div className="flex items-center justify-between px-4 sm:px-6 h-14 sm:h-16">
 
           {/* Back */}
           <button
             onClick={() => router.back()}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full fixed top-4 left-4 z-50 shadow-lg border border-2 border-slate-800 flex items-center justify-center"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full fixed top-4 left-4 z-50 shadow-lg bg-gray-200 flex items-center justify-center"
           >
-            <span className="material-symbols-outlined text-slate-900 text-[18px] sm:text-[20px]">
-              arrow_back
-            </span>
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           {/* Actions */}
@@ -107,7 +106,7 @@ return (
 
             <button
               onClick={handleShare}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg border border-2 border-slate-800 flex items-center justify-center"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg flex items-center justify-center"
             >
               <span className="material-symbols-outlined text-slate-900 text-[18px] sm:text-[20px]">
                 share
@@ -116,7 +115,7 @@ return (
 
             <button
               onClick={handleFavorite}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg border border-2 border-slate-800 flex items-center justify-center"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg border-slate-800 flex items-center justify-center"
             >
               <span
                 className={`material-symbols-outlined transition-all duration-300 ${

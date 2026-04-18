@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function PropertyOverview({ property }) {
   const price = new Intl.NumberFormat("en-IN").format(
     property.priceValue || 0
@@ -14,8 +16,9 @@ export default function PropertyOverview({ property }) {
           {property.title}
         </h1>
 
-        <p className="text-sm text-slate-500 mt-1">
-          📍 {property.city}, {property.state}
+        <p className="text-sm text-slate-500 mt-1 flex items-center gap-3">
+          <Image src={"/amenities/location.png"} alt="location" width={35} height={35} />
+           {property.city}, {property.state}
         </p>
       </div>
 

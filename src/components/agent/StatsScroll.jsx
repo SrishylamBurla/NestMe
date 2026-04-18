@@ -1,8 +1,9 @@
 "use client";
 
+import { useAuth } from "@/hooks/useAuth";
 import { useGetAgentPropertiesQuery } from "@/store/services/agentApi";
 import { useGetAgentLeadsQuery } from "@/store/services/agentApi";
-import { useGetMeQuery } from "@/store/services/authApi";
+
 
 const StatCard = ({ icon, label, value, sub, color }) => {
   return (
@@ -43,9 +44,7 @@ const StatCard = ({ icon, label, value, sub, color }) => {
 };
 
 export default function StatsScroll() {
-  const { data: meData, isLoading: userLoading } = useGetMeQuery();
-
-  const user = meData?.user;
+  const  { user, userLoading } = useAuth()
   const agentId = user?.agentProfileId;
 
   const { data: properties } = useGetAgentPropertiesQuery(agentId, {

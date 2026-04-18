@@ -1,5 +1,6 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
@@ -39,7 +40,7 @@ export default function SearchBar() {
             group-hover:text-indigo-600
             transition
           ">
-            search
+            <Search />
           </span>
 
           {/* Input */}

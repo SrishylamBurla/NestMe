@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { useAuth } from "@/hooks/useAuth";
+
 
 
 export default function SupportChat({ onClose }) {
-  const { data: user, isLoading } = useAuth();
+  const { user, isLoading } = useAuth()
 
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");

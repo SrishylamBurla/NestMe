@@ -1,15 +1,14 @@
 "use client";
 
-import { useGetMeQuery } from "@/store/services/authApi";
 import { useGetAgentStatsQuery } from "@/store/services/agentApi";
 import { useGetAdminStatsQuery } from "@/store/services/adminApi";
 import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 /* ================= MAIN ================= */
 export default function ProfileStats() {
-  const { data } = useGetMeQuery();
-  const user = data?.user;
+const { user } = useAuth()
 
   const role = user?.role;
   const agentId = user?.agentProfileId;

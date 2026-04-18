@@ -3,6 +3,8 @@
 import { useGetMeQuery, useLogoutMutation } from "@/store/services/authApi";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
+import { Heart } from "lucide-react";
+import { Bell } from "lucide-react";
 import {
   useGetNotificationsQuery,
   useMarkReadMutation,
@@ -208,9 +210,7 @@ const user = data?.user;
                 onClick={() => setShowNotifications(true)}
                 className="relative p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
               >
-                <span className="material-symbols-outlined text-gray-700">
-                  notifications
-                </span>
+                <Bell />
 
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full animate-pulse">
@@ -490,7 +490,7 @@ function FavoriteButton() {
       onClick={() => router.push("/saved")}
       className="relative p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
     >
-      <span className="material-symbols-outlined text-gray-700">favorite</span>
+      <Heart />
 
       {count > 0 && (
         <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-1.5 rounded-full">

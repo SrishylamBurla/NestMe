@@ -10,7 +10,7 @@ export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: user, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const agentId = user?.agentProfileId;
 
   const { data: leads } = useGetAgentLeadsQuery(agentId ?? skipToken,

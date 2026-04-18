@@ -36,8 +36,7 @@ const LeadItem = ({ lead, agentId }) => {
 
 export default function LeadsPreview() {
   // ✅ FIXED
-  const { data, isLoading: userLoading } = useAuth();
-  const user = data?.user;
+  const { user, isLoading: userLoading } = useAuth();
   const agentId = user?.agentProfileId;
 
   const { data: leadsData, isLoading } =
@@ -51,7 +50,7 @@ export default function LeadsPreview() {
     <div className="px-4 py-4">
       <h3 className="text-lg font-bold mb-3">New Leads</h3>
 
-      {(userLoading || isLoading) && (
+      {( isLoading) && (
         <p className="text-sm text-gray-500">Loading leads...</p>
       )}
 

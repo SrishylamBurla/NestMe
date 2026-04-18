@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useGetAgentPropertiesQuery } from "@/store/services/agentApi";
-import { useGetMeQuery } from "@/store/services/authApi";
+import { useAuth } from "@/hooks/useAuth";
 
 const PropertyCard = ({ property, agentId }) => {
   const router = useRouter();
@@ -112,8 +112,8 @@ const PropertyCard = ({ property, agentId }) => {
 };
 
 export default function PropertiesPreview() {
-  const { data, isLoading: userLoading } = useGetMeQuery();
-  const user = data?.user;
+  const { user, isLoading: userLoading } = useAuth()
+ 
   const agentId = user?.agentProfileId;
 
   const { data: propertiesData, isLoading } =

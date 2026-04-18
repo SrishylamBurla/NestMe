@@ -6,7 +6,7 @@ export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: user, isLoading, isError } = useAuth();
+  const { user, isLoading, isError } = useAuth();
 
   if (isLoading || isError || !user) return null;
 

@@ -100,7 +100,7 @@ export default function AgentContactForm({ propertyId: propId }) {
       <textarea
         required
         placeholder="Write your message..."
-        className="w-full border rounded-xl p-3 text-sm min-h-[100px]"
+        className="w-full shadow-md rounded-xl p-3 text-sm min-h-[100px]"
         value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })}
       />
@@ -113,7 +113,7 @@ export default function AgentContactForm({ propertyId: propId }) {
 
       <button
         disabled={isLoading}
-        className="w-full h-11 rounded bg-[#36e27b] text-black font-bold hover:opacity-90 disabled:opacity-60"
+        className="w-full h-11 rounded-xl bg-[#0e2d30] text-white font-bold hover:opacity-90 disabled:opacity-60"
       >
         {isLoading ? "Sending..." : "Send Message"}
       </button>
@@ -123,6 +123,6 @@ export default function AgentContactForm({ propertyId: propId }) {
 
 function Input(props) {
   return (
-    <input {...props} className="w-full h-11 border rounded-xl px-4 text-sm" />
+    <input {...props} className="w-full h-11 shadow-md rounded-xl px-4 text-sm" />
   );
 }
