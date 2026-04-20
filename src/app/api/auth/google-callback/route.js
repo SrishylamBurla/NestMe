@@ -26,7 +26,7 @@ export async function GET(req) {
     client.setCredentials(tokens);
 
     // 🔥 STEP 2: Get user info
-    const ticket = client.verifyIdToken({
+    const ticket = await client.verifyIdToken({
         idToken: tokens.id_token,
         audience: process.env.GOOGLE_CLIENT_ID,
     });
