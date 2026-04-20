@@ -8,7 +8,8 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useDispatch } from "react-redux";
 import { authApi } from "@/store/services/authApi";
-
+import { signInWithRedirect } from "firebase/auth";
+import { initAuth } from "@/lib/firebase";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
@@ -115,47 +116,43 @@ export default function LoginPage() {
 
   // ================= GOOGLE LOGIN =================
   const googleLogin = async () => {
-    try {
-      // const isApp =
-      //   typeof window !== "undefined" &&
-      //   window.ReactNativeWebView;
+  try {
+    await initAuth();
 
-      // 📱 MOBILE → redirect to backend
-      // if (isApp) {
-      //   window.location.href = "https://nestme.in/api/auth/google";
-      //   return;
-      // }
+    const provider = new GoogleAuthProvider();
 
-      // 🌐 WEB → Firebase login
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+    const isMobile = window.ReactNativeWebView;
+
+    if (isMobile) {
+      await signInWithRedirect(auth, provider); // ✅ mobile
+    } else {
+      const result = await signInWithPopup(auth, provider); // ✅ web
+
       const user = result.user;
 
-      // 🔥 REDIRECT instead of fetch
       window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
+    }
 
-    } catch (err) {
-      if (err.code === "auth/popup-closed-by-user") {
-      return; // silently ignore
-    }
-    }
-  };
+  } catch (err) {
+    if (err.code === "auth/popup-closed-by-user") return;
+
+    console.error(err);
+  }
+};
   // ================= RECAPTCHA =================
   useEffect(() => {
-    if (mode !== "phone") return;
+  if (mode !== "phone") return;
 
-    setTimeout(() => {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-      }
+  if (window.recaptchaVerifier) {
+    window.recaptchaVerifier.clear();
+  }
 
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha",
-        { size: "invisible" }
-      );
-    }, 500);
-  }, [mode]);
+  window.recaptchaVerifier = new RecaptchaVerifier(
+    auth,
+    "recaptcha",
+    { size: "invisible" }
+  );
+}, [mode]);
 
   return (
     <AuthLayout>
@@ -230,7 +227,7 @@ export default function LoginPage() {
                 Send OTP
               </button>
 
-              <div id="recaptcha"></div>
+              <div id="recaptcha" className="hidden"></div>
 
               <Input
                 label="Enter OTP"
