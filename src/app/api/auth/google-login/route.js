@@ -64,7 +64,7 @@ export async function POST(req) {
       path: "/",
       sameSite: "lax",
     });
-    return NextResponse.redirect("nestme://");
+    return NextResponse.redirect(new URL("nestme://"));
     // return NextResponse.json({
     //   id: user._id,
     //   token,

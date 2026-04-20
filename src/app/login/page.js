@@ -111,13 +111,13 @@ const googleLogin = async () => {
       typeof window !== "undefined" &&
       window.ReactNativeWebView;
 
-    // ✅ MOBILE APP → OPEN EXTERNAL BROWSER
+    // ✅ MOBILE APP → call backend Google route
     if (isApp) {
-      window.location.href = "https://nestme.in/login";
+      window.location.href = "https://nestme.in/api/auth/google-login";
       return;
     }
 
-    // ✅ WEB → NORMAL GOOGLE LOGIN
+    // ✅ WEB → Firebase popup
     const provider = new GoogleAuthProvider();
 
     const result = await signInWithPopup(auth, provider);
@@ -148,7 +148,6 @@ const googleLogin = async () => {
     console.error(err);
   }
 };
-
   // ================= RECAPTCHA =================
   useEffect(() => {
     if (mode !== "phone") return;
