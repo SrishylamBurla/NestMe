@@ -64,7 +64,7 @@ export async function POST(req) {
       path: "/",
       sameSite: "lax",
     });
-    return NextResponse.redirect("nestme://login-success");
+    return NextResponse.redirect("nestme://home");
     // return NextResponse.json({
     //   id: user._id,
     //   token,
