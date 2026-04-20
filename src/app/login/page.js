@@ -10,45 +10,54 @@ import { useDispatch } from "react-redux";
 import { authApi } from "@/store/services/authApi";
 
 import { auth } from "@/lib/firebase";
- import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
 import { initAuth } from "@/lib/firebase";
 
-
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
+
+  const { user } = useAuth();
+
   useEffect(() => {
-  initAuth();
-}, []);
+    if (user) {
+      router.replace("/");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    initAuth();
+  }, []);
   const router = useRouter();
   const [login, { isLoading, error }] = useLoginMutation();
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({ email: "", password: "" });
   const [phone, setPhone] = useState("");
   const [confirm, setConfirm] = useState(null);
   const [mode, setMode] = useState("email");
   const [code, setCode] = useState("");
-  
+
 
   // ================= EMAIL LOGIN =================
   const submitHandler = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const data = await login({
-      email: form.email.trim(),
-      password: form.password,
-    }).unwrap();
+    try {
+      const data = await login({
+        email: form.email.trim(),
+        password: form.password,
+      }).unwrap();
 
-    dispatch(authApi.util.resetApiState()); // 🔥 refresh user
-    router.push("/");
-  } catch (err) {
-    console.error(err);
-  }
-};
+      dispatch(authApi.util.resetApiState()); // 🔥 refresh user
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // ================= SEND OTP =================
   const sendOtp = async () => {
@@ -69,66 +78,68 @@ const dispatch = useDispatch();
 
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
-  try {
-    const result = await confirm.confirm(code);
+    try {
+      const result = await confirm.confirm(code);
 
-    const phone = result.user.phoneNumber.replace(/\D/g, "").slice(-10);
+      const phone = result.user.phoneNumber.replace(/\D/g, "").slice(-10);
 
-    const savedEmail =
-      typeof window !== "undefined"
-        ? localStorage.getItem("google_email")
-        : null;
+      const savedEmail =
+        typeof window !== "undefined"
+          ? localStorage.getItem("google_email")
+          : null;
 
-    const res = await fetch("/api/auth/phone-login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        phone,
-        email: savedEmail || undefined,
-      }),
-    });
+      const res = await fetch("/api/auth/phone-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          phone,
+          email: savedEmail || undefined,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) throw new Error(data.message);
+      if (!res.ok) throw new Error(data.message);
 
-    localStorage.removeItem("google_email");
+      localStorage.removeItem("google_email");
 
-    dispatch(authApi.util.resetApiState()); // 🔥 IMPORTANT
-    router.push("/");
-  } catch (err) {
-    console.error(err);
-  }
-};
+      dispatch(authApi.util.resetApiState()); // 🔥 IMPORTANT
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // ================= GOOGLE LOGIN =================
-const googleLogin = async () => {
-  try {
-    // const isApp =
-    //   typeof window !== "undefined" &&
-    //   window.ReactNativeWebView;
+  const googleLogin = async () => {
+    try {
+      // const isApp =
+      //   typeof window !== "undefined" &&
+      //   window.ReactNativeWebView;
 
-    // 📱 MOBILE → redirect to backend
-    // if (isApp) {
-    //   window.location.href = "https://nestme.in/api/auth/google";
-    //   return;
-    // }
+      // 📱 MOBILE → redirect to backend
+      // if (isApp) {
+      //   window.location.href = "https://nestme.in/api/auth/google";
+      //   return;
+      // }
 
-    // 🌐 WEB → Firebase login
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+      // 🌐 WEB → Firebase login
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-    // 🔥 REDIRECT instead of fetch
-    window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
+      // 🔥 REDIRECT instead of fetch
+      window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
 
-  } catch (err) {
-    console.error(err);
-  }
-};
+    } catch (err) {
+      if (err.code === "auth/popup-closed-by-user") {
+      return; // silently ignore
+    }
+    }
+  };
   // ================= RECAPTCHA =================
   useEffect(() => {
     if (mode !== "phone") return;
@@ -147,125 +158,150 @@ const googleLogin = async () => {
   }, [mode]);
 
   return (
-    <AuthLayout
-      title="Welcome Back"
-      quote="Your next home is just a search away."
-    >
-      {/* TOGGLE */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setMode("email")}
-          className={`flex-1 py-2 rounded ${mode === "email"
-            ? "bg-indigo-600 text-white"
-            : "bg-gray-700"
-            }`}
-        >
-          Email
-        </button>
-        <button
-          onClick={() => setMode("phone")}
-          className={`flex-1 py-2 rounded ${mode === "phone"
-            ? "bg-indigo-600 text-white"
-            : "bg-gray-700"
-            }`}
-        >
-          Phone
-        </button>
-      </div>
+    <AuthLayout>
+      {/* <div className="flex items-center justify-center"> */}
 
-      {/* EMAIL */}
-      {mode === "email" && (
-        <form onSubmit={submitHandler} className="space-y-4">
-          <Input
-            label="Email"
-            type="email"
-            value={form.email}
-            onChange={(e) =>
-              setForm({ ...form, email: e.target.value })
-            }
-          />
+        <div className="w-full max-w-md backdrop-blur-2xl rounded-3xl p-6 space-y-6">
 
-          <Input
-            label="Password"
-            type="password"
-            value={form.password}
-            onChange={(e) =>
-              setForm({ ...form, password: e.target.value })
-            }
-          />
-
-          {error && (
-            <p className="text-sm text-red-400 text-center">
-              {error?.data?.message || "Invalid credentials"}
+          {/* HEADER */}
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl font-bold text-white">
+              Welcome to NestMe
+            </h1>
+            <p className="text-sm text-white/70">
+              Find your next home effortlessly
             </p>
+          </div>
+
+          {error && ( <p className="text-sm text-red-400 text-center"> {error?.data?.message || "Invalid credentials"} </p> )}
+
+          {/* GOOGLE LOGIN */}
+          <button
+            onClick={googleLogin}
+            className="w-full h-12 rounded-xl bg-white text-black font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] transition"
+          >
+            <img src="/icons/google.png" className="w-5 h-5" />
+            Continue with Google
+          </button>
+
+          {/* DIVIDER */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-white/20" />
+            <span className="text-white/60 text-xs">OR</span>
+            <div className="flex-1 h-px bg-white/20" />
+          </div>
+
+          {/* TOGGLE */}
+          <div className="flex bg-white/10 rounded-xl p-1">
+            <button
+              onClick={() => setMode("phone")}
+              className={`flex-1 py-2 rounded-lg text-sm ${mode === "phone"
+                ? "bg-white text-black font-semibold"
+                : "text-white/70"
+                }`}
+            >
+              Phone
+            </button>
+
+            <button
+              onClick={() => setMode("email")}
+              className={`flex-1 py-2 rounded-lg text-sm ${mode === "email"
+                ? "bg-white text-black font-semibold"
+                : "text-white/70"
+                }`}
+            >
+              Email
+            </button>
+          </div>
+
+          {/* PHONE */}
+          {mode === "phone" && (
+            <div className="space-y-3">
+              <Input
+                label="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+
+              <button
+                onClick={sendOtp}
+                className="w-full h-11 rounded-xl bg-white text-black font-semibold"
+              >
+                Send OTP
+              </button>
+
+              <div id="recaptcha"></div>
+
+              <Input
+                label="Enter OTP"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+              />
+
+              <button
+                onClick={verifyOtp}
+                className="w-full h-11 rounded-xl bg-black text-white font-semibold"
+              >
+                Verify & Continue
+              </button>
+            </div>
           )}
 
-          <p
-            onClick={() => router.push("/forgot-password")}
-            className="text-sm text-right text-indigo-400 cursor-pointer"
-          >
-            Forgot Password?
+          {/* EMAIL */}
+          {mode === "email" && (
+            <form onSubmit={submitHandler} className="space-y-3">
+              <Input
+                label="Email"
+                type="email"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({ ...form, email: e.target.value })
+                }
+              />
+
+              <Input
+                label="Password"
+                type="password"
+                value={form.password}
+                onChange={(e) =>
+                  setForm({ ...form, password: e.target.value })
+                }
+              />
+
+              <button
+                disabled={isLoading}
+                className="w-full h-11 rounded-xl bg-black text-white font-semibold"
+              >
+                {isLoading ? "Please wait..." : "login"}
+              </button>
+
+              <p
+                onClick={() => router.push("/forgot-password")}
+                className="text-sm text-right text-white/60 cursor-pointer"
+              >
+                Forgot Password?
+              </p>
+              <p className="text-sm text-center text-white/60 mt-4">
+                Don’t have an account?{" "}
+                <span
+                  className="text-indigo-400 cursor-pointer"
+                  onClick={() => router.push("/register")}
+                >
+                  Register
+                </span>
+              </p>
+            </form>
+          )}
+
+
+
+          {/* FOOTER */}
+          <p className="text-center text-xs text-white/60 pt-2">
+            New here? Just continue — we’ll create your account automatically.
           </p>
 
-          <Button disabled={isLoading}>
-            {isLoading ? "Signing In..." : "Login"}
-          </Button>
-        </form>
-      )}
-
-      {/* PHONE */}
-      {mode === "phone" && (
-        <div className="space-y-4">
-          <Input
-            label="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-
-          <button
-            onClick={sendOtp}
-            className="w-full h-11 bg-black text-white rounded-lg font-bold"
-          >
-            Send OTP
-          </button>
-
-          <div id="recaptcha"></div>
-
-          <Input
-            label="Enter OTP"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-          />
-
-          <button
-            onClick={verifyOtp}
-            className="w-full h-11 bg-black text-white rounded-lg font-bold"
-          >
-            Verify OTP
-          </button>
         </div>
-      )}
-
-      {/* GOOGLE */}
-      <div className="mt-6">
-        <button
-          onClick={googleLogin}
-          className="w-full h-11 bg-black text-white rounded-lg font-bold"
-        >
-          Continue with Google
-        </button>
-      </div>
-
-      {/* REGISTER */}
-      <p className="text-sm text-center text-white/60 mt-4">
-        Don’t have an account?{" "}
-        <span
-          className="text-indigo-400 cursor-pointer"
-          onClick={() => router.push("/register")}
-        >
-          Register
-        </span>
-      </p>
+      {/* </div> */}
     </AuthLayout>
   );
 }

@@ -32,27 +32,30 @@ export async function GET(req) {
         role: "user",
       });
     }
+const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+  expiresIn: "30d",
+});
 
-    const token = jwt.sign({ id: user._id }, "secret123", {
-      expiresIn: "30d",
-    });
+// ✅ create response FIRST
+let res;
 
-    const cookieStore = await cookies();
+// 📱 MOBILE
+if (req.headers.get("user-agent")?.includes("wv")) {
+  res = NextResponse.redirect("nestme://");
+} else {
+  // 🌐 WEB
+  res = NextResponse.redirect(new URL("/", req.url));
+}
 
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      sameSite: "none",
-    });
+// ✅ SET COOKIE ON RESPONSE (NOT cookies())
+res.cookies.set("token", token, {
+  httpOnly: true,
+  secure: false,       // 🔥 IMPORTANT for localhost
+  path: "/",
+  sameSite: "lax",     // 🔥 FIX THIS
+});
 
-    // 📱 MOBILE → go back to app
-    if (req.headers.get("user-agent")?.includes("wv")) {
-      return NextResponse.redirect(new URL("nestme://"));
-    }
-
-    // 🌐 WEB → go home
-    return NextResponse.redirect(new URL("/"));
+return res;
 
   } catch (err) {
     console.error(err);

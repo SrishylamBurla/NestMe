@@ -4,7 +4,7 @@ export default function AuthLayout({ title, children, quote }) {
 
   
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e293b] text-white">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white">
 
       {/* Glow background */}
       <div className="absolute inset-0 -z-10 bg-indigo-500/20 blur-3xl" />
@@ -23,7 +23,7 @@ export default function AuthLayout({ title, children, quote }) {
         </div>
 
         {/* CARD */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6">
+        <div className="bg-white/5 backdrop-blur-2xl rounded-3xl shadow-2xl space-y-6">
 
           <h2 className="text-2xl font-bold text-center">
             {title}

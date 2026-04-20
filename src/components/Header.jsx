@@ -9,15 +9,14 @@ import {
   useGetNotificationsQuery,
   useMarkReadMutation,
 } from "@/store/services/notificationApi";
-
+import { useAuth } from "@/hooks/useAuth";
 import { io } from "socket.io-client";
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data, isLoading } = useGetMeQuery();
-const user = data?.user;
+  const { user, isLoading } = useAuth();
   const [logout] = useLogoutMutation();
 
   const { data: notifications, refetch } = useGetNotificationsQuery(undefined, {

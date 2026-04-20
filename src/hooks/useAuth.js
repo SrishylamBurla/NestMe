@@ -1,11 +1,13 @@
 import { useGetMeQuery } from "@/store/services/authApi";
 
-export const useAuth = () => {
-  const { data, isLoading, isError } = useGetMeQuery();
+export function useAuth() {
+  const { data, isLoading, isFetching, refetch } = useGetMeQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   return {
     user: data?.user || null,
-    isLoading,
-    isError,
+    isLoading: isLoading || isFetching,
+    refetch,
   };
-};
+}
