@@ -156,7 +156,7 @@ export default function SearchContent() {
               </div>
 
               <div className="flex gap-2 sm:gap-3 overflow-x-auto mt-4 no-scrollbar">
-                {["sale", "rent"].map((type) => (
+                {["sale", "rent", "lease"].map((type) => (
                   <button
                     key={type}
                     onClick={() =>
@@ -170,7 +170,7 @@ export default function SearchContent() {
                       : "bg-slate-800 text-slate-300 hover:bg-slate-700"
                       }`}
                   >
-                    {type === "sale" ? "Buy" : "Rent"}
+                    {type === "sale" ? "Buy" : type === "rent" ? "Rent" : "Lease"}
                   </button>
                 ))}
               </div>
