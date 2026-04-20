@@ -16,7 +16,6 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import { initAuth } from "@/lib/firebase";
 
 import { useAuth } from "@/hooks/useAuth";
 
