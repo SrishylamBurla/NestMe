@@ -111,39 +111,20 @@ const googleLogin = async () => {
       typeof window !== "undefined" &&
       window.ReactNativeWebView;
 
-    // ✅ MOBILE APP → call backend Google route
+    // 📱 MOBILE → redirect to backend
     if (isApp) {
-      window.location.href = "https://nestme.in/api/auth/google-login";
+      window.location.href = "https://nestme.in/api/auth/google";
       return;
     }
 
-    // ✅ WEB → Firebase popup
+    // 🌐 WEB → Firebase login
     const provider = new GoogleAuthProvider();
-
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    localStorage.setItem("google_email", user.email);
+    // 🔥 REDIRECT instead of fetch
+    window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
 
-    const res = await fetch("/api/auth/google-login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        email: user.email,
-        name: user.displayName,
-        image: user.photoURL,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message);
-
-    dispatch(authApi.util.resetApiState());
-    router.push("/");
   } catch (err) {
     console.error(err);
   }

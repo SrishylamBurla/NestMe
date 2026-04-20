@@ -4,46 +4,28 @@ import User from "@/models/User";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
-};
-
-export async function POST(req) {
+// const generateToken = (id) => {
+//   return jwt.sign({ id }, process.env.JWT_SECRET, {
+//     expiresIn: "30d",
+//   });
+// };
+export async function GET(req) {
   try {
     await connectDB();
 
-    const { email, name, image } = await req.json();
+    const { searchParams } = new URL(req.url);
+
+    const email = searchParams.get("email");
+    const name = searchParams.get("name");
+    const image = searchParams.get("image");
 
     if (!email) {
-      return NextResponse.json(
-        { message: "Email required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Email required" }, { status: 400 });
     }
 
-    // 🔥 STEP 1: Find by email
     let user = await User.findOne({ email });
 
-    // 🔥 STEP 2: If NOT found → check if phone user exists (merge case)
     if (!user) {
-      user = await User.findOne({
-        phone: { $exists: true },
-        email: { $exists: false },
-      });
-    }
-
-    // 🔥 STEP 3: If user exists → UPDATE (merge)
-    if (user) {
-      user.email = email;
-      user.name = user.name || name;
-      user.avatar = image;
-      user.loginProvider = "google";
-
-      await user.save();
-    } else {
-      // 🔥 STEP 4: Create new user
       user = await User.create({
         email,
         name: name || "User",
@@ -53,8 +35,9 @@ export async function POST(req) {
       });
     }
 
-    // 🔥 STEP 5: Token
-    const token = generateToken(user._id);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
 
     const cookieStore = await cookies();
 
@@ -64,18 +47,16 @@ export async function POST(req) {
       path: "/",
       sameSite: "lax",
     });
-    return NextResponse.redirect(new URL("nestme://"));
-    // return NextResponse.json({
-    //   id: user._id,
-    //   token,
-    // });
+
+    // 📱 MOBILE
+    if (req.headers.get("user-agent")?.includes("wv")) {
+      return NextResponse.redirect(new URL("nestme://"));
+    }
+
+    // 🌐 WEB
+    return NextResponse.redirect(new URL("/"));
 
   } catch (err) {
-    console.error("GOOGLE MERGE ERROR:", err);
-
-    return NextResponse.json(
-      { message: err.message || "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
