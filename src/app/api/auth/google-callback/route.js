@@ -7,7 +7,7 @@ import { OAuth2Client } from "google-auth-library";
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  "https://nestme.in/api/auth/google-callback"
+  "https://www.nestme.in/api/auth/google-callback"
 );
 
 export async function GET(req) {
@@ -61,7 +61,7 @@ export async function GET(req) {
     const isMobile = req.headers.get("user-agent")?.includes("wv");
 
     if (isMobile) {
-      res = NextResponse.redirect("nestme://home");
+      res = NextResponse.redirect("nestme://");
     } else {
       res = NextResponse.redirect(new URL("/", req.url));
     }

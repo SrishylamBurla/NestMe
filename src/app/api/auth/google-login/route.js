@@ -4,7 +4,7 @@ export async function GET() {
   const url =
     "https://accounts.google.com/o/oauth2/v2/auth" +
     "?client_id=" + process.env.GOOGLE_CLIENT_ID +
-    "&redirect_uri=" + encodeURIComponent("https://nestme.in/api/auth/google-callback") +
+    "&redirect_uri=" + encodeURIComponent("https://www.nestme.in/api/auth/google-callback") +
     "&response_type=code" +
     "&scope=" + encodeURIComponent("email profile") +
     "&access_type=offline" +
