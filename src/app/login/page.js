@@ -107,15 +107,15 @@ const dispatch = useDispatch();
   // ================= GOOGLE LOGIN =================
 const googleLogin = async () => {
   try {
-    const isApp =
-      typeof window !== "undefined" &&
-      window.ReactNativeWebView;
+    // const isApp =
+    //   typeof window !== "undefined" &&
+    //   window.ReactNativeWebView;
 
     // 📱 MOBILE → redirect to backend
-    if (isApp) {
-      window.location.href = "https://nestme.in/api/auth/google";
-      return;
-    }
+    // if (isApp) {
+    //   window.location.href = "https://nestme.in/api/auth/google";
+    //   return;
+    // }
 
     // 🌐 WEB → Firebase login
     const provider = new GoogleAuthProvider();

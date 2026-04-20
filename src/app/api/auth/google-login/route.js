@@ -4,11 +4,6 @@ import User from "@/models/User";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-// const generateToken = (id) => {
-//   return jwt.sign({ id }, process.env.JWT_SECRET, {
-//     expiresIn: "30d",
-//   });
-// };
 export async function GET(req) {
   try {
     await connectDB();
@@ -20,7 +15,10 @@ export async function GET(req) {
     const image = searchParams.get("image");
 
     if (!email) {
-      return NextResponse.json({ message: "Email required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Email required" },
+        { status: 400 }
+      );
     }
 
     let user = await User.findOne({ email });
@@ -35,7 +33,7 @@ export async function GET(req) {
       });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, "secret123", {
       expiresIn: "30d",
     });
 
@@ -48,15 +46,19 @@ export async function GET(req) {
       sameSite: "lax",
     });
 
-    // 📱 MOBILE
+    // 📱 MOBILE → go back to app
     if (req.headers.get("user-agent")?.includes("wv")) {
       return NextResponse.redirect(new URL("nestme://"));
     }
 
-    // 🌐 WEB
+    // 🌐 WEB → go home
     return NextResponse.redirect(new URL("/"));
 
   } catch (err) {
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    console.error(err);
+    return NextResponse.json(
+      { message: "Server error" },
+      { status: 500 }
+    );
   }
 }
