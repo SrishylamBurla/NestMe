@@ -43,7 +43,7 @@ export async function GET(req) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      sameSite: "lax",
+      sameSite: "none",
     });
 
     // 📱 MOBILE → go back to app
