@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import AuthLayout from "@/components/AuthLayout";
 import Input from "@/components/Input";
-import Button from "@/components/Button";
 import { useDispatch } from "react-redux";
 import { authApi } from "@/store/services/authApi";
-import { signInWithRedirect } from "firebase/auth";
 import { initAuth } from "@/lib/firebase";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -116,26 +114,30 @@ export default function LoginPage() {
   // ================= GOOGLE LOGIN =================
   const googleLogin = async () => {
   try {
+    const isMobile = window.ReactNativeWebView;
+
+    // ✅ MOBILE (WebView → open real browser)
+    if (isMobile) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "GOOGLE_LOGIN" })
+      );
+      return;
+    }
+
+    // ✅ WEB (normal Firebase popup)
     await initAuth();
 
     const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
 
-    const isMobile = window.ReactNativeWebView;
+    const user = result.user;
 
-    if (isMobile) {
-      await signInWithRedirect(auth, provider); // ✅ mobile
-    } else {
-      const result = await signInWithPopup(auth, provider); // ✅ web
-
-      const user = result.user;
-
-      window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
-    }
+    window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
 
   } catch (err) {
     if (err.code === "auth/popup-closed-by-user") return;
 
-    console.error(err);
+    console.error("Google Login Error:", err);
   }
 };
   // ================= RECAPTCHA =================
