@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  const redirectUri = "https://www.nestme.in/api/auth/google-callback";
+
   const url =
     "https://accounts.google.com/o/oauth2/v2/auth" +
     "?client_id=" + process.env.GOOGLE_CLIENT_ID +
-    "&redirect_uri=" + encodeURIComponent("https://www.nestme.in/api/auth/google-callback") +
+    "&redirect_uri=" + encodeURIComponent(redirectUri) +
     "&response_type=code" +
-    "&scope=" + encodeURIComponent("email profile") +
-    "&access_type=offline" +
-    "&prompt=consent";
+    "&scope=" + encodeURIComponent("openid email profile");
+
+  console.log("CLIENT ID:", process.env.GOOGLE_CLIENT_ID);
 
   return NextResponse.redirect(url);
 }

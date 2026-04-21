@@ -4,10 +4,12 @@ import User from "@/models/User";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
+const redirectUri = "https://www.nestme.in/api/auth/google-callback";
+
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  "https://www.nestme.in/api/auth/google-callback"
+  redirectUri
 );
 
 export async function GET(req) {
@@ -17,27 +19,39 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const code = searchParams.get("code");
 
+    console.log("CODE:", code);
+
     if (!code) {
       return NextResponse.json({ message: "No code provided" }, { status: 400 });
     }
 
-    // 🔥 STEP 1: Exchange code for tokens
-    const { tokens } = await client.getToken(code);
-    client.setCredentials(tokens);
+    // 🔥 STEP 1: exchange code
+    const { tokens } = await client.getToken({
+      code,
+      redirect_uri: redirectUri,
+    });
 
-    // 🔥 STEP 2: Get user info
+    console.log("TOKENS:", tokens);
+
+    if (!tokens.id_token) {
+      throw new Error("ID token missing");
+    }
+
+    // 🔥 STEP 2: verify user
     const ticket = await client.verifyIdToken({
-        idToken: tokens.id_token,
-        audience: process.env.GOOGLE_CLIENT_ID,
+      idToken: tokens.id_token,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
+
+    console.log("USER:", payload);
 
     const email = payload.email;
     const name = payload.name;
     const image = payload.picture;
 
-    // 🔥 STEP 3: Find or create user
+    // 🔥 STEP 3: DB
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -50,37 +64,27 @@ export async function GET(req) {
       });
     }
 
-    // 🔥 STEP 4: Create JWT
+    // 🔥 STEP 4: JWT
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
 
-    // 🔥 STEP 5: Create response
-    let res;
+    // 🔥 STEP 5: RESPONSE
+    const res = NextResponse.redirect("nestme://");
 
-    const isMobile = req.headers.get("user-agent")?.includes("wv");
-
-    if (isMobile) {
-      res = NextResponse.redirect("nestme://");
-    } else {
-      res = NextResponse.redirect(new URL("/", req.url));
-    }
-
-    // 🔥 STEP 6: Set cookie
     res.cookies.set("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
     });
 
     return res;
 
   } catch (err) {
-    console.error("GOOGLE CALLBACK ERROR:", err);
-
+    console.error("❌ GOOGLE CALLBACK ERROR:", err);
     return NextResponse.json(
-      { message: "Google login failed" },
+      { message: err.message || "Google login failed" },
       { status: 500 }
     );
   }
