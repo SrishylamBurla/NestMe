@@ -26,11 +26,6 @@ export default function LoginPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && window.ReactNativeWebView) {
       setIsMobileApp(true);
-
-      // 🔥 AUTO TRIGGER GOOGLE LOGIN IN MOBILE
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({ type: "GOOGLE_LOGIN" })
-      );
     }
   }, []);
 
@@ -153,30 +148,58 @@ export default function LoginPage() {
   };
 
   // ================= GOOGLE LOGIN =================
+
   const googleLogin = async () => {
-    try {
-      await initAuth();
+  try {
+    const isMobile =
+      typeof window !== "undefined" && window.ReactNativeWebView;
 
-      const provider = new GoogleAuthProvider();
-
-      const isMobile = window.ReactNativeWebView;
-
-      if (isMobile) {
-        await signInWithRedirect(auth, provider); // ✅ mobile
-      } else {
-        const result = await signInWithPopup(auth, provider); // ✅ web
-
-        const user = result.user;
-
-        window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
-      }
-
-    } catch (err) {
-      if (err.code === "auth/popup-closed-by-user") return;
-
-      console.error(err);
+    // 🚫 BLOCK MOBILE COMPLETELY
+    if (isMobile) {
+      alert("Google login is available only on website");
+      return;
     }
-  };
+
+    await initAuth();
+
+    const provider = new GoogleAuthProvider();
+
+    const result = await signInWithPopup(auth, provider);
+
+    const user = result.user;
+
+    window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
+    
+  } catch (err) {
+    if (err.code === "auth/popup-closed-by-user") return;
+
+    console.error(err);
+  }
+};
+  // const googleLogin = async () => {
+  //   try {
+  //     await initAuth();
+
+  //     const provider = new GoogleAuthProvider();
+
+  //     const isMobile = window.ReactNativeWebView;
+
+  //     if (isMobile) {
+  //       await signInWithRedirect(auth, provider); // ✅ mobile
+  //     } else {
+  //       const result = await signInWithPopup(auth, provider); // ✅ web
+
+  //       const user = result.user;
+
+  //       window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
+  //     }
+
+  //   } catch (err) {
+  //     if (err.code === "auth/popup-closed-by-user") return;
+
+  //     console.error(err);
+  //   }
+  // };
   // ================= RECAPTCHA =================
   useEffect(() => {
     if (mode !== "phone") return;
@@ -196,11 +219,11 @@ export default function LoginPage() {
       verifyOtp();
     }
   }, [otp]);
-useEffect(() => {
-  if (otpSent) {
-    setTimeout(() => setOtpSent(false), 30000); // enable after 30s
-  }
-}, [otpSent]);
+  useEffect(() => {
+    if (otpSent) {
+      setTimeout(() => setOtpSent(false), 30000); // enable after 30s
+    }
+  }, [otpSent]);
   return (
     <AuthLayout>
       {/* <div className="flex items-center justify-center"> */}
@@ -275,8 +298,8 @@ useEffect(() => {
               onClick={sendOtp}
               disabled={otpSent}
               className={`w-full h-11 rounded-xl font-semibold transition ${otpSent
-                  ? "bg-green-500 text-white cursor-not-allowed"
-                  : "bg-white text-black hover:scale-[1.02]"
+                ? "bg-green-500 text-white cursor-not-allowed"
+                : "bg-white text-black hover:scale-[1.02]"
                 }`}
             >
               {otpSent ? "OTP Sent ✓" : "Send OTP / Resend"}
@@ -284,7 +307,7 @@ useEffect(() => {
 
             <div id="recaptcha" className="hidden"></div>
 
-            <div className="flex justify-center gap-3 mt-2">
+            <div className="flex justify-center gap-1 mt-2">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -295,7 +318,7 @@ useEffect(() => {
                   onChange={(e) => handleOtpChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   className="
-        w-12 h-12
+        w-10 h-10
         text-center text-lg font-semibold
         rounded-xl
         bg-white/10
