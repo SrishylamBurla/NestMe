@@ -15,7 +15,7 @@ export default function ProfileFooter() {
   };
 
   const handleDeleteAccount = () => {
-    router.push("https://nestme.in/delete-account");
+    router.push("http://localhost:3000/delete-account || https://www.nestme.in/delete-account");
   };
 
   return (
