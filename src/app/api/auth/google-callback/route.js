@@ -70,7 +70,11 @@ export async function GET(req) {
     });
 
     // 🔥 STEP 5: RESPONSE
-    const res = NextResponse.redirect("nestme://");
+    const isMobile = req.headers.get("user-agent")?.includes("wv");
+
+    const res = isMobile
+      ? NextResponse.redirect("nestme://")
+      : NextResponse.redirect("https://www.nestme.in/");
 
     res.cookies.set("token", token, {
       httpOnly: true,
