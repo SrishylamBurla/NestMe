@@ -8,9 +8,11 @@ export async function GET() {
     "?client_id=" + process.env.GOOGLE_CLIENT_ID +
     "&redirect_uri=" + encodeURIComponent(redirectUri) +
     "&response_type=code" +
-    "&scope=" + encodeURIComponent("openid email profile");
+    "&scope=" + encodeURIComponent("openid email profile") +
+    "&access_type=offline" +        // 🔥 ADD THIS
+    "&prompt=consent";              // 🔥 ADD THIS
 
-  console.log("CLIENT ID:", process.env.GOOGLE_CLIENT_ID);
+  console.log("AUTH URL:", url);
 
   return NextResponse.redirect(url);
 }

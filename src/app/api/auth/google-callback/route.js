@@ -26,10 +26,12 @@ export async function GET(req) {
     }
 
     // 🔥 STEP 1: exchange code
-    const { tokens } = await client.getToken({
+    const tokenResponse = await client.getToken({
       code,
       redirect_uri: redirectUri,
     });
+
+    const tokens = tokenResponse.tokens;
 
     console.log("TOKENS:", tokens);
 
