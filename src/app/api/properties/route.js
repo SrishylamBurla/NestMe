@@ -139,7 +139,7 @@ async function sendPushNotificationToUsers({ title, body, url }) {
     const tokens = users.flatMap((u) => u.pushTokens || []);
 
     if (!tokens.length) {
-      console.log("No push tokens found");
+     
       return;
     }
 
@@ -163,7 +163,6 @@ async function sendPushNotificationToUsers({ title, body, url }) {
 
     const result = await response.json();
 
-    console.log("Push sent:", result);
   } catch (err) {
     console.error("Push error:", err);
   }

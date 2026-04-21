@@ -19,8 +19,6 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const code = searchParams.get("code");
 
-    console.log("CODE:", code);
-
     if (!code) {
       return NextResponse.json({ message: "No code provided" }, { status: 400 });
     }
@@ -33,7 +31,6 @@ export async function GET(req) {
 
     const tokens = tokenResponse.tokens;
 
-    console.log("TOKENS:", tokens);
 
     if (!tokens.id_token) {
       throw new Error("ID token missing");
@@ -47,7 +44,6 @@ export async function GET(req) {
 
     const payload = ticket.getPayload();
 
-    console.log("USER:", payload);
 
     const email = payload.email;
     const name = payload.name;

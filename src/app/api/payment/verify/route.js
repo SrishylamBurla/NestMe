@@ -56,10 +56,7 @@ export async function POST(req) {
   endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
 });
 
-// console.log("SUB CREATED:", subscription);
-
   user.subscriptionId = subscription._id;
-// console.log("VERIFY API CALLED");
   await user.save();
 
   return NextResponse.json({

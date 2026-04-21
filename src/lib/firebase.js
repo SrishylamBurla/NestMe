@@ -22,7 +22,7 @@ export const auth = getAuth(app);
 export const initAuth = async () => {
   try {
     await setPersistence(auth, browserLocalPersistence);
-    console.log("✅ Firebase persistence ready");
+    // console.log("✅ Firebase persistence ready");
   } catch (err) {
     console.error("❌ Persistence error:", err);
   }

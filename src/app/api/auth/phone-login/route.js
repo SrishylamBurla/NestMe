@@ -41,8 +41,6 @@ export async function POST(req) {
 
     phone = normalizePhone(phone);
 
-    console.log("NORMALIZED PHONE:", phone);
-
     let user;
 
     // 🔥 STEP 1: Find by phone

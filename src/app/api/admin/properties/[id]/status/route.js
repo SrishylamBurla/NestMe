@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 
 export async function PUT(req, context) {
   try {
-    // console.log("ADMIN STATUS ROUTE HIT");
 
     await connectDB();
 

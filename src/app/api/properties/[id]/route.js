@@ -92,8 +92,6 @@ export async function PUT(req, context) {
     return NextResponse.json({ message: "Invalid status" }, { status: 400 });
   }
 
-  console.log("USER:", user);
-console.log("PROPERTY:", await Property.findById(id));
   let property;
 
   // ADMIN

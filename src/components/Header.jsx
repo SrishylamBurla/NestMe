@@ -63,7 +63,6 @@ export default function Header() {
   socket.emit("join", user._id);
 
   socket.on("notification", (data) => {
-    console.log("🔥 Real-time notification:", data);
 
     refetch(); // 🔥 refresh instantly
   });

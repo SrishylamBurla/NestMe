@@ -35,7 +35,6 @@ export async function POST(req) {
         { status: 404 },
       );
     }
-    console.log("Incrementing leads for property:", property._id.toString());
 
     /* ---------------- CREATE LEAD ---------------- */
     const lead = await Lead.create({
@@ -56,7 +55,6 @@ export async function POST(req) {
     });
 
     const updated = await Property.findById(property._id);
-    console.log("Updated leadsCount:", updated.leadsCount);
 
     // 🔔 Notify agent if exists
     if (property.agent?.user?._id) {

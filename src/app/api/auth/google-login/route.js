@@ -12,9 +12,6 @@
 //     "&access_type=offline" +        // 🔥 ADD THIS
 //     "&prompt=consent";              // 🔥 ADD THIS
 
-//   console.log("AUTH URL:", url);
-//   console.log("CLIENT ID:", process.env.GOOGLE_CLIENT_ID);
-
 //   return NextResponse.redirect(url);
 // }
 

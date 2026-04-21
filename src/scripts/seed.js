@@ -1,28 +1,3 @@
-// import mongoose from "mongoose";
-// import dotenv from "dotenv";
-// import Property from "../models/Property.js";
-// import properties from "@/data/seedData.js";
-
-// dotenv.config({ path: ".env.local" });
-// console.log("MONGO_URI:", process.env.MONGO_URI);
-// const seedData = async () => {
-//   try {
-//     await mongoose.connect(process.env.MONGO_URI);
-
-//     await Property.deleteMany();
-//     console.log("🗑 Existing properties removed");
-
-//     await Property.insertMany(properties);
-//     console.log("✅ Properties seeded successfully");
-
-//     process.exit();
-//   } catch (error) {
-//     console.error("❌ Seeding failed:", error);
-//     process.exit(1);
-//   }
-// };
-
-// seedData();
 
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
