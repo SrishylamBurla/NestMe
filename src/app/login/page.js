@@ -21,7 +21,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
 
-    const [isMobileApp, setIsMobileApp] = useState(false);
+  const [isMobileApp, setIsMobileApp] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.ReactNativeWebView) {
@@ -54,8 +54,30 @@ export default function LoginPage() {
   const [phone, setPhone] = useState("");
   const [confirm, setConfirm] = useState(null);
   const [mode, setMode] = useState("email");
-  const [code, setCode] = useState("");
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otpSent, setOtpSent] = useState(false);
 
+
+
+  const inputsRef = useRef([]);
+  const handleOtpChange = (value, index) => {
+    if (!/^[0-9]?$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // move to next
+    if (value && index < 5) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    }
+  };
 
   // ================= EMAIL LOGIN =================
   const submitHandler = async (e) => {
@@ -86,6 +108,7 @@ export default function LoginPage() {
       );
 
       setConfirm(confirmation);
+      setOtpSent(true); // 🔥 mark as sent
     } catch (err) {
       console.error("OTP ERROR:", err);
     }
@@ -94,7 +117,8 @@ export default function LoginPage() {
   // ================= VERIFY OTP =================
   const verifyOtp = async () => {
     try {
-      const result = await confirm.confirm(code);
+      const finalCode = otp.join("");
+      const result = await confirm.confirm(finalCode);
 
       const phone = result.user.phoneNumber.replace(/\D/g, "").slice(-10);
 
@@ -167,7 +191,16 @@ export default function LoginPage() {
       { size: "invisible" }
     );
   }, [mode]);
-
+  useEffect(() => {
+    if (otp.every((d) => d !== "")) {
+      verifyOtp();
+    }
+  }, [otp]);
+useEffect(() => {
+  if (otpSent) {
+    setTimeout(() => setOtpSent(false), 30000); // enable after 30s
+  }
+}, [otpSent]);
   return (
     <AuthLayout>
       {/* <div className="flex items-center justify-center"> */}
@@ -240,18 +273,40 @@ export default function LoginPage() {
 
             <button
               onClick={sendOtp}
-              className="w-full h-11 rounded-xl bg-white text-black font-semibold"
+              disabled={otpSent}
+              className={`w-full h-11 rounded-xl font-semibold transition ${otpSent
+                  ? "bg-green-500 text-white cursor-not-allowed"
+                  : "bg-white text-black hover:scale-[1.02]"
+                }`}
             >
-              Send OTP
+              {otpSent ? "OTP Sent ✓" : "Send OTP / Resend"}
             </button>
 
             <div id="recaptcha" className="hidden"></div>
 
-            <Input
-              label="Enter OTP"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
+            <div className="flex justify-center gap-3 mt-2">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputsRef.current[index] = el)}
+                  type="text"
+                  maxLength="1"
+                  value={digit}
+                  onChange={(e) => handleOtpChange(e.target.value, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  className="
+        w-12 h-12
+        text-center text-lg font-semibold
+        rounded-xl
+        bg-white/10
+        border border-white/20
+        text-white
+        focus:outline-none focus:ring-2 focus:ring-indigo-500
+        transition
+      "
+                />
+              ))}
+            </div>
 
             <button
               onClick={verifyOtp}
@@ -259,6 +314,14 @@ export default function LoginPage() {
             >
               Verify & Continue
             </button>
+
+            <div>
+              <p className="text-center text-xs text-white/60 pt-2">
+                New here? Just continue
+              </p><p className="text-center text-xs text-white/60 pt-2">
+                We’ll create your account automatically.
+              </p>
+            </div>
           </div>
         )}
 
@@ -311,9 +374,7 @@ export default function LoginPage() {
 
 
         {/* FOOTER */}
-        <p className="text-center text-xs text-white/60 pt-2">
-          New here? Just continue — we’ll create your account automatically.
-        </p>
+
 
       </div>
       {/* </div> */}
