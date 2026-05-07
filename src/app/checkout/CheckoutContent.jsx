@@ -7,6 +7,7 @@ import {
 } from "@/store/services/SubscribeApi";
 
 import { toast } from "react-hot-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function CheckoutContent() {
   const params = useSearchParams();

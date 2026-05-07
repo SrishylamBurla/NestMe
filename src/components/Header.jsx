@@ -147,7 +147,7 @@ export default function Header() {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-40 bg-white px-2 sm:px-6 py-1 flex justify-between items-center">
+      <header className="sticky top-0 bg-[(rgba(0, 0, 0, 0.1))] backdrop-blur-sm px-2 sm:px-6 py-1 flex justify-between items-center">
         {/* LEFT SIDE */}
         {!user && (
           <div>

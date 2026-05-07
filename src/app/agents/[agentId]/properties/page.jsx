@@ -6,6 +6,8 @@ import { useGetAgentPropertiesQuery } from "@/store/services/agentApi";
 import { useGetMeQuery } from "@/store/services/authApi";
 import AgentPropertyCard from "@/components/agent/AgentPropertyCard";
 import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function AgentPropertiesPage() {
   // ✅ FIXED: correct structure
@@ -82,13 +84,13 @@ export default function AgentPropertiesPage() {
       <div className="max-w-7xl mx-auto space-y-3">
 
         {/* HEADER */}
-        <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 px-1 py-1 rounded-full bg-gray-600 text-white hover:bg-gray-700"
+        <div className="flex items-center justify-between py-2">
+          <Link
+            href="/"
+            className="text cursor-pointer bg-gray-50 rounded-full p-2 hover:bg-gray-300 transition"
           >
-            ←
-          </button>
+            <ChevronLeft className="w-5 h-5" />
+          </Link>
 
           <h1 className="text-2xl font-bold text-center text-indigo-600">
             My Properties
@@ -100,20 +102,20 @@ export default function AgentPropertiesPage() {
         </div>
 
         {/* SEARCH + SORT */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-row gap-2 items-center">
 
           <input
             type="text"
             placeholder="Search properties..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 h-11 px-4 rounded-lg border"
+            className="flex-1 h-8 px-4 rounded-lg bg-gray-50"
           />
 
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="h-11 px-4 rounded-lg border"
+            className="h-8 px-2 rounded-lg bg-gray-50"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -128,10 +130,10 @@ export default function AgentPropertiesPage() {
             <button
               key={status}
               onClick={() => setFilter(status)}
-              className={`px-4 py-2 rounded-lg ${
+              className={`px-2 py-1 rounded-lg ${
                 filter === status
                   ? "bg-indigo-600 text-white"
-                  : "bg-white border"
+                  : "bg-gray-50 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {status}

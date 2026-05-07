@@ -44,13 +44,13 @@ export default function HomePage() {
   if (showSplash) return <PremiumSplash />;
 
   return (
-    <>
+    <div className="">
       <Header />
       {user && <HelpWidget />}
       <main className="bg-[#f9fafb] overflow-x-hidden">
 
         {/* HERO */}
-        <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 pt-14 pb-12 rounded-b-[36px]">
+        <section className="bg-gradient-to-br from-[#33c9b5] via-[#010101] to-[#26a9e1] text-white px-5 py-18 rounded-b-[36px]">
           <div className="max-w-full mx-auto text-center space-y-5">
             <h1 className="text-3xl md:text-5xl font-bold">
               Find Your Perfect Property
@@ -126,7 +126,7 @@ export default function HomePage() {
 
       <Footer />
       <BottomNav />
-    </>
+    </div>
   );
 }
 

@@ -55,7 +55,7 @@ export default function LeadsClient({ agentId }) {
           placeholder="Search by user or property..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full h-11 px-4 rounded-full border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full h-8 px-4 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
       </div>
 
@@ -65,7 +65,7 @@ export default function LeadsClient({ agentId }) {
           <button
             key={status}
             onClick={() => setFilter(status)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+            className={`px-2 py-1 rounded-full text-sm font-semibold transition ${
               filter === status
                 ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md"
                 : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
@@ -106,7 +106,7 @@ export default function LeadsClient({ agentId }) {
                 router.push(`/properties/${lead.property._id}`);
               }
             }}
-            className="bg-white/80 backdrop-blur-xl border border-white/40 rounded-3xl p-6 shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+            className="bg-white/80 backdrop-blur-xl border border-white/40 rounded-3xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer"
           >
             {/* Top */}
             <div className="flex justify-between items-start border-b border-slate-100 pb-4">
