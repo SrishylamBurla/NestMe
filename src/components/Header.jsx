@@ -3,7 +3,7 @@
 import { useGetMeQuery, useLogoutMutation } from "@/store/services/authApi";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
-import { Heart } from "lucide-react";
+import { Heart, HeartIcon } from "lucide-react";
 import { Bell } from "lucide-react";
 import {
   useGetNotificationsQuery,
@@ -147,9 +147,16 @@ export default function Header() {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 bg-[(rgba(0, 0, 0, 0.1))] backdrop-blur-sm px-2 sm:px-6 py-1 flex justify-between items-center">
-        {/* LEFT SIDE */}
-        {!user && (
+      <header
+  className="
+  fixed top-0 left-0 w-full z-50
+  bg-[rgba(0,0,0,0.8)]
+  backdrop-blur-sm
+  px-4 sm:px-8
+  py-2
+  flex justify-between items-center border border-b-white/10
+  "
+>    {!user && (
           <div>
             <Image
               src={"/splashlogo.png"}
@@ -189,9 +196,9 @@ export default function Header() {
               />
             </div>
 
-            <div>
-              <p className="text-xs text-gray-400">Welcome</p>
-              <h1 className="text-sm font-semibold capitalize">
+            <div className="border-l-4 border-gray-200 pl-2">
+              <p className="text-xs text-gray-300">Welcome</p>
+              <h1 className="text-md font-semibold text-gray-200 capitalize">
                 {user?.name || "Guest"}
               </h1>
             </div>
@@ -203,10 +210,10 @@ export default function Header() {
         <div className="flex items-center gap-3">
           {user && (
             <>
-              <FavoriteButton />
+              <HeartIcon className="text-gray-200" />
               <button
                 onClick={() => setShowNotifications(true)}
-                className="relative p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
+                className="relative p-2 rounded-full hover:bg-gray-100 text-gray-200 transition cursor-pointer"
               >
                 <Bell />
 

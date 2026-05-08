@@ -29,7 +29,7 @@ export const initSocket = (server) => {
         if (!userId) return;
 
         // ✅ send to ALL clients in room (including sender)
-        io.to(userId).emit("newMessage", message);
+        io.to(userId).emit("support-message", message);
       });
 
       // ✍️ Typing indicator
@@ -55,7 +55,7 @@ export const sendNotification = (userId, data) => {
 // 💬 Chat helper
 export const sendMessageToUser = (userId, message) => {
   if (!io) return;
-  io.to(userId).emit("newMessage", message);
+  io.to(userId).emit("support-message", message);
 };
 
 // ✅ Safe getter

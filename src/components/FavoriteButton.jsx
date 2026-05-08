@@ -1,6 +1,7 @@
 import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
+import { useRouter } from "next/navigation";
 
-function FavoriteButton() {
+export const FavoriteButton = () => {
   const router = useRouter();
   const { data } = useGetSavedPropertiesQuery();
 
@@ -9,9 +10,9 @@ function FavoriteButton() {
   return (
     <button
       onClick={() => router.push("/saved-properties")}
-      className="relative p-2 rounded-full hover:bg-gray-100 transition"
+      className="relative p-2 rounded-full hover:bg-gray-100 text-gray-500 transition"
     >
-      <span className="material-symbols-outlined text-gray-700">
+      <span className="material-symbols-outlined text-gray-500">
         favorite
       </span>
 

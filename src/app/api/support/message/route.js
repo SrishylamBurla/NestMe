@@ -104,15 +104,15 @@ export async function POST(req) {
     sender: "user",
     text,
     file,
-    userId: user._id.toString(), // 🔥 IMPORTANT
+    userId: user._id.toString(), 
   };
 
   // ✅ AI MESSAGE
-  const adminMsg = {
-    sender: "admin",
-    text: reply,
-    userId: user._id.toString(), // 🔥 IMPORTANT
-  };
+  // const adminMsg = {
+  //   sender: "admin",
+  //   text: reply,
+  //   userId: user._id.toString(), 
+  // };
 
   ticket.messages.push(userMsg);
 
@@ -132,10 +132,17 @@ export async function POST(req) {
   ticket.state = nextState;
 
   await ticket.save();
+  const updatedTicket = await Support.findById(ticket._id);
 
+  sendMessageToUser(
+    user._id.toString(),
+    updatedTicket
+  );
+
+  return NextResponse.json(updatedTicket);
   // ⚡ SOCKET (CLEAN)
-  sendMessageToUser(user._id.toString(), userMsg);
-  sendMessageToUser(user._id.toString(), adminMsg);
+  // sendMessageToUser(user._id.toString(), userMsg);
+  // sendMessageToUser(user._id.toString(), adminMsg);
 
-  return NextResponse.json({ success: true });
+  // return NextResponse.json(ticket);
 }
