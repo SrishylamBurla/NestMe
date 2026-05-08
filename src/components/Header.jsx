@@ -148,9 +148,6 @@ export default function Header() {
     <>
       {/* ================= HEADER ================= */}
       <header
-        style={{
-          paddingTop: RNStatusBar.currentHeight,
-        }}
         className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
