@@ -151,7 +151,6 @@ export default function Header() {
   className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
-  backdrop-blur-sm
   px-4 sm:px-8
   py-2
   flex justify-between items-center border border-b-white/10
