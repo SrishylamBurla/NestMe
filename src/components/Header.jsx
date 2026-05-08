@@ -53,36 +53,36 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-  if (!user) return;
+    if (!user) return;
 
-  const socket = io("https://www.nestme.in", {
-    withCredentials: true,
-    transports: ["websocket"],
-  });
+    const socket = io("https://www.nestme.in", {
+      withCredentials: true,
+      transports: ["websocket"],
+    });
 
-  socket.emit("join", user._id);
+    socket.emit("join", user._id);
 
-  socket.on("notification", (data) => {
+    socket.on("notification", (data) => {
 
-    refetch(); // 🔥 refresh instantly
-  });
+      refetch(); // 🔥 refresh instantly
+    });
 
-  return () => socket.disconnect();
-}, [user]);
+    return () => socket.disconnect();
+  }, [user]);
 
   useEffect(() => {
-  if (!user) return;
+    if (!user) return;
 
-  // 🔥 SEND USER DATA TO MOBILE APP
-  if (typeof window !== "undefined" && window.ReactNativeWebView) {
-    window.ReactNativeWebView.postMessage(
-      JSON.stringify({
-        type: "USER_DATA",
-        userId: user._id,
-      })
-    );
-  }
-}, [user]);
+    // 🔥 SEND USER DATA TO MOBILE APP
+    if (typeof window !== "undefined" && window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          type: "USER_DATA",
+          userId: user._id,
+        })
+      );
+    }
+  }, [user]);
 
   const handleMarkAllRead = async () => {
     const unread = notifications.filter((n) => !n.isRead);
@@ -148,24 +148,29 @@ export default function Header() {
     <>
       {/* ================= HEADER ================= */}
       <header
-  className="
+        style={{
+          paddingTop: RNStatusBar.currentHeight,
+        }}
+        className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
   px-4 sm:px-8
   py-2
-  flex justify-between items-center border border-b-white/10
+  flex justify-between items-center
+  border-b border-white/10
+  backdrop-blur-xl
   "
->    {!user && (
-          <div>
-            <Image
-              src={"/splashlogo.png"}
-              alt="logo"
-              width={60}
-              height={60}
-              className="object-cover"
-            />
-          </div>
-        )}
+      >  {!user && (
+        <div>
+          <Image
+            src={"/splashlogo.png"}
+            alt="logo"
+            width={60}
+            height={60}
+            className="object-cover"
+          />
+        </div>
+      )}
         {user && (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -182,9 +187,9 @@ export default function Header() {
           </div> */}
             <div
               className="flex items-center gap-1 cursor-pointer"
-              // onClick={() => {
-              //   handleNavigate("/");
-              // }}
+            // onClick={() => {
+            //   handleNavigate("/");
+            // }}
             >
               <Image
                 src={"/splashlogo.png"}
@@ -371,23 +376,23 @@ export default function Header() {
         <div className="flex justify-between items-center px-3 py-4 shadow-sm">
           <h2 className="text-xl font-semibold text-gray-900">Notifications</h2>
           <div className="flex items-center gap-4">
-          {unreadCount > 0 && (
+            {unreadCount > 0 && (
+              <button
+                onClick={handleMarkAllRead}
+                className="text-xs text-gray-500 hover:text-gray-700 transition cursor-pointer"
+              >
+                Mark all read
+              </button>
+            )}
+
             <button
-              onClick={handleMarkAllRead}
-              className="text-xs text-gray-500 hover:text-gray-700 transition cursor-pointer"
+              onClick={() => setShowNotifications(false)}
+              className="p-2 rounded-full hover:bg-gray-100 transition"
             >
-              Mark all read
+              <span className="material-symbols-outlined text-gray-600">
+                close
+              </span>
             </button>
-          )}
-          
-          <button
-            onClick={() => setShowNotifications(false)}
-            className="p-2 rounded-full hover:bg-gray-100 transition"
-          >
-            <span className="material-symbols-outlined text-gray-600">
-              close
-            </span>
-          </button>
           </div>
         </div>
 
@@ -413,11 +418,10 @@ export default function Header() {
                           handleNavigate(n.link);
                         }}
                         className={`flex gap-3 p-4 rounded-xl cursor-pointer transition-all
-                    ${
-                      !n.isRead
-                        ? "bg-indigo-50 hover:bg-indigo-100"
-                        : "bg-gray-100 hover:bg-gray-200"
-                    }`}
+                    ${!n.isRead
+                            ? "bg-indigo-50 hover:bg-indigo-100"
+                            : "bg-gray-100 hover:bg-gray-200"
+                          }`}
                       >
                         {/* Icon */}
                         <span className="material-symbols-outlined text-violet-500 mt-1 pt-2">
@@ -454,13 +458,13 @@ export default function Header() {
           {Object.values(groupedNotifications).every(
             (items) => items.length === 0,
           ) && (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500">
-              <span className="material-symbols-outlined text-4xl mb-2">
-                notifications_off
-              </span>
-              <p className="text-sm">No notifications yet</p>
-            </div>
-          )}
+              <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                <span className="material-symbols-outlined text-4xl mb-2">
+                  notifications_off
+                </span>
+                <p className="text-sm">No notifications yet</p>
+              </div>
+            )}
         </div>
       </div>
     </>
