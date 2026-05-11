@@ -8,7 +8,7 @@ export async function POST(req, context) {
     await connectDB();
 
 
-    const id = await context.params
+    const { id } = await context.params
     const { message } = await req.json();
 
     // ✅ Validate input
@@ -42,7 +42,7 @@ export async function POST(req, context) {
 
     // 🔔 Notify user (fix field name)
     await Notification.create({
-      user: ticket.userId, // ⚠️ IMPORTANT (not ticket.user)
+      user: ticket.user, // ⚠️ IMPORTANT (not ticket.user)
       title: "Support Reply",
       message,
       link: "/support",
