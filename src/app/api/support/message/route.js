@@ -2,80 +2,54 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Support from "@/models/Support";
-import { getAuthUser } from "@/lib/getAuthUser";
 import { sendMessageToUser } from "@/lib/socket";
 
-export async function POST(req) {
+export async function POST(req, context) {
   try {
     await connectDB();
 
-    const user = await getAuthUser();
+    const { id } = context.params;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const { message } = await req.json();
 
-    const { text, file, subject } = await req.json();
-
-    if (!text?.trim()) {
+    if (!message?.trim()) {
       return NextResponse.json(
         { error: "Message required" },
         { status: 400 }
       );
     }
 
-    let ticket = await Support.findOne({
-      user: user._id,
-    }).sort({
-      createdAt: -1,
-    });
+    const ticket = await Support.findById(id);
 
-    // ✅ Create new support ticket
     if (!ticket) {
-      ticket = await Support.create({
-        user: user._id,
-        subject: subject || "Support Chat",
-        status: "open",
-
-        messages: [
-          {
-            sender: "user",
-            text,
-            file,
-          },
-        ],
-      });
-    } else {
-      // ✅ Push new message
-      ticket.messages.push({
-        sender: "user",
-        text,
-        file,
-      });
-
-      ticket.status = "open";
-
-      await ticket.save();
+      return NextResponse.json(
+        { error: "Ticket not found" },
+        { status: 404 }
+      );
     }
 
-    // ✅ Fetch updated ticket
-    const updatedTicket = await Support.findById(
-      ticket._id
-    );
+    ticket.messages.push({
+      sender: "admin",
+      text: message,
+    });
 
-    // ✅ Realtime update
+    ticket.status = "open";
+
+    await ticket.save();
+
+    // ✅ fetch updated ticket
+    const updatedTicket = await Support.findById(id);
+
+    // ✅ realtime emit
     sendMessageToUser(
-      user._id.toString(),
+      ticket.user.toString(),
       updatedTicket
     );
 
     return NextResponse.json(updatedTicket);
 
   } catch (error) {
-    console.log(error);
+    console.error("Reply API Error:", error);
 
     return NextResponse.json(
       { error: "Something went wrong" },
@@ -83,6 +57,90 @@ export async function POST(req) {
     );
   }
 }
+// import { NextResponse } from "next/server";
+// import connectDB from "@/lib/db";
+// import Support from "@/models/Support";
+// import { getAuthUser } from "@/lib/getAuthUser";
+// import { sendMessageToUser } from "@/lib/socket";
+
+// export async function POST(req) {
+//   try {
+//     await connectDB();
+
+//     const user = await getAuthUser();
+
+//     if (!user) {
+//       return NextResponse.json(
+//         { error: "Unauthorized" },
+//         { status: 401 }
+//       );
+//     }
+
+//     const { text, file, subject } = await req.json();
+
+//     if (!text?.trim()) {
+//       return NextResponse.json(
+//         { error: "Message required" },
+//         { status: 400 }
+//       );
+//     }
+
+//     let ticket = await Support.findOne({
+//       user: user._id,
+//     }).sort({
+//       createdAt: -1,
+//     });
+
+//     // ✅ Create new support ticket
+//     if (!ticket) {
+//       ticket = await Support.create({
+//         user: user._id,
+//         subject: subject || "Support Chat",
+//         status: "open",
+
+//         messages: [
+//           {
+//             sender: "user",
+//             text,
+//             file,
+//           },
+//         ],
+//       });
+//     } else {
+//       // ✅ Push new message
+//       ticket.messages.push({
+//         sender: "user",
+//         text,
+//         file,
+//       });
+
+//       ticket.status = "open";
+
+//       await ticket.save();
+//     }
+
+//     // ✅ Fetch updated ticket
+//     const updatedTicket = await Support.findById(
+//       ticket._id
+//     );
+
+//     // ✅ Realtime update
+//     sendMessageToUser(
+//       user._id.toString(),
+//       updatedTicket
+//     );
+
+//     return NextResponse.json(updatedTicket);
+
+//   } catch (error) {
+//     console.log(error);
+
+//     return NextResponse.json(
+//       { error: "Something went wrong" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 
 
