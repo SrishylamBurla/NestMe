@@ -9,6 +9,8 @@ import {
   useGetNotificationsQuery,
   useMarkReadMutation,
 } from "@/store/services/notificationApi";
+import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
+import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import { io } from "socket.io-client";
 
@@ -211,10 +213,10 @@ export default function Header() {
         <div className="flex items-center gap-3">
           {user && (
             <>
-              <HeartIcon className="text-gray-200" />
+              <FavoriteButton />
               <button
                 onClick={() => setShowNotifications(true)}
-                className="relative p-2 rounded-full hover:bg-gray-100 text-gray-200 transition cursor-pointer"
+                className="relative p-2 rounded-full text-gray-200 hover:bg-gray-500 transition cursor-pointer"
               >
                 <Bell />
 
@@ -481,9 +483,6 @@ function DrawerItem({ label, onClick }) {
   );
 }
 
-import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
-import Image from "next/image";
-
 function FavoriteButton() {
   const router = useRouter();
   const { data } = useGetSavedPropertiesQuery();
@@ -493,7 +492,7 @@ function FavoriteButton() {
   return (
     <button
       onClick={() => router.push("/saved")}
-      className="relative p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
+      className="relative p-2 rounded-full text-gray-200 hover:bg-gray-500 transition cursor-pointer"
     >
       <Heart />
 

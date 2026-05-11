@@ -14,23 +14,23 @@ export default function SupportChat({ onClose }) {
   const [text, setText] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [typing, setTyping] = useState(false);
+  // const [typing, setTyping] = useState(false);
 
   const bottomRef = useRef();
   const socketRef = useRef(null);
 
   // 🧠 AI welcome messages
-  const defaultMessages = [
-    { sender: "admin", text: "👋 Welcome to NestMe!" },
-    {
-      sender: "admin",
-      text: "I’m your virtual assistant. I can help you buy, rent, or list properties.",
-    },
-    {
-      sender: "admin",
-      text: "What would you like to do?\n\n🏡 Buy Property\n🏢 Rent Property\n📢 Post Property\n❓ Help",
-    },
-  ];
+  // const defaultMessages = [
+  //   { sender: "admin", text: "👋 Welcome to NestMe!" },
+  //   {
+  //     sender: "admin",
+  //     text: "I’m your virtual assistant. I can help you buy, rent, or list properties.",
+  //   },
+  //   {
+  //     sender: "admin",
+  //     text: "What would you like to do?\n\n🏡 Buy Property\n🏢 Rent Property\n📢 Post Property\n❓ Help",
+  //   },
+  // ];
 
   // 🔄 Fetch initial messages
   const fetchMessages = async () => {
@@ -38,14 +38,14 @@ export default function SupportChat({ onClose }) {
       const res = await axios.get("/api/support");
       const tickets = res.data;
 
-      if (tickets.length > 0 && tickets[0].messages.length > 0) {
-        setMessages(tickets[0].messages);
+      if (tickets.length > 0) {
+        setMessages(tickets[0].messages || []);
       } else {
-        setMessages(defaultMessages);
+        setMessages([]);
       }
     } catch (err) {
       console.error("Fetch error:", err);
-      setMessages(defaultMessages);
+      setMessages([]);
     }
   };
 
@@ -57,17 +57,17 @@ export default function SupportChat({ onClose }) {
   useEffect(() => {
     if (!user?._id) return;
 
-    socketRef.current = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000" );
+    socketRef.current = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000");
     const socket = socketRef.current;
 
     socket.emit("join", user._id);
 
     socket.on("newMessage", (msg) => {
-  // ✅ only accept messages for this user
-  if (msg.userId !== user._id) return;
+      // ✅ only accept messages for this user
+      if (msg.userId !== user._id) return;
 
-  setMessages((prev) => [...prev, msg]);
-});
+      setMessages((prev) => [...prev, msg]);
+    });
 
     // socket.on("newMessage", (msg) => {
     //   setMessages((prev) => {
@@ -82,10 +82,10 @@ export default function SupportChat({ onClose }) {
     //   });
     // });
 
-    socket.on("typing", () => {
-      setTyping(true);
-      setTimeout(() => setTyping(false), 1000);
-    });
+    // socket.on("typing", () => {
+    //   setTyping(true);
+    //   setTimeout(() => setTyping(false), 1000);
+    // });
 
     return () => {
       socket.disconnect();
@@ -116,7 +116,7 @@ export default function SupportChat({ onClose }) {
       }
 
       // 💬 Emit typing
-      socketRef.current?.emit("typing", user._id);
+      // socketRef.current?.emit("typing", user._id);
 
       const newMsg = {
         sender: "user",
@@ -155,8 +155,13 @@ export default function SupportChat({ onClose }) {
             S
           </div>
           <div>
-            <p className="text-sm font-semibold">Support</p>
-            <p className="text-xs text-gray-300">Online</p>
+            <p className="text-sm font-semibold">
+              NestMe Support
+            </p>
+
+            <p className="text-xs text-emerald-300">
+              Usually replies within 30 mins
+            </p>
           </div>
         </div>
 
@@ -164,64 +169,93 @@ export default function SupportChat({ onClose }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gradient-to-t from-violet-100 via-pink-100 to-purple-200">
-        {messages.map((msg, i) => (
-          <div
-            key={msg._id || i}
-            className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm shadow ${
-              msg.sender === "user"
-                ? "bg-violet-800 text-white ml-auto rounded-br-none"
-                : "bg-gray-800 text-white rounded-bl-none"
-            }`}
-          >
-            {msg.text}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-slate-50 to-white">
 
-            {/* Quick actions */}
-            {msg.text?.includes("🏡") && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {["Buy Property", "Rent Property", "Post Property", "Help"].map(
-                  (opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => {
-                        setText(opt);
-                        setTimeout(() => {
-                          sendMessage();
-                        }, 100);
-                      }}
-                      className="bg-white text-black px-2 py-1 rounded-full text-xs"
-                    >
-                      {opt}
-                    </button>
-                  ),
-                )}
+        {messages.length === 0 && (
+          <div className="h-full flex items-center justify-center mt-3">
+            <div className="max-w-sm text-center">
+
+              {/* <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center shadow-lg mx-auto mb-5">
+                <span className="text-4xl">💬</span>
               </div>
-            )}
 
-            {/* File */}
-            {msg.file && (
-              <a
-                href={msg.file}
-                target="_blank"
-                className="text-xs underline mt-1 flex items-center gap-1"
-              >
-                <img src="/icons/attach.png" alt="Attach" className="w-4 h-4" />{" "}
-                Attachment
-              </a>
-            )}
-          </div>
-        ))}
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                NestMe Customer Support
+              </h2>
 
-        {/* Typing */}
-        {typing && (
-          <div className="text-xs text-gray-500 italic">
-            NestMe is typing...
+              <p className="text-emerald-600 text-sm font-semibold mb-6">
+                Usually replies within 30 mins
+              </p> */}
+
+              <div className="p-3 bg-white rounded-2xl shadow-sm text-left">
+
+                <p className="text-xs text-slate-700">
+                  Welcome to NestMe Support
+                  <br /><br />
+                  Our support team can help you with:
+                </p>
+
+                <div className="grid grid-cols-1 gap-1 mt-5">
+
+                  <div className="bg-slate-50 border text-sm border-slate-200 rounded-2xl p-2">
+                    🏡 Property Listings
+                  </div>
+
+                  <div className="bg-slate-50 border text-sm border-slate-200 rounded-2xl p-2">
+                    🔑 Account & Login Issues
+                  </div>
+
+                  <div className="bg-slate-50 border text-sm  border-slate-200 rounded-2xl p-2">
+                    📞 Leads & Enquiries
+                  </div>
+
+                  <div className="bg-slate-50 border text-sm border-slate-200 rounded-2xl p-2">
+                    💎 Subscription Support
+                  </div>
+
+                </div>
+
+                <div className="mt-5 bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-sm text-indigo-700">
+                  Please describe your issue clearly and our support team will get back to you shortly.
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
+        {messages.map((msg, i) => (
+          <div
+            key={msg._id || i}
+            className={`flex ${msg.sender === "user"
+                ? "justify-end"
+                : "justify-start"
+              }`}
+          >
+            <div
+              className={`max-w-[80%] px-4 py-3 rounded-3xl text-sm shadow-sm ${msg.sender === "user"
+                  ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-br-md"
+                  : "bg-white border border-slate-200 text-slate-800 rounded-bl-md"
+                }`}
+            >
+              <p className="leading-relaxed">
+                {msg.text}
+              </p>
+
+              {msg.file && (
+                <a
+                  href={msg.file}
+                  target="_blank"
+                  className="block mt-3 text-xs underline"
+                >
+                  📎 View Attachment
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+
         <div ref={bottomRef}></div>
       </div>
-
       {/* Input */}
       <div className="p-2 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 flex items-center gap-2">
         <label className="cursor-pointer text-lg">

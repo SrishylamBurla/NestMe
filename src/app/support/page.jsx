@@ -159,12 +159,12 @@ export default function SupportPage() {
       const data = await res.json();
 
       setTickets(
-  [...data].sort(
-    (a, b) =>
-      new Date(b.updatedAt) -
-      new Date(a.updatedAt)
-  )
-);
+        [...data].sort(
+          (a, b) =>
+            new Date(b.updatedAt) -
+            new Date(a.updatedAt)
+        )
+      );
     } catch (err) {
       console.log(err);
     }
@@ -192,7 +192,13 @@ export default function SupportPage() {
     socket.on("support-message", (updatedTicket) => {
       console.log("🔥 RECEIVED", updatedTicket);
 
-      setTickets([updatedTicket])
+      setTickets((prev) => {
+        const filtered = prev.filter(
+          (t) => t._id !== updatedTicket._id
+        );
+
+        return [updatedTicket, ...filtered];
+      });
     });
 
     return () => {
@@ -270,7 +276,7 @@ export default function SupportPage() {
       setLoading(false);
     }
   };
-const latestTicket = tickets[0];
+  const latestTicket = tickets[0];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pb-28">
@@ -289,14 +295,14 @@ const latestTicket = tickets[0];
               </h1>
 
               <p className="text-sm text-slate-500">
-                Realtime customer support
+                Professional property assistance & customer support
               </p>
             </div>
           </div>
 
           <div className="hidden sm:flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            AI Assistant Online
+            Support Team • Usually replies within 30 mins
           </div>
         </div>
       </div>
@@ -363,11 +369,11 @@ const latestTicket = tickets[0];
 
               <div>
                 <h2 className="font-bold text-slate-900">
-                  NestMe AI Support
+                  NestMe Customer Support
                 </h2>
 
                 <p className="text-sm text-emerald-600 font-medium">
-                  Active now
+                  Usually replies within 30 mins
                 </p>
               </div>
             </div>
@@ -376,23 +382,67 @@ const latestTicket = tickets[0];
           {/* ================= MESSAGES ================= */}
 
           <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5 bg-gradient-to-b from-slate-50 to-white">
+
             {!latestTicket && (
-              <div className="h-full flex items-center justify-center text-center px-4">
-                <div>
-                  <div className="text-6xl mb-4">🏡</div>
+              <div className="flex justify-center items-center h-full py-10">
+                <div className="max-w-xl w-full bg-white border border-slate-200 rounded-[32px] p-8 shadow-xl">
 
-                  <h2 className="text-2xl font-bold text-slate-800 mb-2">
-                    Welcome to NestMe Support
-                  </h2>
+                  <div className="flex flex-col items-center text-center">
 
-                  <p className="text-slate-500 max-w-md">
-                    Ask about buying, renting, listing properties, or account
-                    issues.
-                  </p>
+                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center shadow-lg mb-5">
+                      <span className="text-4xl">💬</span>
+                    </div>
+
+                    <h2 className="text-3xl font-bold text-slate-900 mb-2">
+                      NestMe Customer Support
+                    </h2>
+
+                    <p className="text-emerald-600 font-semibold text-sm mb-6">
+                      Usually replies within 30 minutes
+                    </p>
+
+                    <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 text-left w-full">
+
+                      <p className="text-slate-700 leading-relaxed text-sm">
+                        Welcome to NestMe Support 👋
+                        <br />
+                        <br />
+                        Our team is here to help you with:
+                      </p>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+
+                        <div className="bg-white rounded-2xl border border-slate-200 p-4">
+                          🏡 Property Listings
+                        </div>
+
+                        <div className="bg-white rounded-2xl border border-slate-200 p-4">
+                          🔑 Account & Login Issues
+                        </div>
+
+                        <div className="bg-white rounded-2xl border border-slate-200 p-4">
+                          📞 Leads & Enquiries
+                        </div>
+
+                        <div className="bg-white rounded-2xl border border-slate-200 p-4">
+                          💎 Subscription Support
+                        </div>
+
+                        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:col-span-2">
+                          📱 App-related Assistance
+                        </div>
+
+                      </div>
+
+                      <div className="mt-6 bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-sm text-indigo-700">
+                        Please describe your issue clearly and our support team will get back to you shortly.
+                      </div>
+
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
-
             {latestTicket?.messages?.map((m, i) => (
               <div
                 key={i}
