@@ -232,7 +232,7 @@ export default function SupportChat({ onClose }) {
               }`}
           >
             <div
-              className={`max-w-[80%] px-4 py-3 rounded-3xl text-sm shadow-sm ${msg.sender === "user"
+              className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm shadow-sm ${msg.sender === "user"
                   ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-br-md"
                   : "bg-white border border-slate-200 text-slate-800 rounded-bl-md"
                 }`}

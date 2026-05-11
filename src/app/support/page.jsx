@@ -474,7 +474,7 @@ export default function SupportPage() {
                 className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-3xl px-5 py-4 shadow-sm
+                  className={`max-w-[80%] rounded-2xl px-3 py-2 shadow-sm
                   ${m.sender === "user"
                       ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white"
                       : "bg-white border border-slate-200 text-slate-800"
@@ -528,7 +528,7 @@ export default function SupportPage() {
                 <button
                   onClick={createTicket}
                   disabled={loading}
-                  className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-6 py-3 rounded-2xl font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg disabled:opacity-50"
+                  className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2 rounded-2xl font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg disabled:opacity-50"
                 >
                   {loading ? "Sending..." : "Send Message"}
                 </button>

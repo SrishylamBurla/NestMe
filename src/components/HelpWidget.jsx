@@ -114,7 +114,7 @@ export default function HelpWidget() {
       <div className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-[999]">
 
         {/* ONLINE BADGE */}
-        <div className="absolute -top-2 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-white animate-pulse" />
+        <div className="absolute -top-2 -right-1 w-5 h-5 z-[50] rounded-full bg-emerald-500 border-4 border-white animate-pulse" />
 
         {/* BUTTON */}
         <button
@@ -123,13 +123,10 @@ export default function HelpWidget() {
           group
           relative
           w-16 h-16
-          rounded-3xl
+          rounded-full
           overflow-hidden
-          bg-gradient-to-br
-          from-indigo-600
-          via-violet-600
-          to-fuchsia-600
-          shadow-[0_20px_60px_rgba(79,70,229,0.45)]
+          bg-gray-400
+          shadow-inner
           hover:scale-110
           active:scale-95
           transition-all
@@ -159,15 +156,15 @@ export default function HelpWidget() {
         <div
           className="
           absolute
-          right-20
+          right-18
           top-1/2
           -translate-y-1/2
           hidden
           md:flex
           flex-col
           bg-white
-          px-4
-          py-3
+          px-3
+          py-2
           rounded-2xl
           shadow-2xl
           border
