@@ -91,81 +91,61 @@ export default function AdminSupport() {
     const socket =
       socketRef.current;
 
-      socket.on(
-  "support-message",
-  (updatedTicket) => {
+    socket.on(
+      "support-message",
+      (updatedTicket) => {
 
-    setTickets((prev) =>
-      prev.map((t) =>
-        t._id === updatedTicket._id
-          ? updatedTicket
-          : t
-      )
-    );
+        setTickets((prev) =>
+          prev.map((t) =>
+            t._id === updatedTicket._id
+              ? updatedTicket
+              : t
+          )
+        );
 
-    setSelected((prev) => {
-      if (
-        prev &&
-        prev._id === updatedTicket._id
-      ) {
-        return updatedTicket;
+        setSelected((prev) => {
+          if (
+            prev &&
+            prev._id === updatedTicket._id
+          ) {
+            return updatedTicket;
+          }
+
+          return prev;
+        });
       }
-
-      return prev;
-    });
-  }
-);
-    // socket.on(
-    //   "support-message",
-    //   (msg) => {
-    //     if (!msg?.userId)
-    //       return;
-
-    //     // UPDATE TICKETS
-    //     setTickets((prev) =>
-    //       prev.map((t) => {
-    //         if (
-    //           t.user?._id ===
-    //           msg.userId
-    //         ) {
-    //           return {
-    //             ...t,
-    //             messages: [
-    //               ...t.messages,
-    //               msg,
-    //             ],
-    //           };
-    //         }
-
-    //         return t;
-    //       })
-    //     );
-
-    //     // UPDATE ACTIVE CHAT
-    //     setSelected((prev) => {
-    //       if (
-    //         prev &&
-    //         prev.user?._id ===
-    //           msg.userId
-    //       ) {
-    //         return {
-    //           ...prev,
-    //           messages: [
-    //             ...prev.messages,
-    //             msg,
-    //           ],
-    //         };
-    //       }
-
-    //       return prev;
-    //     });
-    //   }
-    // );
+    );
 
     return () =>
       socket.disconnect();
   }, []);
 
+
+  useEffect(() => {
+  if (!selected) return;
+
+  const interval = setInterval(async () => {
+    const res = await fetch(
+      "/api/admin/support"
+    );
+
+    const data = await res.json();
+
+    setTickets(data);
+
+    const updated =
+      data.find(
+        (t) => t._id === selected._id
+      );
+
+    if (updated) {
+      setSelected(updated);
+    }
+  }, 2000);
+
+  return () => clearInterval(interval);
+
+}, [selected]);
   // ================= SEND =================
   const sendReply =
     async () => {
@@ -206,10 +186,9 @@ export default function AdminSupport() {
       {/* ================= SIDEBAR ================= */}
       <div
         className={`
-          ${
-            showMobileChat
-              ? "hidden"
-              : "flex"
+          ${showMobileChat
+            ? "hidden"
+            : "flex"
           }
 
           lg:flex
@@ -287,11 +266,10 @@ export default function AdminSupport() {
                   border-b border-gray-100
                   hover:bg-gray-50
                   transition
-                  ${
-                    selected?._id ===
+                  ${selected?._id ===
                     t._id
-                      ? "bg-[#f0f2f5]"
-                      : ""
+                    ? "bg-[#f0f2f5]"
+                    : ""
                   }
                 `}
               >
@@ -311,10 +289,10 @@ export default function AdminSupport() {
                   {t.user?.name?.charAt(
                     0
                   ) || (
-                    <User
-                      size={18}
-                    />
-                  )}
+                      <User
+                        size={18}
+                      />
+                    )}
                 </div>
 
                 {/* CONTENT */}
@@ -366,10 +344,9 @@ export default function AdminSupport() {
       {/* ================= CHAT AREA ================= */}
       <div
         className={`
-          ${
-            showMobileChat
-              ? "flex"
-              : "hidden"
+          ${showMobileChat
+            ? "flex"
+            : "hidden"
           }
 
           lg:flex
@@ -482,11 +459,10 @@ export default function AdminSupport() {
                     key={i}
                     className={`
                       flex
-                      ${
-                        m.sender ===
+                      ${m.sender ===
                         "admin"
-                          ? "justify-end"
-                          : "justify-start"
+                        ? "justify-end"
+                        : "justify-start"
                       }
                     `}
                   >
@@ -500,11 +476,10 @@ export default function AdminSupport() {
                         rounded-2xl
                         shadow-sm
                         relative
-                        ${
-                          m.sender ===
+                        ${m.sender ===
                           "admin"
-                            ? "bg-[#d9fdd3] rounded-br-sm"
-                            : "bg-white rounded-bl-sm"
+                          ? "bg-[#d9fdd3] rounded-br-sm"
+                          : "bg-white rounded-bl-sm"
                         }
                       `}
                     >
