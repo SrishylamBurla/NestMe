@@ -91,52 +91,76 @@ export default function AdminSupport() {
     const socket =
       socketRef.current;
 
-    socket.on(
-      "newMessage",
-      (msg) => {
-        if (!msg?.userId)
-          return;
+      socket.on(
+  "support-message",
+  (updatedTicket) => {
 
-        // UPDATE TICKETS
-        setTickets((prev) =>
-          prev.map((t) => {
-            if (
-              t.user?._id ===
-              msg.userId
-            ) {
-              return {
-                ...t,
-                messages: [
-                  ...t.messages,
-                  msg,
-                ],
-              };
-            }
-
-            return t;
-          })
-        );
-
-        // UPDATE ACTIVE CHAT
-        setSelected((prev) => {
-          if (
-            prev &&
-            prev.user?._id ===
-              msg.userId
-          ) {
-            return {
-              ...prev,
-              messages: [
-                ...prev.messages,
-                msg,
-              ],
-            };
-          }
-
-          return prev;
-        });
-      }
+    setTickets((prev) =>
+      prev.map((t) =>
+        t._id === updatedTicket._id
+          ? updatedTicket
+          : t
+      )
     );
+
+    setSelected((prev) => {
+      if (
+        prev &&
+        prev._id === updatedTicket._id
+      ) {
+        return updatedTicket;
+      }
+
+      return prev;
+    });
+  }
+);
+    // socket.on(
+    //   "support-message",
+    //   (msg) => {
+    //     if (!msg?.userId)
+    //       return;
+
+    //     // UPDATE TICKETS
+    //     setTickets((prev) =>
+    //       prev.map((t) => {
+    //         if (
+    //           t.user?._id ===
+    //           msg.userId
+    //         ) {
+    //           return {
+    //             ...t,
+    //             messages: [
+    //               ...t.messages,
+    //               msg,
+    //             ],
+    //           };
+    //         }
+
+    //         return t;
+    //       })
+    //     );
+
+    //     // UPDATE ACTIVE CHAT
+    //     setSelected((prev) => {
+    //       if (
+    //         prev &&
+    //         prev.user?._id ===
+    //           msg.userId
+    //       ) {
+    //         return {
+    //           ...prev,
+    //           messages: [
+    //             ...prev.messages,
+    //             msg,
+    //           ],
+    //         };
+    //       }
+
+    //       return prev;
+    //     });
+    //   }
+    // );
 
     return () =>
       socket.disconnect();

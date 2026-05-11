@@ -241,28 +241,53 @@ export default function SupportPage() {
 
       /* ================= SEND MESSAGE ================= */
 
-      const res = await fetch("/api/support", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          subject,
-          text: message,
-          file: fileUrl,
-        }),
-      });
+      // const res = await fetch("/api/support", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     subject,
+      //     text: message,
+      //     file: fileUrl,
+      //   }),
+      // });
+
+      // const updatedTicket = await res.json();
+
+      // setTickets((prev) => {
+      //   const filtered = prev.filter(
+      //     (t) => t._id !== updatedTicket._id
+      //   );
+
+      //   return [updatedTicket, ...filtered];
+      // });
+
+      const res = await fetch(
+        `/api/support/${selectedTicket._id}/reply`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: replyText,
+          }),
+        }
+      );
 
       const updatedTicket = await res.json();
 
-      setTickets((prev) => {
-        const filtered = prev.filter(
-          (t) => t._id !== updatedTicket._id
-        );
+      // ✅ instantly update sender UI
+      setTickets((prev) =>
+        prev.map((t) =>
+          t._id === updatedTicket._id
+            ? updatedTicket
+            : t
+        )
+      );
 
-        return [updatedTicket, ...filtered];
-      });
-
+      setReplyText("");
       // await res.json();
       // await fetchTickets();
       /* ================= RESET ================= */
