@@ -85,7 +85,7 @@ export default function AdminSupport() {
 
     // SOCKET
     socketRef.current = io(
-      "http://localhost:3000"
+      "http://www.nestme.in"
     );
 
     const socket =
@@ -120,26 +120,39 @@ export default function AdminSupport() {
       socket.disconnect();
   }, []);
 
-
-  useEffect(() => {
+useEffect(() => {
   if (!selected) return;
 
   const interval = setInterval(async () => {
-    const res = await fetch(
-      "/api/admin/support"
-    );
+    try {
+      const res = await fetch(
+        "/api/admin/support",
+        {
+          cache: "no-store",
+        }
+      );
 
-    const data = await res.json();
+      if (!res.ok) return;
 
-    setTickets(data);
+      const data = await res.json();
 
-    const updated =
-      data.find(
+      if (!Array.isArray(data)) return;
+
+      setTickets(data);
+
+      const updated = data.find(
         (t) => t._id === selected._id
       );
 
-    if (updated) {
-      setSelected(updated);
+      if (updated) {
+        setSelected(updated);
+      }
+
+    } catch (err) {
+      console.log(
+        "Polling error:",
+        err.message
+      );
     }
   }, 2000);
 
