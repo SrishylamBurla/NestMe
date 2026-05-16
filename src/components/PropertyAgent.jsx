@@ -16,6 +16,11 @@ export default function PropertyAgent({ property }) {
     ? `/users/${owner._id}`
     : "#";
 
+
+  console.log(property);
+console.log(property?.agent);
+console.log(property?.agent?.user);
+
   return (
     <div className="space-y-5">
 

@@ -81,25 +81,25 @@ export default function HomePage() {
           <div className="grid grid-cols-4 gap-4 text-center max-w-4xl mx-auto">
 
   <PropertyType 
-    image="/icons/apartments.png" 
+    image="/icons/residential.png" 
     label="Apartment" 
     type="apartment" 
   />
 
   <PropertyType 
-    image="/icons/villa.png" 
+    image="/icons/villa2.png" 
     label="Villa" 
     type="villa" 
   />
 
   <PropertyType 
-    image="/icons/space.png" 
+    image="/icons/plotting.png" 
     label="Plot" 
     type="plot" 
   />
 
   <PropertyType 
-    image="/icons/commercial.png" 
+    image="/icons/buildings.png" 
     label="Commercial" 
     type="commercial" 
   />

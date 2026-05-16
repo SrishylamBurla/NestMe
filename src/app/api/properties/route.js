@@ -139,7 +139,7 @@ async function sendPushNotificationToUsers({ title, body, url }) {
     const tokens = users.flatMap((u) => u.pushTokens || []);
 
     if (!tokens.length) {
-     
+
       return;
     }
 
@@ -321,7 +321,10 @@ export async function POST(req) {
       },
       images: uploadedImages,
       owner: user._id,
-      agent: agentProfileId,
+      agent:
+        user.role === "agent"
+          ? user.agentProfileId
+          : null,
       approvalStatus: "pending",
     });
 

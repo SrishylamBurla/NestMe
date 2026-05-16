@@ -5,11 +5,11 @@ export const leadEmailTemplate = ({
 }) => {
   const dashboardLink =
     receiverType === "agent"
-      ? `${process.env.CLIENT_URL}/agents/${property.agent._id}/leads`
+      ? `${process.env.CLIENT_URL}/agents/${property.agent?._id}/leads`
       : `${process.env.CLIENT_URL}/my-leads`;
 
   const propertyLink = `${process.env.CLIENT_URL}/properties/${property._id}`;
-
+  
   return `
   <div style="margin:0; padding:0; background:#f3f4f6; font-family:Arial, sans-serif;">
     

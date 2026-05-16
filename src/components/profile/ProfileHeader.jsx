@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ProfileHeader({ user }) {
@@ -14,9 +15,7 @@ export default function ProfileHeader({ user }) {
           onClick={() => router.back()}
           className="h-10 w-10 rounded-full bg-slate-800 hover:bg-indigo-600 flex items-center justify-center"
         >
-          <span className="material-symbols-outlined">
-            arrow_back
-          </span>
+          <ChevronLeftIcon className="text-slate-400" />
         </button>
 
         <h2 className="text-xl font-bold">Account</h2>

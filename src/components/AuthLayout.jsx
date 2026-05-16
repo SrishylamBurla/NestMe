@@ -25,7 +25,7 @@ export default function AuthLayout({ title, children, quote }) {
         {/* CARD */}
         <div className="bg-white/5 backdrop-blur-2xl rounded-3xl shadow-2xl space-y-6">
 
-          <h2 className="text-2xl font-bold text-center">
+          <h2 className="text-2xl font-bold text-center pt-4">
             {title}
           </h2>
 

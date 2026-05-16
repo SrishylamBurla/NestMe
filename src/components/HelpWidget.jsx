@@ -114,7 +114,7 @@ export default function HelpWidget() {
       <div className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-[999]">
 
         {/* ONLINE BADGE */}
-        <div className="absolute -top-2 -right-1 w-5 h-5 z-[50] rounded-full bg-emerald-500 border-4 border-white animate-pulse" />
+        {/* <div className="absolute -top-2 -right-1 w-5 h-5 z-[50] rounded-full bg-emerald-500 border-4 border-white animate-pulse" /> */}
 
         {/* BUTTON */}
         <button
@@ -125,7 +125,7 @@ export default function HelpWidget() {
           w-16 h-16
           rounded-full
           overflow-hidden
-          bg-gray-400
+          bg-gray-800
           shadow-inner
           hover:scale-110
           active:scale-95
@@ -153,7 +153,7 @@ export default function HelpWidget() {
         </button>
 
         {/* DESKTOP LABEL */}
-        <div
+        {/* <div
           className="
           absolute
           right-18
@@ -162,7 +162,7 @@ export default function HelpWidget() {
           hidden
           md:flex
           flex-col
-          bg-white
+          bg-gray-800
           px-3
           py-2
           rounded-2xl
@@ -172,14 +172,14 @@ export default function HelpWidget() {
           min-w-[220px]
           "
         >
-          <p className="text-sm font-bold text-slate-900">
+          <p className="text-sm font-bold text-slate-200">
             NestMe Support
           </p>
 
-          <p className="text-xs text-emerald-600 font-medium mt-1">
+          <p className="text-xs text-emerald-400 font-medium mt-1">
             Usually replies within 30 mins
           </p>
-        </div>
+        </div> */}
       </div>
     </>
   );

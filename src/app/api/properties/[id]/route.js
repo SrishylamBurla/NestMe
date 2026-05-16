@@ -4,6 +4,7 @@ import connectDB from "@/lib/db";
 import { getAuthUser } from "@/lib/getAuthUser";
 import Notification from "@/models/Notification";
 import AgentProfile from "@/models/AgentProfile";
+import User from "@/models/User";
 import mongoose from "mongoose";
 import SavedProperty from "@/models/SavedProperty";
 import { cookies } from "next/headers";
@@ -28,8 +29,16 @@ export async function GET(req, context) {
       { $inc: { viewsCount: 1 } },
       { new: true }
     )
-      .populate("agent")
-      .populate("owner", "name email");
+      .populate({
+        path: "agent",
+        populate: {
+          path: "user",
+          select: "name email avatar",
+        },
+      })
+      .populate("owner", "name email avatar");
+    // .populate("agent")
+    // .populate("owner", "name email");
 
     if (!property) {
       return NextResponse.json(
@@ -101,17 +110,17 @@ export async function PUT(req, context) {
 
   // AGENT
   else if (user.role === "agent") {
-  property = await Property.findOne({
-    _id: id,
-    $or: [
-      { agent: user.agentProfileId }, // agent property
-      { owner: user._id }             // own property
-    ],
-  });
+    property = await Property.findOne({
+      _id: id,
+      $or: [
+        { agent: user.agentProfileId }, // agent property
+        { owner: user._id }             // own property
+      ],
+    });
 
-  body.approvalStatus = "pending";
-  body.rejectionReason = "";
-}
+    body.approvalStatus = "pending";
+    body.rejectionReason = "";
+  }
 
 
   // NORMAL USER
@@ -159,7 +168,7 @@ export async function PUT(req, context) {
     }
   }
 
-  
+
 
   return NextResponse.json({ success: true, property });
 }

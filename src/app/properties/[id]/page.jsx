@@ -17,7 +17,7 @@ import PropertyAmenities from "@/components/PropertyAmenities";
 import PropertyLocation from "@/components/PropertyLocation";
 import PropertyAgent from "@/components/PropertyAgent";
 import SimilarProperties from "@/components/SimilarProperties";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Share } from "lucide-react";
 
 
 export default function PropertyDetailsPage() {
@@ -80,49 +80,130 @@ export default function PropertyDetailsPage() {
     );
   }
 return (
-  <div className="relative min-h-screen bg-gradient-to-br from-[#f8fafc] via-[#eef2ff] to-[#e0e7ff] text-slate-800">
+  <div className="min-h-screen bg-[#f6f8fc] overflow-x-hidden">
 
-    {/* HERO AT TOP */}
-    <div className="relative w-full overflow-hidden">
-      <PropertyHero images={property.images} />
+    {/* ================= HERO SECTION ================= */}
 
-      {/* Soft dark overlay */}
-      <div className="absolute inset-0 bg-black/20"></div>
+    <section className="relative">
 
-      {/* Top Glass Bar */}
-      <div className="absolute fixed top-0 left-0 w-full z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur border-slate-200">
-        <div className="flex items-center justify-between px-4 sm:px-6 h-14 sm:h-16">
+      {/* HERO */}
+      <PropertyHero
+        property={property}
+        images={property.images}
+      />
 
-          {/* Back */}
+      {/* DARK TOP OVERLAY */}
+      <div
+        className="
+        absolute
+        inset-0
+        bg-gradient-to-b
+        from-black/30
+        via-transparent
+        to-transparent
+        z-20
+        pointer-events-none
+        "
+      />
+
+      {/* ================= TOP NAV ================= */}
+
+      <div
+        className="
+        fixed
+        top-0
+        left-0
+        w-full
+        z-[100]
+        "
+      >
+        <div
+          className="
+          flex
+          items-center
+          justify-between
+          px-4
+          sm:px-6
+          lg:px-10
+          pt-4
+          "
+        >
+          {/* LEFT */}
           <button
             onClick={() => router.back()}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full fixed top-4 left-4 z-50 shadow-lg bg-gray-200 flex items-center justify-center"
+            className="
+            w-11 h-11
+            rounded-full
+            bg-white/80
+            backdrop-blur-2xl
+            shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+            border border-white/40
+            flex items-center justify-center
+            hover:scale-105
+            active:scale-95
+            transition-all
+            duration-300
+            "
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 text-slate-900" />
           </button>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3 fixed top-4 right-4 z-50">
+          {/* RIGHT */}
+          <div className="flex items-center gap-3">
 
+            {/* SHARE */}
             <button
               onClick={handleShare}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg flex items-center justify-center"
+              className="
+              w-11 h-11
+              rounded-full
+              bg-white/80
+              backdrop-blur-2xl
+              shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+              border border-white/40
+              flex items-center justify-center
+              hover:scale-105
+              active:scale-95
+              transition-all
+              duration-300
+              "
             >
-              <span className="material-symbols-outlined text-slate-900 text-[18px] sm:text-[20px]">
-                share
-              </span>
+              <Share className="w-5 h-5 text-slate-900" />
             </button>
 
+            {/* FAVORITE */}
             <button
               onClick={handleFavorite}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg border-slate-800 flex items-center justify-center"
+              className="
+              w-11 h-11
+              rounded-full
+              bg-white/80
+              backdrop-blur-2xl
+              shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+              border border-white/40
+              flex items-center justify-center
+              hover:scale-105
+              active:scale-95
+              transition-all
+              duration-300
+              "
             >
               <span
-                className={`material-symbols-outlined transition-all duration-300 ${
-                  isSaved ? "text-red-500 scale-110" : "text-slate-900"
-                }`}
+                className={`
+                material-symbols-outlined
+                transition-all
+                duration-300
+                ${
+                  isSaved
+                    ? "text-red-500 scale-110"
+                    : "text-slate-900"
+                }
+                `}
                 style={{
-                  fontVariationSettings: isSaved ? "'FILL' 1" : "'FILL' 0",
+                  fontVariationSettings:
+                    isSaved
+                      ? "'FILL' 1"
+                      : "'FILL' 0",
                 }}
               >
                 favorite
@@ -132,54 +213,145 @@ return (
           </div>
         </div>
       </div>
+    </section>
 
-    </div>
+    {/* ================= MAIN CONTENT ================= */}
 
-    {/* CONTENT */}
-    <div className="relative -mt-10 sm:-mt-14 md:-mt-18 lg:-mt-22 z-30 px-4 sm:px-6 max-w-5xl mx-auto space-y-2 sm:space-y-6 pb-16">
+    <main
+      className="
+      relative
+      z-40
+      -mt-20
+      sm:-mt-24
+      lg:-mt-28
+      "
+    >
+      <div
+        className="
+        max-w-7xl
+        mx-auto
+        px-4
+        sm:px-6
+        lg:px-8
+        xl:px-10
+        "
+      >
+        {/* ================= GRID ================= */}
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-200 p-4 sm:p-6">
-        <PropertyOverview property={property} />
-      </div>
- 
-      <div className="p-4 sm:p-6">
-        <PropertyAmenities amenities={property.amenities} />
-      </div>
+        <div
+          className="
+          grid
+          grid-cols-1
+          xl:grid-cols-[1fr_360px]
+          gap-6
+          lg:gap-8
+          "
+        >
+          {/* ================= LEFT CONTENT ================= */}
 
-      <div className="">
-        <PropertyLocation location={property.location} />
-      </div>
+          <div className="space-y-6 lg:space-y-8">
 
-      <div className="py-4 sm:py-6">
-        <PropertyAgent property={property} />
-      </div>
+            {/* OVERVIEW */}
+            <section
+              className="
+              rounded-[32px]
+              overflow-hidden
+              "
+            >
+              <PropertyOverview
+                property={property}
+              />
+            </section>
 
-      {similar?.properties?.length > 0 && (
-        <div className="p-4 sm:p-6">
-          <SimilarProperties properties={similar.properties} />
+            {/* AMENITIES */}
+            <section
+              className="
+              bg-white
+              rounded-[32px]
+              border border-slate-200
+              shadow-sm
+              p-5
+              sm:p-6
+              lg:p-8
+              "
+            >
+              <PropertyAmenities
+                amenities={
+                  property.amenities
+                }
+              />
+            </section>
+
+            {/* LOCATION */}
+            <section
+              className="
+              bg-white
+              rounded-[32px]
+              border border-slate-200
+              shadow-sm
+              overflow-hidden
+              "
+            >
+              <PropertyLocation
+                location={
+                  property.location
+                }
+              />
+            </section>
+
+            {/* SIMILAR */}
+            {similar?.properties
+              ?.length > 0 && (
+              <section
+                className="
+                bg-white
+                rounded-[32px]
+                border border-slate-200
+                shadow-sm
+                p-5
+                sm:p-6
+                "
+              >
+                <SimilarProperties
+                  properties={
+                    similar.properties
+                  }
+                />
+              </section>
+            )}
+          </div>
+
+          {/* ================= RIGHT SIDEBAR ================= */}
+
+          <aside
+            className="
+            xl:sticky
+            xl:top-24
+            h-fit
+            "
+          >
+            <div
+              className="
+              bg-white
+              rounded-[32px]
+              border border-slate-200
+              shadow-sm
+              p-5
+              sm:p-6
+              "
+            >
+              <PropertyAgent
+                property={property}
+              />
+            </div>
+          </aside>
         </div>
-      )}
-
-    </div>
-
-    {/* MOBILE STICKY CTA */}
-    {/* <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-slate-200 p-3 sm:hidden z-50">
-      <div className="flex gap-3">
-
-        <button className="flex-1 h-11 rounded-full border border-slate-300 text-slate-700 text-sm font-medium">
-          Book Visit
-        </button>
-
-        <button className="flex-1 h-11 rounded-full bg-indigo-600 text-white text-sm font-semibold flex items-center justify-center gap-2">
-          <span className="material-symbols-outlined text-[18px]">
-            call
-          </span>
-          Contact
-        </button>
-
       </div>
-    </div> */}
+    </main>
 
+    {/* ================= BOTTOM SPACING ================= */}
+
+    <div className="h-20" />
   </div>
 );
 }

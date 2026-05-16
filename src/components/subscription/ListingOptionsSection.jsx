@@ -104,7 +104,7 @@ function OwnerCard({ isLoggedIn }) {
 
 function BecomeAgentCard() {
   return (
-    <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 shadow-2xl space-y-6">
+    <div className="relative bg-gradient-to-br from-emerald-600 to-teal-600 rounded-3xl p-8 shadow-2xl space-y-6">
       <div className="absolute top-4 right-4 text-xs bg-white/20 px-3 py-1 rounded-full">
         Recommended
       </div>

@@ -97,10 +97,13 @@ export default function RegisterPage() {
   };
 
   return (
+    
     <AuthLayout
       title="Create Your Nest"
       quote="Find the place where your story begins."
     >
+
+    <div className="w-full max-w-md backdrop-blur-2xl rounded-b-3xl p-6 space-y-6">
       <form onSubmit={submitHandler} className="space-y-4">
         <Input
           label="Full Name"
@@ -158,6 +161,9 @@ export default function RegisterPage() {
           Login
         </span>
       </p>
-    </AuthLayout>
+    </div>
+  </AuthLayout>
+
+
   );
 }
