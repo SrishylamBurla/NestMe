@@ -145,75 +145,74 @@ export default function EditPropertyPage() {
   // =========================
   // LOAD DATA
   // =========================
-
-const [initialized, setInitialized] =
-  useState(false);
-
 useEffect(() => {
 
-  if (!data || initialized)
-    return;
+  if (!data) return;
 
   const p = data;
 
-  setForm({
-    title: p.title || "",
-    description:
-      p.description || "",
+  requestAnimationFrame(() => {
 
-    propertyType:
-      p.propertyType ||
-      "apartment",
+    setForm({
+      title: p.title || "",
+      description:
+        p.description || "",
 
-    listingType:
-      p.listingType || "sale",
+      propertyType:
+        p.propertyType ||
+        "apartment",
 
-    priceLabel:
-      p.priceLabel || "",
+      listingType:
+        p.listingType || "sale",
 
-    priceValue:
-      p.priceValue || "",
+      priceLabel:
+        p.priceLabel || "",
 
-    pricePerSqFt:
-      p.pricePerSqFt || "",
+      priceValue:
+        p.priceValue || "",
 
-    beds: p.beds || 2,
+      pricePerSqFt:
+        p.pricePerSqFt || "",
 
-    baths: p.baths || 2,
+      beds: p.beds || 2,
 
-    areaSqFt:
-      p.areaSqFt || "",
+      baths: p.baths || 2,
 
-    furnishing:
-      p.furnishing ||
-      "semi",
+      areaSqFt:
+        p.areaSqFt || "",
 
-    facing:
-      p.facing || "",
+      furnishing:
+        p.furnishing ||
+        "semi",
 
-    address:
-      p.address || "",
+      facing:
+        p.facing || "",
 
-    city: p.city || "",
+      address:
+        p.address || "",
 
-    state:
-      p.state || "",
+      city: p.city || "",
 
-    lat:
-      p.location?.lat || "",
+      state:
+        p.state || "",
 
-    lng:
-      p.location?.lng || "",
+      lat:
+        p.location?.lat || "",
 
-    amenities:
-      p.amenities || [],
+      lng:
+        p.location?.lng || "",
 
-    images: p.images || [],
+      amenities:
+        p.amenities || [],
+    });
+
+    setImageFiles(
+      p.images || []
+    );
+
   });
 
-  setInitialized(true);
-
-}, [data, initialized]);
+}, [data]);
 
   // =========================
   // UPDATE FORM
