@@ -26,7 +26,10 @@ export default function AdminLeadsPage() {
   const [filter, setFilter] =
     useState("all");
 
-  const leads = data?.leads || [];
+  const leads = useMemo(
+  () => data?.leads || [],
+  [data]
+);
 
   // ================= FILTER =================
   const filteredLeads = useMemo(() => {

@@ -17,7 +17,10 @@ export default function AdminAgentsPage() {
 
   const [search, setSearch] = useState("");
 
-  const agents = data?.agents || [];
+  const agents = useMemo(
+  () => data?.agents || [],
+  [data]
+);
 
   // ================= FILTER =================
   const filteredAgents = useMemo(() => {

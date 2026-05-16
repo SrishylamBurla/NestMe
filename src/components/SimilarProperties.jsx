@@ -128,8 +128,21 @@ export default function SimilarProperties({
   };
 
   useEffect(() => {
-    updateProgress();
-  }, []);
+  const el = scrollRef.current;
+
+  if (!el) return;
+
+  const scrollWidth =
+    el.scrollWidth - el.clientWidth;
+
+  const current = el.scrollLeft;
+
+  const percent =
+    (current / scrollWidth) * 100;
+
+  setProgress(percent || 0);
+
+}, []);
 
   if (!properties.length) return null;
 
