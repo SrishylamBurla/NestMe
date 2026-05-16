@@ -38,42 +38,42 @@ export const propertiesApi = api.injectEndpoints({
 
 
     getProperties: builder.query({
-  query: ({ page = 1, limit = 8, ...filters }) => {
-    const params = new URLSearchParams();
-    params.set("page", page.toString());
-    params.set("limit", limit.toString());
+      query: ({ page = 1, limit = 8, ...filters }) => {
+        const params = new URLSearchParams();
+        params.set("page", page.toString());
+        params.set("limit", limit.toString());
 
-    Object.entries(filters).forEach(([key, value]) => {
-      if (!value) return;
-      if (Array.isArray(value)) {
-        params.set(key, value.join(","));
-      } else {
-        params.set(key, String(value));
-      }
-    });
+        Object.entries(filters).forEach(([key, value]) => {
+          if (!value) return;
+          if (Array.isArray(value)) {
+            params.set(key, value.join(","));
+          } else {
+            params.set(key, String(value));
+          }
+        });
 
-    return `/properties?${params.toString()}`;
-  },
+        return `/properties?${params.toString()}`;
+      },
 
-  providesTags: (result) =>
-    result?.properties
-      ? [
-          ...result.properties.map((p) => ({
-            type: "Property",
-            id: p._id,
-          })),
-          { type: "Property", id: "LIST" },
-        ]
-      : [{ type: "Property", id: "LIST" }],
-}),
+      providesTags: (result) =>
+        result?.properties
+          ? [
+            ...result.properties.map((p) => ({
+              type: "Property",
+              id: p._id,
+            })),
+            { type: "Property", id: "LIST" },
+          ]
+          : [{ type: "Property", id: "LIST" }],
+    }),
 
 
     getPropertyById: builder.query({
-  query: (id) => `/properties/${id}`,
-  providesTags: (result, error, id) => [
-    { type: "Property", id },
-  ],
-}),
+      query: (id) => `/properties/${id}`,
+      providesTags: (result, error, id) => [
+        { type: "Property", id },
+      ],
+    }),
 
 
     addProperty: builder.mutation({
@@ -100,11 +100,12 @@ export const propertiesApi = api.injectEndpoints({
     }),
 
     updateProperty: builder.mutation({
-      query: ({ id, ...body }) => ({
+      query: ({ id, data }) => ({
         url: `/properties/${id}`,
         method: "PUT",
-        body,
+        body: data,
       }),
+
       invalidatesTags: ["Property"],
     }),
 
@@ -123,11 +124,11 @@ export const propertiesApi = api.injectEndpoints({
         body: { approvalStatus, rejectionReason },
       }),
       invalidatesTags: (result, error, { id }) => [
-  { type: "Property", id },
-],
+        { type: "Property", id },
+      ],
 
     }),
-    
+
   }),
 });
 

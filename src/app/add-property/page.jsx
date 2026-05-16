@@ -5,9 +5,17 @@ import { useRouter } from "next/navigation";
 import { useAddPropertyMutation } from "@/store/services/PropertiesApi";
 import Image from "next/image";
 // import MapPicker from "@/components/MapPicker";
+import dynamic from "next/dynamic";
 
 const AMENITIES = ["pool", "gym", "parking", "security", "garden", "lift"];
 const FACING_OPTIONS = ["East", "West", "North", "South"];
+
+const MapPicker = dynamic(
+  () => import("@/components/MapPicker"),
+  {
+    ssr: false,
+  }
+);
 
 export default function AddPropertyPage() {
   const router = useRouter();
@@ -128,15 +136,14 @@ export default function AddPropertyPage() {
               {/* LISTING TYPE */}
               <div className="p-4">
                 <div className="flex bg-gray-200 rounded-xl p-1">
-                  {["sale", "rent"].map((t) => (
+                  {["sale", "rent", "lease"].map((t) => (
                     <button
                       key={t}
                       onClick={() => setListingType(t)}
-                      className={`flex-1 py-2 rounded-lg font-bold ${
-                        listingType === t ? "bg-white shadow" : "text-gray-500"
-                      }`}
+                      className={`flex-1 py-2 rounded-lg font-bold ${listingType === t ? "bg-white shadow" : "text-gray-500"
+                        }`}
                     >
-                      {t === "sale" ? "For Sale" : "For Rent"}
+                      {t === "sale" ? "For Sale" : t === "rent" ? "For Rent" : "For Lease"}
                     </button>
                   ))}
                 </div>
@@ -233,7 +240,67 @@ export default function AddPropertyPage() {
                   value={form.state}
                   onChange={(e) => update("state", e.target.value)}
                 />
-                <div className="grid grid-cols-2 gap-4">
+
+                <div
+                  className="
+  mt-6
+  rounded-[28px]
+  border
+  border-slate-200
+  bg-white
+  p-5
+  shadow-sm
+  space-y-5
+  "
+                >
+
+                  <div>
+                    <p className="text-xs uppercase tracking-[3px] text-slate-400 font-semibold">
+                      Property Location
+                    </p>
+
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">
+                      Pin Exact Property Location
+                    </h3>
+
+                    <p className="text-sm text-slate-500 mt-2">
+                      Tap anywhere on map to select property location.
+                    </p>
+                  </div>
+
+                  <MapPicker
+                    onSelect={({ lat, lng }) => {
+                      update("lat", lat);
+                      update("lng", lng);
+                    }}
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+
+                    <div className="bg-slate-100 rounded-2xl p-4">
+                      <p className="text-xs text-slate-500">
+                        Latitude
+                      </p>
+
+                      <p className="font-bold mt-1">
+                        {form.lat || "--"}
+                      </p>
+                    </div>
+
+                    <div className="bg-slate-100 rounded-2xl p-4">
+                      <p className="text-xs text-slate-500">
+                        Longitude
+                      </p>
+
+                      <p className="font-bold mt-1">
+                        {form.lng || "--"}
+                      </p>
+                    </div>
+
+                  </div>
+
+                </div>
+                {/* <div className="grid grid-cols-2 gap-4">
                   <Input
                     label="Latitude"
                     placeholder="17.3850"
@@ -246,7 +313,7 @@ export default function AddPropertyPage() {
                     value={form.lng}
                     onChange={(e) => update("lng", e.target.value)}
                   />
-                </div>
+                </div> */}
               </Section>
 
               {/* <Section title="Pin Location">
@@ -270,11 +337,10 @@ export default function AddPropertyPage() {
                     <button
                       key={a}
                       onClick={() => toggleAmenity(a)}
-                      className={`px-4 py-2 rounded-full border font-bold ${
-                        form.amenities.includes(a)
+                      className={`px-4 py-2 rounded-full border font-bold ${form.amenities.includes(a)
                           ? "bg-black text-white"
                           : "bg-white"
-                      }`}
+                        }`}
                     >
                       {a}
                     </button>
