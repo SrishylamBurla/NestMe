@@ -70,7 +70,7 @@ export default function Header() {
     });
 
     return () => socket.disconnect();
-  }, [user]);
+  }, [user, refetch]);
 
   useEffect(() => {
     if (!user) return;

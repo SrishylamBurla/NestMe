@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { useAuth } from "@/hooks/useAuth";
+import Image from "next/image";
 
 
 
@@ -259,7 +260,7 @@ export default function SupportChat({ onClose }) {
       {/* Input */}
       <div className="p-2 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 flex items-center gap-2">
         <label className="cursor-pointer text-lg">
-          <img src="/icons/attach.png" alt="Attach" className="w-5 h-5" />
+          <Image src="/icons/attach.png" alt="Attach" className="w-5 h-5" />
           <input
             type="file"
             hidden
