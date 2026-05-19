@@ -2,41 +2,6 @@ import { api } from "../api";
 
 export const propertiesApi = api.injectEndpoints({
   endpoints: (builder) => ({
-
-
-    // getProperties: builder.query({
-    //   query: ({ page = 1, limit = 8, ...filters }) => {
-    //     const params = new URLSearchParams();
-
-    //     // Pagination
-    //     params.set("page", page.toString());
-    //     params.set("limit", limit.toString());
-
-    //     // Filters (sanitize)
-    //     Object.entries(filters).forEach(([key, value]) => {
-    //       if (
-    //         value === undefined ||
-    //         value === null ||
-    //         value === "" ||
-    //         (Array.isArray(value) && value.length === 0)
-    //       ) {
-    //         return;
-    //       }
-
-    //       // Arrays → comma-separated
-    //       if (Array.isArray(value)) {
-    //         params.set(key, value.join(","));
-    //       } else {
-    //         params.set(key, String(value));
-    //       }
-    //     });
-
-    //     return `/properties?${params.toString()}`;
-    //   },
-    //   providesTags: (result, error, id) => [{ type: "Property", id }],
-    // }),
-
-
     getProperties: builder.query({
       query: ({ page = 1, limit = 8, ...filters }) => {
         const params = new URLSearchParams();
@@ -117,17 +82,43 @@ export const propertiesApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Property"],
     }),
-    adminUpdatePropertyStatus: builder.mutation({
-      query: ({ id, approvalStatus, rejectionReason }) => ({
-        url: `/admin/properties/${id}/status`,
-        method: "PUT",
-        body: { approvalStatus, rejectionReason },
-      }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "Property", id },
-      ],
+    adminUpdatePropertyStatus:
+      builder.mutation({
+        query: ({
+          id,
+          approvalStatus,
+          rejectionReason,
+        }) => ({
+          url:
+            `/admin/properties/${id}/status`,
 
-    }),
+          method: "PUT",
+
+          body: {
+            approvalStatus,
+            rejectionReason,
+          },
+        }),
+
+        invalidatesTags: (
+          result,
+          error,
+          { id }
+        ) => [
+
+            // ✅ refresh pending list
+            "PendingProperties",
+
+            // ✅ refresh property details
+            {
+              type: "Property",
+              id,
+            },
+
+            // ✅ refresh all properties
+            "Properties",
+          ],
+      }),
 
   }),
 });

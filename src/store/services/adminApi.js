@@ -13,13 +13,17 @@ export const adminApi = api.injectEndpoints({
       query: () => "/admin/subscriptions",
     }),
     getPendingProperties: builder.query({
-      query: () => "/admin/pending-properties",
-      providesTags: ["Properties"],
+      query: () =>
+        "/admin/pending-properties",
+
+      providesTags: [
+        "PendingProperties",
+      ],
     }),
-     getAdminStats: builder.query({
+    getAdminStats: builder.query({
       query: () => "/admin/stats",
     }),
-    
+
   }),
 });
 
