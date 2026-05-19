@@ -35,6 +35,15 @@ const LISTING_TYPES = [
   "lease",
 ];
 
+const PROPERTY_STATUS = [
+  "available",
+  "sold",
+  "rented",
+  "leased",
+  "under_review",
+];
+
+
 const FURNISHING_OPTIONS = [
   "full",
   "semi",
@@ -120,6 +129,7 @@ export default function EditPropertyPage() {
 
     propertyType: "apartment",
     listingType: "sale",
+    listingStatus: "available",
 
     priceLabel: "",
     priceValue: "",
@@ -145,74 +155,78 @@ export default function EditPropertyPage() {
   // =========================
   // LOAD DATA
   // =========================
-useEffect(() => {
+  useEffect(() => {
 
-  if (!data) return;
+    if (!data) return;
 
-  const p = data;
+    const p = data;
 
-  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
 
-    setForm({
-      title: p.title || "",
-      description:
-        p.description || "",
+      setForm({
+        title: p.title || "",
+        description:
+          p.description || "",
 
-      propertyType:
-        p.propertyType ||
-        "apartment",
+        propertyType:
+          p.propertyType ||
+          "apartment",
 
-      listingType:
-        p.listingType || "sale",
+        listingType:
+          p.listingType || "sale",
 
-      priceLabel:
-        p.priceLabel || "",
+        listingStatus:
+          p.listingStatus ||
+          "available",
 
-      priceValue:
-        p.priceValue || "",
+        priceLabel:
+          p.priceLabel || "",
 
-      pricePerSqFt:
-        p.pricePerSqFt || "",
+        priceValue:
+          p.priceValue || "",
 
-      beds: p.beds || 2,
+        pricePerSqFt:
+          p.pricePerSqFt || "",
 
-      baths: p.baths || 2,
+        beds: p.beds || 2,
 
-      areaSqFt:
-        p.areaSqFt || "",
+        baths: p.baths || 2,
 
-      furnishing:
-        p.furnishing ||
-        "semi",
+        areaSqFt:
+          p.areaSqFt || "",
 
-      facing:
-        p.facing || "",
+        furnishing:
+          p.furnishing ||
+          "semi",
 
-      address:
-        p.address || "",
+        facing:
+          p.facing || "",
 
-      city: p.city || "",
+        address:
+          p.address || "",
 
-      state:
-        p.state || "",
+        city: p.city || "",
 
-      lat:
-        p.location?.lat || "",
+        state:
+          p.state || "",
 
-      lng:
-        p.location?.lng || "",
+        lat:
+          p.location?.lat || "",
 
-      amenities:
-        p.amenities || [],
+        lng:
+          p.location?.lng || "",
+
+        amenities:
+          p.amenities || [],
+      });
+
+      setImageFiles(
+        p.images || []
+      );
+
     });
 
-    setImageFiles(
-      p.images || []
-    );
-
-  });
-
-}, [data]);
+  }, [data]);
 
   // =========================
   // UPDATE FORM
@@ -465,8 +479,8 @@ useEffect(() => {
 
           {/* IMAGES */}
           <Section
-            // title="Property Images"
-            // subtitle="Manage your gallery"
+          // title="Property Images"
+          // subtitle="Manage your gallery"
           >
 
             {/* HEADER */}
@@ -832,7 +846,7 @@ useEffect(() => {
 
             </div>
 
-            <div className="grid md:grid-cols-4 gap-5">
+            <div className="grid md:grid-cols-5 gap-5">
 
               <div className="space-y-2">
                 <label className="text-sm font-semibold">
@@ -924,6 +938,55 @@ useEffect(() => {
                     )
                   )}
                 </select>
+              </div>
+
+              <div className="space-y-2">
+
+                <label className="text-sm font-semibold">
+                  Property Status
+                </label>
+
+                <select
+                  value={form.listingStatus}
+                  onChange={(e) =>
+                    update(
+                      "listingStatus",
+                      e.target.value
+                    )
+                  }
+                  className="
+    w-full
+    h-14
+    rounded-2xl
+    border
+    border-slate-200
+    px-5
+    outline-none
+    "
+                >
+
+                  {PROPERTY_STATUS.map(
+                    (status) => (
+
+                      <option
+                        key={status}
+                        value={status}
+                      >
+
+                        {status
+                          .replace("_", " ")
+                          .replace(
+                            /\b\w/g,
+                            (c) =>
+                              c.toUpperCase()
+                          )}
+
+                      </option>
+                    )
+                  )}
+
+                </select>
+
               </div>
 
             </div>
