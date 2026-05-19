@@ -4,83 +4,193 @@ import Support from "@/models/Support";
 import Notification from "@/models/Notification";
 import { getAuthUser } from "@/lib/getAuthUser";
 import User from "@/models/User";
-import cloudinary from "@/lib/cloudinary";
 
 
-// ============================
-// ✅ CREATE SUPPORT TICKET
-// ============================
+
 export async function POST(req) {
   try {
+
     await connectDB();
 
-    const user = await getAuthUser();
+    const user =
+      await getAuthUser();
+
     if (!user) {
+
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    const formData = await req.formData();
+    // =========================
+    // BODY
+    // =========================
 
-    const subject = formData.get("subject");
-    const message = formData.get("message");
-    const file = formData.get("file");
+    const body =
+      await req.json();
 
-    if (!message) {
+    const {
+      text,
+      file,
+      subject,
+      ticketId,
+    } = body;
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    if (!text?.trim()) {
+
       return NextResponse.json(
-        { error: "Message is required" },
-        { status: 400 }
+        {
+          error:
+            "Message is required",
+        },
+        {
+          status: 400,
+        }
       );
     }
 
-    // 📁 Upload file (optional)
-    let fileUrl = "";
-    if (file) {
-      fileUrl = await cloudinary(file);
+    let ticket = null;
+
+    // =========================
+    // EXISTING TICKET
+    // =========================
+
+    if (ticketId) {
+
+      ticket =
+        await Support.findById(
+          ticketId
+        );
     }
 
-    // ✅ Create ticket
-    const ticket = await Support.create({
-      user: user._id,
-      subject: subject || "No Subject",
-      status: "open",
-      messages: [
-        {
-          sender: "user",
-          text: message,
-          file: fileUrl,
-        },
-      ],
-    });
+    // =========================
+    // CREATE NEW TICKET
+    // =========================
 
-    // 🔔 Notify all admins
-    const admins = await User.find({ role: "admin" });
+    if (!ticket) {
+
+      ticket =
+        new Support({
+
+          user:
+            user._id,
+
+          subject:
+            subject ||
+            "Support Chat",
+
+          status:
+            "open",
+
+          messages: [
+            {
+              sender:
+                "user",
+
+              text,
+
+              file:
+                file || "",
+            },
+          ],
+        });
+
+    } else {
+
+      // =========================
+      // ADD MESSAGE
+      // =========================
+
+      ticket.messages.push({
+
+        sender:
+          "user",
+
+        text,
+
+        file:
+          file || "",
+      });
+
+      ticket.status =
+        "open";
+    }
+
+    // =========================
+    // SAVE
+    // =========================
+
+    await ticket.save();
+
+    // =========================
+    // NOTIFY ADMINS
+    // =========================
+
+    const admins =
+      await User.find({
+        role: "admin",
+      });
 
     if (admins.length > 0) {
+
       await Notification.insertMany(
-        admins.map((admin) => ({
-          user: admin._id,
-          title: "New Support Ticket",
-          message: subject || "New message received",
-          link: "/admin/support",
-        }))
+
+        admins.map(
+          (admin) => ({
+
+            user:
+              admin._id,
+
+            title:
+              "New Support Message",
+
+            message:
+              text,
+
+            link:
+              "/admin/support",
+          })
+        )
       );
     }
 
-    return NextResponse.json(ticket);
+    // =========================
+    // FETCH UPDATED TICKET
+    // =========================
 
-  } catch (error) {
-    console.error("CREATE SUPPORT ERROR:", error);
+    const updatedTicket =
+      await Support.findById(
+        ticket._id
+      ).lean();
 
     return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
+      updatedTicket
+    );
+
+  } catch (error) {
+
+    console.error(
+      "CREATE SUPPORT ERROR:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        error:
+          error.message ||
+          "Something went wrong",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }
-
 
 // ============================
 // ✅ GET USER TICKETS
