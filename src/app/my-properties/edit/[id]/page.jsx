@@ -465,8 +465,8 @@ useEffect(() => {
 
           {/* IMAGES */}
           <Section
-            title="Property Images"
-            subtitle="Manage your gallery"
+            // title="Property Images"
+            // subtitle="Manage your gallery"
           >
 
             {/* HEADER */}

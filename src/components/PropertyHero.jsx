@@ -1,144 +1,4 @@
-// "use client";
 
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { Navigation, Pagination, Autoplay } from "swiper/modules";
-// import { useState } from "react";
-// import Image from "next/image";
-
-// import "swiper/css";
-// import "swiper/css/navigation";
-// import "swiper/css/pagination";
-
-// export default function PropertyHero({ images = [], property }) {
-//   const [activeIndex, setActiveIndex] = useState(1);
-
-//   const slides =
-//     images.length > 0
-//       ? images
-//       : [{ url: "/propertyImg/placeholder-property.jpg" }];
-
-//   return (
-//     <div className="relative w-full h-[85vh] md:h-screen overflow-hidden">
-
-//       {/* SWIPER */}
-//       <Swiper
-//         modules={[Navigation, Pagination, Autoplay]}
-//         navigation={{
-//           nextEl: ".hero-next",
-//           prevEl: ".hero-prev",
-//         }}
-//         pagination={{
-//           clickable: true,
-//           el: ".hero-pagination",
-//         }}
-//         autoplay={{
-//           delay: 4000,
-//           disableOnInteraction: false,
-//         }}
-//         loop
-//         onSlideChange={(swiper) =>
-//           setActiveIndex(swiper.realIndex + 1)
-//         }
-//         className="w-full h-full"
-//       >
-//         {slides.map((img, i) => (
-//           <SwiperSlide key={i}>
-//             <div className="relative w-full h-full">
-//               <Image
-//                 src={img.url}
-//                 alt={`property-${i}`}
-//                 fill
-//                 priority={i === 0}
-//                 className="object-cover scale-110 animate-[slowZoom_14s_linear_infinite]"
-//               />
-//             </div>
-//           </SwiperSlide>
-//         ))}
-//       </Swiper>
-
-//       {/* LEFT ARROW */}
-//       <button className="hero-prev hidden text-3xl md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition">
-//         ‹
-//       </button>
-
-//       {/* RIGHT ARROW */}
-//       <button className="hero-next hidden md:flex text-3xl absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition">
-//         ›
-//       </button>
-
-//       {/* SLIDE COUNT */}
-//       <div className="absolute bottom-4 right-4 z-20 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full">
-//         {activeIndex} / {slides.length}
-//       </div>
-
-//       {/* PAGINATION DOTS */}
-//       <div className="hero-pagination absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2" />
-
-//       {/* GRADIENT OVERLAY */}
-//       <div className="
-// absolute inset-0
-// bg-gradient-to-t
-// from-black/90
-// via-black/30
-// to-black/10
-// z-10
-// "/>
-
-//       {/* BOTTOM FADE */}
-//       <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-black/80 to-transparent z-10" />
-
-//       <div className="
-// absolute
-// bottom-8
-// left-1/2
-// -translate-x-1/2
-// z-30
-// w-[92%]
-// max-w-6xl
-// ">
-//   <div className="
-//   bg-white/10
-//   backdrop-blur-2xl
-//   border border-white/20
-//   rounded-[32px]
-//   p-6
-//   shadow-[0_20px_80px_rgba(0,0,0,0.45)]
-//   text-white
-//   ">
-
-//     <div className="flex justify-between flex-wrap gap-6">
-
-//       <div>
-//         <p className="text-xs uppercase tracking-[4px] text-white/70">
-//           Premium Property
-//         </p>
-
-//         <h1 className="text-3xl md:text-5xl font-black mt-2">
-//           {property?.title}
-//         </h1>
-
-//         <p className="mt-3 text-white/80">
-//           📍 {property?.city}, {property?.state}
-//         </p>
-//       </div>
-
-//       <div className="text-right">
-//         <p className="text-white/60 text-xs">
-//           Starting Price
-//         </p>
-
-//         <h2 className="text-4xl md:text-6xl font-black mt-2">
-//           ₹ {property?.priceLabel}
-//         </h2>
-//       </div>
-
-//     </div>
-
-//   </div>
-// </div>
-//     </div>
-//   );
-// }
 
 "use client";
 
@@ -184,7 +44,7 @@ md:h-screen
       "
     >
       {/* ================= SWIPER ================= */}
-      <Swiper
+      {/* <Swiper
         modules={[
           Navigation,
           Pagination,
@@ -224,6 +84,83 @@ md:h-screen
         }
 
         className="w-full h-full"
+      > */}
+
+      <Swiper
+        modules={[
+          Navigation,
+          Pagination,
+          Autoplay,
+        ]}
+
+        // ================= MOBILE FEEL =================
+
+        slidesPerView={1}
+
+        centeredSlides
+
+        loop
+
+        speed={650}
+
+        resistance={true}
+
+        resistanceRatio={0.65}
+
+        touchRatio={1.5}
+
+        threshold={2}
+
+        longSwipes={true}
+
+        longSwipesRatio={0.2}
+
+        followFinger={true}
+
+        allowTouchMove={true}
+
+        simulateTouch={true}
+
+        touchStartPreventDefault={false}
+
+        grabCursor={true}
+
+        // ================= AUTOPLAY =================
+
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+
+        // ================= PAGINATION =================
+
+        pagination={{
+          clickable: true,
+          dynamicBullets: true,
+          el: ".hero-pagination",
+        }}
+
+        // ================= NAVIGATION =================
+
+        navigation={{
+          nextEl: ".hero-next",
+          prevEl: ".hero-prev",
+        }}
+
+        // ================= ACTIVE SLIDE =================
+
+        onSlideChange={(swiper) =>
+          setActiveIndex(
+            swiper.realIndex + 1
+          )
+        }
+
+        className="
+  w-full
+  h-full
+  touch-pan-y
+  "
       >
         {slides.map((img, i) => (
           <SwiperSlide key={i}>
@@ -235,10 +172,12 @@ md:h-screen
                 fill
                 priority={i === 0}
                 className="
-                object-cover
-                scale-110
-                animate-[slowZoom_14s_linear_infinite]
-                "
+object-cover
+transition-transform
+duration-[5000ms]
+ease-linear
+swiper-slide-active:scale-105
+"
               />
 
             </div>

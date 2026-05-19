@@ -210,3 +210,24 @@ body {
   width: 18px;
   border-radius: 999px;
 }
+
+.swiper {
+  overflow: hidden;
+}
+
+.swiper-slide {
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.45;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  width: 22px;
+  border-radius: 999px;
+}
