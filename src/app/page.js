@@ -30,7 +30,7 @@ export default function HomePage() {
       setTimeout(() => {
         sessionStorage.setItem("nestme_intro_seen", "true");
         setShowSplash(false);
-      },1000);
+      },300);
     }
 
     setChecking(false);

@@ -1,8 +1,7 @@
-
-
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
+
 import {
   Navigation,
   Pagination,
@@ -10,6 +9,7 @@ import {
 } from "swiper/modules";
 
 import { useState } from "react";
+
 import Image from "next/image";
 
 import "swiper/css";
@@ -20,6 +20,7 @@ export default function PropertyHero({
   images = [],
   property,
 }) {
+
   const [activeIndex, setActiveIndex] =
     useState(1);
 
@@ -27,64 +28,27 @@ export default function PropertyHero({
     images.length > 0
       ? images
       : [
-        {
-          url: "/propertyImg/placeholder-property.jpg",
-        },
-      ];
+          {
+            url:
+              "/propertyImg/placeholder-property.jpg",
+          },
+        ];
 
   return (
+
     <div
       className="
       relative
       w-full
       h-[72vh]
-sm:h-[80vh]
-md:h-screen
+      sm:h-[80vh]
+      md:h-screen
       overflow-hidden
+      bg-black
       "
     >
+
       {/* ================= SWIPER ================= */}
-      {/* <Swiper
-        modules={[
-          Navigation,
-          Pagination,
-          Autoplay,
-        ]}
-
-        // 🔥 MOBILE SWIPE IMPROVEMENTS
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={1}
-        spaceBetween={0}
-        touchRatio={1.2}
-        threshold={5}
-
-        navigation={{
-          nextEl: ".hero-next",
-          prevEl: ".hero-prev",
-        }}
-
-        pagination={{
-          clickable: true,
-          dynamicBullets: true,
-          el: ".hero-pagination",
-        }}
-
-        autoplay={{
-          delay: 4500,
-          disableOnInteraction: false,
-        }}
-
-        loop
-
-        onSlideChange={(swiper) =>
-          setActiveIndex(
-            swiper.realIndex + 1
-          )
-        }
-
-        className="w-full h-full"
-      > */}
 
       <Swiper
         modules={[
@@ -93,47 +57,42 @@ md:h-screen
           Autoplay,
         ]}
 
-        // ================= MOBILE FEEL =================
-
         slidesPerView={1}
 
-        centeredSlides
+        centeredSlides={false}
 
-        loop
+        loop={slides.length > 1}
 
-        speed={650}
-
-        resistance={true}
-
-        resistanceRatio={0.65}
-
-        touchRatio={1.5}
-
-        threshold={2}
-
-        longSwipes={true}
-
-        longSwipesRatio={0.2}
-
-        followFinger={true}
+        speed={500}
 
         allowTouchMove={true}
 
         simulateTouch={true}
 
-        touchStartPreventDefault={false}
+        touchRatio={1.5}
+
+        threshold={5}
+
+        resistance={true}
+
+        resistanceRatio={0.85}
 
         grabCursor={true}
 
-        // ================= AUTOPLAY =================
+        followFinger={true}
 
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
+        touchStartPreventDefault={false}
+
+        passiveListeners={false}
+
+        observer={true}
+
+        observeParents={true}
+
+        navigation={{
+          nextEl: ".hero-next",
+          prevEl: ".hero-prev",
         }}
-
-        // ================= PAGINATION =================
 
         pagination={{
           clickable: true,
@@ -141,14 +100,10 @@ md:h-screen
           el: ".hero-pagination",
         }}
 
-        // ================= NAVIGATION =================
-
-        navigation={{
-          nextEl: ".hero-next",
-          prevEl: ".hero-prev",
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
         }}
-
-        // ================= ACTIVE SLIDE =================
 
         onSlideChange={(swiper) =>
           setActiveIndex(
@@ -157,55 +112,86 @@ md:h-screen
         }
 
         className="
-  w-full
-  h-full
-  touch-pan-y
-  "
+        w-full
+        h-full
+        z-0
+        "
       >
+
         {slides.map((img, i) => (
+
           <SwiperSlide key={i}>
-            <div className="relative w-full h-full">
+
+            <div
+              className="
+              relative
+              w-full
+              h-full
+              touch-pan-y
+              "
+            >
 
               <Image
                 src={img.url}
                 alt={`property-${i}`}
                 fill
                 priority={i === 0}
+                draggable={false}
                 className="
-object-cover
-transition-transform
-duration-[5000ms]
-ease-linear
-swiper-slide-active:scale-105
-"
+                object-cover
+                select-none
+                pointer-events-none
+                transition-transform
+                duration-700
+                ease-out
+                "
               />
 
             </div>
+
           </SwiperSlide>
         ))}
+
       </Swiper>
 
+      {/* ================= OVERLAY ================= */}
+
+      <div
+        className="
+        absolute
+        inset-0
+        bg-gradient-to-t
+        from-black/80
+        via-black/20
+        to-transparent
+        z-10
+        pointer-events-none
+        "
+      />
 
       {/* ================= NAVIGATION ================= */}
 
       <button
         className="
         hero-prev
-        hidden md:flex
+        hidden
+        md:flex
         absolute
         left-6
         top-1/2
         -translate-y-1/2
         z-30
-        w-10 h-10
-        items-center justify-center
+        w-12
+        h-12
+        items-center
+        justify-center
         rounded-full
-        backdrop-blur-2xl
+        backdrop-blur-xl
         bg-white/10
-        border border-white/20
+        border
+        border-white/20
         text-white
         text-3xl
-        shadow-[0_10px_40px_rgba(0,0,0,0.35)]
         hover:scale-110
         transition-all
         duration-300
@@ -217,21 +203,24 @@ swiper-slide-active:scale-105
       <button
         className="
         hero-next
-        hidden md:flex
+        hidden
+        md:flex
         absolute
         right-6
         top-1/2
         -translate-y-1/2
         z-30
-        w-10 h-10
-        items-center justify-center
+        w-12
+        h-12
+        items-center
+        justify-center
         rounded-full
-        backdrop-blur-2xl
+        backdrop-blur-xl
         bg-white/10
-        border border-white/20
+        border
+        border-white/20
         text-white
         text-3xl
-        shadow-[0_10px_40px_rgba(0,0,0,0.35)]
         hover:scale-110
         transition-all
         duration-300
@@ -239,19 +228,6 @@ swiper-slide-active:scale-105
       >
         ›
       </button>
-
-      {/* ================= OVERLAY ================= */}
-
-      <div
-        className="
-        absolute inset-0
-        bg-gradient-to-t
-        from-black/90
-        via-black/30
-        to-black/10
-        z-10
-        "
-      />
 
       {/* ================= SLIDE COUNT ================= */}
 
@@ -261,59 +237,59 @@ swiper-slide-active:scale-105
         top-24
         right-5
         z-30
-        px-3 py-1
+        px-4
+        py-2
         rounded-full
-        bg-white/10
-        backdrop-blur-2xl
-        border border-white/10
+        bg-black/40
+        backdrop-blur-xl
         text-white
         text-xs
-        shadow-lg
+        font-semibold
+        pointer-events-none
         "
       >
         {activeIndex} / {slides.length}
       </div>
 
-
-      {/* ================= MOBILE SWIPE HINT ================= */}
+      {/* ================= MOBILE HINT ================= */}
 
       <div
         className="
-  md:hidden
-  absolute
-  bottom-16
-  left-1/2
-  -translate-x-1/2
-  z-30
-  px-4
-  py-2
-  rounded-full
-  bg-black/30
-  backdrop-blur-xl
-  text-white/80
-  text-[11px]
-  tracking-wide
-  animate-pulse
-  "
+        md:hidden
+        absolute
+        bottom-16
+        left-1/2
+        -translate-x-1/2
+        z-30
+        px-4
+        py-2
+        rounded-full
+        bg-black/40
+        backdrop-blur-xl
+        text-white/90
+        text-[11px]
+        tracking-wide
+        animate-pulse
+        pointer-events-none
+        "
       >
-        Swipe for more photos
+        Swipe photos →
       </div>
+
       {/* ================= PAGINATION ================= */}
 
       <div
         className="
         hero-pagination
         absolute
-        bottom-4
+        bottom-5
         left-1/2
         -translate-x-1/2
         z-30
-        flex gap-2
+        flex
+        gap-2
         "
       />
-
-      {/* ================= CURVED BOTTOM ================= */}
-
 
     </div>
   );
