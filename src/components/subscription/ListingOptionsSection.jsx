@@ -134,7 +134,7 @@ function BecomeAgentCard() {
 
       <Link
         href="/subscribe"
-        className="block text-center bg-white text-indigo-700 font-bold py-3 rounded-xl hover:bg-indigo-50 transition"
+        className="block text-center bg-white text-gray-800 font-bold py-3 rounded-xl hover:bg-indigo-50 transition"
       >
         Become an Agent
       </Link>

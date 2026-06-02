@@ -153,8 +153,8 @@ export default function Header() {
         className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
-  px-4 sm:px-8
-  py-2
+  px-2 sm:px-4
+  py-1
   flex justify-between items-center
   border-b border-white/10
   backdrop-blur-xl
@@ -164,8 +164,8 @@ export default function Header() {
           <Image
             src={"/splashlogo.png"}
             alt="logo"
-            width={60}
-            height={60}
+            width={50}
+            height={50}
             className="object-cover"
           />
         </div>
@@ -193,14 +193,14 @@ export default function Header() {
               <Image
                 src={"/splashlogo.png"}
                 alt="logo"
-                width={60}
-                height={60}
+                width={50}
+                height={50}
                 className="object-cover"
               />
             </div>
 
-            <div className="border-l-4 border-gray-200 pl-2">
-              <p className="text-xs text-gray-300">Welcome</p>
+            <div className="border-l-4 border-red-500 pl-2">
+              <p className="text-xs text-gray-300 tracking-[2px]">Welcome</p>
               <h1 className="text-md font-semibold text-gray-200 capitalize">
                 {user?.name || "Guest"}
               </h1>

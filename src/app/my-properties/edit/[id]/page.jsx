@@ -1003,12 +1003,12 @@ export default function EditPropertyPage() {
               initialPosition={{
                 lat:
                   Number(
-                    form.lat
+                    form.lat.toFixed(3)
                   ) || 17.385,
 
                 lng:
                   Number(
-                    form.lng
+                    form.lng.toFixed(3)
                   ) || 78.4867,
               }}
               onSelect={({

@@ -283,13 +283,13 @@ export default function EditPropertyPage() {
                   <Input
                     label="Latitude"
                     placeholder="17.3850"
-                    value={form.lat}
+                    value={form.lat.toFixed(3)}
                     onChange={(e) => update("lat", e.target.value)}
                   />
                   <Input
                     label="Longitude"
                     placeholder="78.4867"
-                    value={form.lng}
+                    value={form.lng.toFixed(3)}
                     onChange={(e) => update("lng", e.target.value)}
                   />
                 </div>
