@@ -55,7 +55,10 @@ export default function EditPropertyPage() {
         lat: p.location?.lat || "",
         lng: p.location?.lng || "",
         amenities: p.amenities || [],
-        images: p.images?.length ? p.images : [""],
+        images:
+          p.images?.length
+            ? p.images.map((img) => img.url)
+            : [""],
         listingType: p.listingType || "sale",
       };
     });
@@ -76,18 +79,63 @@ export default function EditPropertyPage() {
   };
 
   const submitHandler = async () => {
-    const payload = {
-      ...form,
-      listingType: form.listingType, // ✅ from form
-      priceValue: Number(form.priceValue),
-      location: {
-        lat: form.lat ? Number(form.lat) : null,
-        lng: form.lng ? Number(form.lng) : null,
-      },
-      images: form.images.filter(Boolean),
-    };
+    const formData = new FormData();
 
-    await updateProperty({ id, ...payload }).unwrap();
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+    formData.append("propertyType", form.propertyType);
+    formData.append("listingType", form.listingType);
+
+    formData.append("priceLabel", form.priceLabel);
+    formData.append("priceValue", form.priceValue);
+    formData.append("pricePerSqFt", form.pricePerSqFt);
+
+    formData.append("beds", form.beds);
+    formData.append("baths", form.baths);
+    formData.append("areaSqFt", form.areaSqFt);
+
+    formData.append("furnishing", form.furnishing);
+    formData.append("facing", form.facing);
+
+    formData.append("address", form.address);
+    formData.append("city", form.city);
+    formData.append("state", form.state);
+
+    formData.append("lat", form.lat);
+    formData.append("lng", form.lng);
+
+    form.amenities.forEach((a) => {
+      formData.append("amenities[]", a);
+    });
+
+    form.images.forEach((img) => {
+
+      // Existing Cloudinary image
+      if (typeof img === "string") {
+
+        formData.append(
+          "images",
+          JSON.stringify({
+            url: img,
+          })
+        );
+
+      }
+
+      // Newly selected File
+      else {
+
+        formData.append(
+          "images",
+          img
+        );
+      }
+    });
+
+    await updateProperty({
+      id,
+      data: formData,
+    }).unwrap();
     toast.success("Property updated successfully");
     router.push("/admin/properties");
   };
@@ -125,9 +173,8 @@ export default function EditPropertyPage() {
                     <button
                       key={t}
                       onClick={() => update("listingType", t)} // ✅ FIXED
-                      className={`flex-1 py-2 rounded-lg font-bold ${
-                        listingType === t ? "bg-white shadow" : "text-gray-500"
-                      }`}
+                      className={`flex-1 py-2 rounded-lg font-bold ${listingType === t ? "bg-white shadow" : "text-gray-500"
+                        }`}
                     >
                       {t === "sale"
                         ? "For Sale"
@@ -269,11 +316,10 @@ export default function EditPropertyPage() {
                     <button
                       key={a}
                       onClick={() => toggleAmenity(a)}
-                      className={`px-4 py-2 rounded-full border font-bold ${
-                        form.amenities.includes(a)
+                      className={`px-4 py-2 rounded-full border font-bold ${form.amenities.includes(a)
                           ? "bg-black text-white"
                           : "bg-white"
-                      }`}
+                        }`}
                     >
                       {a}
                     </button>
