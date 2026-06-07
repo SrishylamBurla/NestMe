@@ -97,7 +97,7 @@ export default function SearchContent() {
                 : "max-h-0 opacity-0 -translate-y-6"
                 }`}
             >
-              <div className="pt-6 pb-2">
+              <div className="pt-12 pb-2">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => router.back()}
