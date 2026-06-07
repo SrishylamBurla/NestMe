@@ -149,8 +149,11 @@ export default function Header() {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header
-        className="
+     <header
+  style={{
+    paddingTop: "env(safe-area-inset-top)",
+  }}
+  className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
   px-2 sm:px-4
@@ -159,7 +162,7 @@ export default function Header() {
   border-b border-white/10
   backdrop-blur-xl
   "
-      >  {!user && (
+> {!user && (
         <div>
           <Image
             src={"/splashlogo.png"}
