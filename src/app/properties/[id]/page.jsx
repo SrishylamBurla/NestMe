@@ -115,7 +115,7 @@ return (
         left-0
         w-full
         z-[100]
-        pt-12 md:pt-0
+        pt-8
         "
       >
         <div
