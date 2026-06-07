@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
       </head>
 
       <body
-        className={`${spline.className} bg-[#F2F4F3] text-gray-900 antialiased`}
+        className={`${spline.className} bg-[#F2F4F3] text-gray-900 antialiased pt-12`}
       >
         <Providers>
           <AuthProvider>
