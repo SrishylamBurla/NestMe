@@ -97,7 +97,7 @@ export default function SearchContent() {
                 : "max-h-0 opacity-0 -translate-y-6"
                 }`}
             >
-              <div className="pt-4 margin-top-safe">
+              <div className="mobile-safe-top">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => router.back()}

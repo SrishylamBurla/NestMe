@@ -9,7 +9,7 @@ export default function ProfileHeader({ user }) {
   return (
     <>
       {/* Top Bar */}
-      <div className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur border-b border-white/10 px-4 py-4 flex justify-between items-center">
+      <div className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur border-b border-white/10 px-4 py-4 mobile-safe-top flex justify-between items-center">
 
         <button
           onClick={() => router.back()}

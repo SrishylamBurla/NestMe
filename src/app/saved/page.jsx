@@ -14,7 +14,7 @@ export default function SavedPropertiesPage() {
   const savedProperties = data?.saved || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-50 pb-24 mobile-safe-top">
       
       {/* HEADER */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200">

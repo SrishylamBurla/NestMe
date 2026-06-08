@@ -234,7 +234,7 @@ export default function PropertyHero({
       <div
         className="
         absolute
-        top-24
+        top-28
         right-5
         z-30
         px-4
@@ -273,7 +273,7 @@ export default function PropertyHero({
         pointer-events-none
         "
       >
-        Swipe photos →
+        Swipe to view more photos
       </div>
 
       {/* ================= PAGINATION ================= */}

@@ -115,7 +115,6 @@ return (
         left-0
         w-full
         z-[100]
-        pt-4
         "
       >
         <div
@@ -126,7 +125,7 @@ return (
           px-4
           sm:px-6
           lg:px-10
-          mobile-top-safe
+          mobile-safe-top
           "
         >
           {/* LEFT */}
@@ -152,25 +151,7 @@ return (
           {/* RIGHT */}
           <div className="flex items-center gap-3">
 
-            {/* SHARE */}
-            <button
-              onClick={handleShare}
-              className="
-              w-11 h-11
-              rounded-full
-              bg-white/80
-              backdrop-blur-2xl
-              shadow-[0_10px_30px_rgba(0,0,0,0.15)]
-              border border-white/40
-              flex items-center justify-center
-              hover:scale-105
-              active:scale-95
-              transition-all
-              duration-300
-              "
-            >
-              <Share className="w-5 h-5 text-slate-900" />
-            </button>
+           
 
             {/* FAVORITE */}
             <button
@@ -209,6 +190,25 @@ return (
               >
                 favorite
               </span>
+            </button>
+             {/* SHARE */}
+            <button
+              onClick={handleShare}
+              className="
+              w-11 h-11
+              rounded-full
+              bg-white/80
+              backdrop-blur-2xl
+              shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+              border border-white/40
+              flex items-center justify-center
+              hover:scale-105
+              active:scale-95
+              transition-all
+              duration-300
+              "
+            >
+              <Share className="w-5 h-5 text-slate-900" />
             </button>
 
           </div>
