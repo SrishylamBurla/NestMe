@@ -39,7 +39,7 @@ export default function AgentPublicProfilePage() {
   }
 
   return (
-    <div className="bg-[#F2F4F3] min-h-screen pb-24">
+    <div className="bg-[#F2F4F3] min-h-screen  mobile-safe-top pb-24">
       <AgentHero agent={agent} />
 
       <div className="max-w-6xl mx-auto px-4 space-y-10 mt-6">

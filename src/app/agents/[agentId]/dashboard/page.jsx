@@ -78,7 +78,7 @@ export default function AgentDashboardPage() {
   ).length;
 
   return (
-    <div className="bg-[#f6f7f8] min-h-screen max-w-5xl mx-auto pb-28 font-sans">
+    <div className="bg-[#f6f7f8] min-h-screen max-w-5xl mx-auto pb-28  mobile-safe-top font-sans">
 
       {/* ✅ FIXED: pass correct user */}
       <DashboardHeader user={user} />

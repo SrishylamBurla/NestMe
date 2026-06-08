@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center">
+    <div className="min-h-screen mobile-safe-top bg-slate-50 flex justify-center">
       <div className="w-full max-w-3xl bg-white rounded-xl shadow-md m-4 p-5 text-slate-800">
 
         {/* Header */}

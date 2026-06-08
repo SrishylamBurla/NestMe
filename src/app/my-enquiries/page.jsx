@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { useGetMyEnquiriesQuery } from "@/store/services/authApi";
 import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 export default function MyEnquiriesPage() {
   const { data, isLoading, isError } = useGetMyEnquiriesQuery();
@@ -39,7 +40,7 @@ export default function MyEnquiriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen mobile-safe-top bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-3">
 
         {/* Header */}
@@ -49,9 +50,7 @@ export default function MyEnquiriesPage() {
       onClick={() => router.back()}
       className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
     >
-      <span className="material-symbols-outlined text-slate-700">
-        arrow_back
-      </span>
+      <ChevronLeft className="w-5 h-5" />
     </button>
           
           <h1 className="text-2xl font-bold font-sans bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">

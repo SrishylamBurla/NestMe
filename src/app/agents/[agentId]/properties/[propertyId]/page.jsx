@@ -56,7 +56,7 @@ export default function AgentPropertyDetailPage() {
     : { text: "Live", color: "bg-green-500" };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-32">
+    <div className="min-h-screen bg-[#f8fafc] pb-32 mobile-safe-top">
 
       {/* HEADER (GLASS) */}
       <div className="sticky top-0 z-30 backdrop-blur bg-white/70 border-b flex items-center justify-between px-4 py-3">

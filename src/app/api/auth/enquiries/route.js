@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Lead from "@/models/Lead";
 import { getAuthUser } from "@/lib/getAuthUser";
+import Property from "@/models/Property";
 
 export async function GET() {
   await connectDB();

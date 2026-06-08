@@ -27,89 +27,6 @@ export default function SubscribePage() {
   const [createOrder] = useCreateOrderMutation();
   const [verifyPayment] = useVerifyPaymentMutation();
 
-  /* ================= SUBSCRIBE HANDLER ================= */
-
-  // const subscribeHandler = async (plan) => {
-  //   const loadingToast = toast.loading("Initializing payment...");
-
-  //   try {
-  //     setLoading(true);
-
-  //     // 1️⃣ Create order
-  //     const order = await createOrder(plan).unwrap();
-
-  //     toast.dismiss(loadingToast);
-
-  //     if (!window.Razorpay) {
-  //       toast.error("Razorpay SDK not loaded");
-  //       return;
-  //     }
-
-  //     // 2️⃣ Razorpay checkout
-  //     const options = {
-  //       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-  //       amount: order.amount,
-  //       currency: "INR",
-  //       order_id: order.id,
-
-  //       name: "NestMe",
-  //       description: "Agent Subscription",
-
-  //       handler: async function (response) {
-  //         const verifyToast = toast.loading("Verifying payment...");
-
-  //         try {
-  //           const result = await verifyPayment({
-  //             razorpay_order_id: response.razorpay_order_id,
-  //             razorpay_payment_id: response.razorpay_payment_id,
-  //             razorpay_signature: response.razorpay_signature,
-  //           }).unwrap();
-
-  //           toast.dismiss(verifyToast);
-
-  //           if (result.success) {
-  //             toast.success("🎉 Subscription activated!");
-
-  //             await refetch();
-
-  //             router.push(
-  //               `/agents/${result.agentProfileId}/dashboard`
-  //             );
-  //           } else {
-  //             toast.error("Payment verification failed");
-  //           }
-  //         } catch (err) {
-  //           toast.dismiss(verifyToast);
-  //           toast.error(err?.data?.message || "Verification failed");
-  //         }
-  //       },
-
-  //       modal: {
-  //         ondismiss: () => {
-  //           toast.error("Payment cancelled");
-  //         },
-  //       },
-
-  //       prefill: {
-  //         name: user?.name || "",
-  //         email: user?.email || "",
-  //       },
-
-  //       theme: {
-  //         color: "#6366f1",
-  //       },
-  //     };
-
-  //     const rzp = new window.Razorpay(options);
-  //     rzp.open();
-  //   } catch (err) {
-  //     toast.dismiss(loadingToast);
-  //     toast.error(err?.data?.message || "Payment failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   /* ================= CANCEL ================= */
 
   const handleCancel = async () => {
@@ -142,7 +59,7 @@ export default function SubscribePage() {
     const sub = data?.subscription;
 
     return (
-      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center px-4">
+      <div className="min-h-screen mobile-safe-top bg-slate-900 text-white flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
           <div className="text-center">
             <h2 className="text-2xl font-bold">Your Agent Plan</h2>

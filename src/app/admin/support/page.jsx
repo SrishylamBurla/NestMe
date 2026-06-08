@@ -193,6 +193,7 @@ useEffect(() => {
         overflow-hidden
         flex
         relative
+        mobile-safe-top
       "
     >
 

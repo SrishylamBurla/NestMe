@@ -89,34 +89,9 @@ export default function CheckoutContent() {
   }
 
   return (
-    // <div className="min-h-screen bg-gradient-to-br from-slate-950 to-indigo-950 text-white flex items-center justify-center px-4">
-    //   <div className="max-w-md w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
+   
 
-    //     <h2 className="text-2xl font-bold text-center">Checkout</h2>
-
-    //     <div className="bg-indigo-600 rounded-2xl p-6 text-center">
-    //       <p className="text-sm uppercase opacity-80">Plan</p>
-    //       <p className="text-3xl font-bold capitalize">{plan}</p>
-    //       <p className="text-lg mt-2">₹{price}</p>
-    //     </div>
-
-    //     <button
-    //       onClick={handlePayment}
-    //       className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold"
-    //     >
-    //       Pay ₹{price}
-    //     </button>
-
-    //     <button
-    //       onClick={() => router.back()}
-    //       className="w-full py-2 text-sm text-slate-400"
-    //     >
-    //       ← Back
-    //     </button>
-    //   </div>
-    // </div>
-
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white flex items-center justify-center px-4">
+    <div className="min-h-screen mobile-safe-top bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white flex items-center justify-center px-4">
 
   <div className="max-w-md w-full space-y-6">
 

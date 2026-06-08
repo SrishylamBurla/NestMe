@@ -7,6 +7,7 @@ import {
 } from "@/store/services/PropertiesApi";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { ChevronLeft } from "lucide-react";
 
 
 export default function AdminPropertyDetails() {
@@ -70,14 +71,12 @@ const reject = async () => {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="max-w-6xl mx-auto p-6 space-y-6 mobile-safe-top">
       <button
             onClick={() => router.back()}
             className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-500 hover:bg-gray-600 transition"
           >
-            <span className="material-symbols-outlined text-gray-100">
-              arrow_back
-            </span>
+            <ChevronLeft className="w-5 h-5 text-white" />
           </button>
 
       {/* ================= IMAGES ================= */}

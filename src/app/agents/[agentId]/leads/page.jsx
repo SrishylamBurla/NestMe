@@ -6,7 +6,7 @@ export default async function AgentLeadsPage(context) {
   const { agentId } = await context.params;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-200 via-gray-600 to-purple-200">
+    <div className="min-h-screen mobile-safe-top bg-gradient-to-br from-indigo-200 via-gray-600 to-purple-200">
       <div className="max-w-7xl mx-auto px-4 py-4 font-sans">
 
         <div className="mb-4 flex justify-between pb-2 items-center">

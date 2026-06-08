@@ -141,7 +141,7 @@ export default function EditPropertyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f8f7] flex justify-center">
+    <div className="min-h-screen mobile-safe-top bg-[#f6f8f7] flex justify-center">
       <div className="w-full max-w-[1100px] flex flex-col">
         {/* HEADER */}
         <div className="sticky top-0 z-50 bg-white border-b">

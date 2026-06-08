@@ -48,7 +48,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 mobile-safe-top">
       {cards.map((card, index) => (
         <Card
           key={index}

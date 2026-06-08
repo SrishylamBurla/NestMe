@@ -80,7 +80,7 @@ export default function AgentPropertiesPage() {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-indigo-200 via-violet-200 to-purple-200 p-4">
+    <section className="min-h-screen  mobile-safe-top bg-gradient-to-br from-indigo-200 via-violet-200 to-purple-200 px-4 pb-4">
       <div className="max-w-7xl mx-auto space-y-3">
 
         {/* HEADER */}
