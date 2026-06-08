@@ -12,6 +12,7 @@ import ListingOptionsSection from "@/components/subscription/ListingOptionsSecti
 import HelpWidget from "@/components/HelpWidget";
 import { useGetMeQuery } from "@/store/services/authApi";
 import Image from "next/image";
+// import PageContainer from "@/components/PageContainer";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(false);
@@ -44,6 +45,7 @@ export default function HomePage() {
   if (showSplash) return <PremiumSplash />;
 
   return (
+    // <PageContainer>
     <div className="">
       <Header />
       {user && <HelpWidget />}
@@ -127,6 +129,7 @@ export default function HomePage() {
       <Footer />
       <BottomNav />
     </div>
+    // </PageContainer>
   );
 }
 

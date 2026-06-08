@@ -97,7 +97,7 @@ export default function SearchContent() {
                 : "max-h-0 opacity-0 -translate-y-6"
                 }`}
             >
-              <div className="pt-12 pb-2">
+              <div className="pt-4 margin-top-safe">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => router.back()}
@@ -123,7 +123,7 @@ export default function SearchContent() {
               <div className="relative group">
                 <div className="absolute -inset-[2px] rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-focus-within:opacity-100 blur-md transition duration-300" />
 
-                <div className="relative flex items-center bg-slate-800 rounded-full h-11 sm:h-14 px-4 sm:px-5 shadow-lg">
+                <div className="relative flex items-center bg-slate-800 rounded-full h-9 sm:h-11 px-2 sm:px-3 shadow-lg">
                   <span className="material-symbols-outlined text-slate-400 text-[18px]">
                     search
                   </span>
@@ -148,7 +148,7 @@ export default function SearchContent() {
                   {/* Desktop Button */}
                   <button
                     onClick={applyFilters}
-                    className="hidden sm:block h-9 px-5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold"
+                    className="hidden sm:block h-7 px-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold"
                   >
                     Search
                   </button>

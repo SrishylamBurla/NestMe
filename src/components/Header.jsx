@@ -154,15 +154,14 @@ export default function Header() {
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
   px-2 sm:px-4
-  pt-3
   pb-1
   flex justify-between items-center
   border-b border-white/10
-  backdrop-blur-xl
+  backdrop-blur-xl mobile-safe-top
 "
-  style={{
-    paddingTop: "max(env(safe-area-inset-top), 12px)",
-  }}
+  // style={{
+  //   paddingTop: "max(env(safe-area-inset-top), 12px)",
+  // }}
 >
 {!user && (
         <div>

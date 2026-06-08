@@ -115,7 +115,7 @@ return (
         left-0
         w-full
         z-[100]
-        pt-8
+        pt-4
         "
       >
         <div
@@ -126,7 +126,7 @@ return (
           px-4
           sm:px-6
           lg:px-10
-          pt-4
+          mobile-top-safe
           "
         >
           {/* LEFT */}

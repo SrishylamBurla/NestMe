@@ -232,3 +232,13 @@ body {
   width: 24px;
   border-radius: 999px;
 }
+
+.mobile-safe-top {
+  padding-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .mobile-safe-top {
+    padding-top: 0;
+  }
+}
