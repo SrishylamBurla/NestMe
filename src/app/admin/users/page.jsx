@@ -52,7 +52,7 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="space-y-6 mobile-safe-top">
+    <div className="space-y-6">
 
       {/* ================= HEADER ================= */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">

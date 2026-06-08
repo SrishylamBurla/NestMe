@@ -123,7 +123,7 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen mobile-safe-top bg-gray-100 flex">
 
       {/* ================= MOBILE OVERLAY ================= */}
       {open && (

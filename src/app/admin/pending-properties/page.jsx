@@ -39,7 +39,7 @@ export default function PendingPropertiesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f8f7] p-4 sm:p-6 mobile-safe-top">
+    <div className="min-h-screen bg-[#f6f8f7] p-4 sm:p-6">
       <div className="space-y-6">
 
         {/* ================= HEADER ================= */}

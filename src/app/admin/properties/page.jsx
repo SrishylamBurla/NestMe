@@ -134,7 +134,7 @@ export default function AdminPropertiesPage() {
   }
 
   return (
-    <div className="min-h-screen mobile-safe-top bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <AdminLayout>
         <div className="space-y-6">
 

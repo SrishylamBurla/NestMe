@@ -58,7 +58,7 @@ const stats = {
 };
   if (isLoading) {
     return (
-      <div className="p-6 mobile-safe-top">
+      <div className="p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-10 bg-gray-200 rounded-xl w-48" />
 
