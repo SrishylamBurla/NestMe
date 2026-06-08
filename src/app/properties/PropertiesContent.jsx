@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useGetPropertiesQuery } from "@/store/services/PropertiesApi";
 import { LoadingGrid, EmptyState, ErrorState } from "@/components/LoadingGrid";
 import PropertiesGrid from "@/components/PropertiesGrid";
+import { ChevronLeft } from "lucide-react";
 
 export default function PropertiesContent() {
   const router = useRouter();
@@ -59,9 +60,7 @@ export default function PropertiesContent() {
               onClick={() => (window.location.href = "/")}
               className="w-10 h-10 rounded-full hover:bg-slate-200 transition flex items-center justify-center"
             >
-              <span className="material-symbols-outlined text-slate-700">
-                arrow_back
-              </span>
+              <ChevronLeft className="w-5 h-5 text-slate-700" />
             </button>
             <div>
               <h1 className="text-3xl font-sans font-bold text-slate-800">
