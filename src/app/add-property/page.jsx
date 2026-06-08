@@ -102,7 +102,7 @@ export default function AddPropertyPage() {
     }
   };
 
-  /* UI */
+  
 
   return (
     <div className="min-h-screen bg-[#f6f8f7] flex justify-center mobile-safe-top">
