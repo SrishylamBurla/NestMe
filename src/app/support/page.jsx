@@ -305,6 +305,7 @@ export default function SupportPage() {
     <div
       className="
       min-h-screen
+      
       bg-gradient-to-br
       from-slate-50
       via-white
@@ -319,6 +320,7 @@ export default function SupportPage() {
         sticky
         top-0
         z-40
+        mobile-safe-top
         backdrop-blur-2xl
         bg-white/80
         border-b

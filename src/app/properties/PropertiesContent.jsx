@@ -50,7 +50,7 @@ export default function PropertiesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-indigo-100 mobile-safe-top">
       <div className="max-w-7xl mx-auto px-2 md:px-4 pt-4 pb-10 space-y-6">
         {/* HEADER */}
         <div className="space-y-6">
@@ -74,7 +74,7 @@ export default function PropertiesContent() {
           </div>
 
           {/* FILTER BAR */}
-          <div className="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="bg-white p-1 rounded-2xl shadow-sm grid grid-cols-2 md:grid-cols-4 gap-2">
             <input
               type="text"
               placeholder="Search title..."

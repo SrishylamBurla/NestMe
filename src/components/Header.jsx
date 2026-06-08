@@ -372,7 +372,7 @@ export default function Header() {
 
       {/* ================= RIGHT NOTIFICATION PANEL ================= */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col
+        className={`fixed top-0 right-0 h-full w-full mobile-safe-top sm:w-[420px] bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col
     ${showNotifications ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}

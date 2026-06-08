@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { useGetMyPropertiesQuery } from "@/store/services/authApi";
 import UserPropertyCard from "@/components/UserPropertyCard";
+import { ChevronLeft } from "lucide-react";
 
 export default function MyPropertiesPage() {
   const { data, isLoading } = useGetMyPropertiesQuery();
@@ -65,7 +66,7 @@ export default function MyPropertiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-3 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-3 px-4 mobile-safe-top">
       <div className="max-w-7xl mx-auto space-y-3">
         {/* ================= HEADER ================= */}
         <div className="">
@@ -74,9 +75,7 @@ export default function MyPropertiesPage() {
               onClick={() => (window.location.href = "/")}
               className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center shadow-sm"
             >
-              <span className="material-symbols-outlined text-slate-700">
-                arrow_back
-              </span>
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <h1 className="text-2xl font-sans font-bold text-slate-800">My Properties</h1>
             <span className="text-sm text-slate-500 bg-white px-4 py-2 rounded-full shadow-sm border">
@@ -94,13 +93,13 @@ export default function MyPropertiesPage() {
             placeholder="Search by title or city..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-70 flex-1 h-11 px-4 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-85 flex-1 h-11 px-4 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
 
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="w-30 h-11 px-4 rounded-xl border border-slate-300 bg-white"
+            className="w-15 h-11 px-2 rounded-xl border border-slate-300 bg-white"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -110,7 +109,7 @@ export default function MyPropertiesPage() {
         </div>
 
         {/* ================= FILTER TABS ================= */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-row overflow-auto gap-3">
           {["all", "available", "rented", "sold", "pending", "rejected"].map(
             (status) => (
               <button

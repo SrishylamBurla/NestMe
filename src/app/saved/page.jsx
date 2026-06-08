@@ -17,7 +17,7 @@ export default function SavedPropertiesPage() {
     <div className="min-h-screen bg-gray-50 pb-24 mobile-safe-top">
       
       {/* HEADER */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200">
+      <header className="sticky top-0 z-50 shadow-sm">
 
   <div className="flex items-center gap-4 px-5 py-4">
 
