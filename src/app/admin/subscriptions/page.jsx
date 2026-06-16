@@ -31,6 +31,14 @@ export default function AdminSubscriptionsPage() {
   const subscriptions =
     data?.subscriptions || [];
 
+  const getSubscriptionStatus = (subscription) => {
+    if (!subscription.endDate) return "pending";
+
+    return new Date(subscription.endDate) < new Date()
+      ? "expired"
+      : "active";
+  };
+
   // ================= FILTER =================
   const filteredSubscriptions =
     useMemo(() => {
@@ -41,8 +49,7 @@ export default function AdminSubscriptionsPage() {
       if (filter !== "all") {
         filtered = filtered.filter(
           (s) =>
-            s.status?.toLowerCase() ===
-            filter
+            getSubscriptionStatus(s) === filter
         );
       }
 
@@ -75,17 +82,13 @@ export default function AdminSubscriptionsPage() {
     total:
       subscriptions.length,
 
-    active:
-      subscriptions.filter(
-        (s) =>
-          s.status === "active"
-      ).length,
+    active: subscriptions.filter(
+      (s) => getSubscriptionStatus(s) === "active"
+    ).length,
 
-    expired:
-      subscriptions.filter(
-        (s) =>
-          s.status === "expired"
-      ).length,
+    expired: subscriptions.filter(
+      (s) => getSubscriptionStatus(s) === "expired"
+    ).length,
 
     pending:
       subscriptions.filter(
@@ -211,10 +214,9 @@ export default function AdminSubscriptionsPage() {
               whitespace-nowrap
               text-sm font-medium
               transition
-              ${
-                filter === tab
-                  ? "bg-black text-white"
-                  : "bg-white border border-gray-300 hover:bg-gray-100"
+              ${filter === tab
+                ? "bg-black text-white"
+                : "bg-white border border-gray-300 hover:bg-gray-100"
               }
             `}
           >
@@ -249,6 +251,10 @@ export default function AdminSubscriptionsPage() {
 
                 <th className="p-4 text-center">
                   Status
+                </th>
+
+                <th className="p-4 text-center">
+                  Joined
                 </th>
 
                 <th className="p-4 text-center">
@@ -314,8 +320,25 @@ export default function AdminSubscriptionsPage() {
                     {/* STATUS */}
                     <td className="p-4 text-center">
                       <StatusBadge
-                        status={s.status}
+                        status={getSubscriptionStatus(s)}
                       />
+                    </td>
+
+                    {/* JOINED */}
+                    <td className="p-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <CalendarDays
+                          size={16}
+                          className="text-gray-400"
+                        />
+                        {new Date(
+                          s.createdAt
+                        ).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </div>
                     </td>
 
                     {/* EXPIRY */}
@@ -328,8 +351,12 @@ export default function AdminSubscriptionsPage() {
 
                         <span>
                           {new Date(
-                            s.expiresAt
-                          ).toLocaleDateString()}
+                            s.endDate
+                          ).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })}
                         </span>
                       </div>
                     </td>
@@ -349,11 +376,19 @@ export default function AdminSubscriptionsPage() {
             <div
               key={s._id}
               className="
+              relative
                 bg-white rounded-2xl
                 border border-gray-100
                 shadow-sm p-4
               "
             >
+
+              {/* STATUS */}
+              <div className="absolute top-3 right-3">
+                <StatusBadge
+                  status={s.status}
+                />
+              </div>
 
               {/* USER */}
               <div className="flex items-center gap-3">
@@ -401,32 +436,62 @@ export default function AdminSubscriptionsPage() {
                 </div>
               </div>
 
-              {/* EXPIRY */}
-              <div className="mt-4">
-                <p className="text-sm text-gray-500">
-                  Expiry Date
-                </p>
 
-                <div className="flex items-center gap-2 mt-1">
-                  <CalendarDays
-                    size={16}
-                    className="text-gray-400"
-                  />
+              <div className="flex flex-row justify-between items-center">
+                {/* JOINED */}
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500">
+                    Joined Date
+                  </p>
 
-                  <span className="font-medium">
-                    {new Date(
-                      s.expiresAt
-                    ).toLocaleDateString()}
-                  </span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <CalendarDays
+                      size={16}
+                      className="text-gray-400"
+                    />
+
+                    <span className="font-medium">
+                      {new Date(
+                        s.createdAt
+                      ).toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
                 </div>
+
+
+
+
+                {/* EXPIRY */}
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500">
+                    Expiry Date
+                  </p>
+
+                  <div className="flex items-center gap-2 mt-1">
+                    <CalendarDays
+                      size={16}
+                      className="text-gray-400"
+                    />
+
+                    <span className="font-medium">
+                      {new Date(
+                        s.endDate
+                      ).toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+
               </div>
 
-              {/* STATUS */}
-              <div className="mt-5">
-                <StatusBadge
-                  status={s.status}
-                />
-              </div>
+
             </div>
           )
         )}

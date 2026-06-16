@@ -1,7 +1,7 @@
 export default function UserHero({ user }) {
   return (
-    <div className="bg-white p-10 shadow-sm">
-      <div className="max-w-6xl mx-auto flex items-center gap-6">
+    <div className="bg-white p-6 pt-4 shadow-sm mobile-safe-top">
+      <div className="max-w-6xl mx-auto flex items-center gap-6 md:pt-6">
         <div className="size-16 p-2 rounded-full bg-indigo-500 text-white flex items-center justify-center text-3xl font-bold">
           {user.name?.[0]}
         </div>

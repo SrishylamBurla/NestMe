@@ -55,8 +55,12 @@ export default function SubscribePage() {
 
   /* ================= ALREADY AGENT ================= */
 
-  if (user?.role === "agent") {
+  if (user?.role === "agent" || data?.subscription) {
     const sub = data?.subscription;
+    const isExpired =
+      !sub ||
+      !sub.endDate ||
+      new Date(sub.endDate) < new Date();
 
     return (
       <div className="min-h-screen mobile-safe-top bg-slate-900 text-white flex items-center justify-center px-4">
@@ -87,7 +91,7 @@ export default function SubscribePage() {
           <div className="space-y-3 text-sm">
             <Detail
               label="Status"
-              value={data?.isActive ? "Active" : "Expired"}
+              value={isExpired ? "Expired" : "Active"}
             />
 
             <Detail
@@ -101,34 +105,61 @@ export default function SubscribePage() {
 
             <Detail
               label="Days Remaining"
-              value={`${data?.daysRemaining ?? 0} days`}
+              value={
+                isExpired
+                  ? "Expired"
+                  : `${data?.daysRemaining ?? 0} days`
+              }
             />
           </div>
 
+          {isExpired && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+              <h3 className="font-semibold text-red-400">
+                Subscription Expired
+              </h3>
+
+              <p className="text-sm text-slate-300 mt-1">
+                Your agent benefits have been paused.
+                Renew your subscription to continue
+                receiving leads and accessing the
+                agent dashboard.
+              </p>
+            </div>
+          )}
+
           {/* ACTIONS */}
-          <button
-            onClick={() =>
-              router.push(`/agents/${user.agentProfileId}/dashboard`)
-            }
-            className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-semibold"
-          >
-            Go to Dashboard
-          </button>
+          {!isExpired && (
+            <button
+              onClick={() =>
+                router.push(`/agents/${user.agentProfileId}/dashboard`)
+              }
+              className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-semibold"
+            >
+              Go to Dashboard
+            </button>
+          )}
 
           <button
-            onClick={() => router.push("/subscribe")}
-            className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20"
+            onClick={() => router.push("/checkout?plan=basic")}
+            className={`w-full py-3 rounded-xl font-semibold transition ${isExpired
+              ? "bg-red-500 hover:bg-red-600 text-white"
+              : "bg-white/10 hover:bg-white/20"
+              }`}
           >
-            Upgrade / Renew Plan
+            {isExpired
+              ? "Renew Subscription"
+              : "Upgrade Plan"}
           </button>
 
-          <button
-            onClick={handleCancel}
-            disabled={cancelling}
-            className="w-full py-3 rounded-xl bg-red-500 hover:bg-red-600 font-semibold transition"
-          >
-            {cancelling ? "Cancelling..." : "Cancel Subscription"}
-          </button>
+          {!isExpired &&
+            <button
+              onClick={handleCancel}
+              disabled={cancelling}
+              className="w-full py-3 rounded-xl bg-red-500 hover:bg-red-600 font-semibold transition"
+            >
+              {cancelling ? "Cancelling..." : "Cancel Subscription"}
+            </button>}
         </div>
       </div>
     );
@@ -140,7 +171,7 @@ export default function SubscribePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white px-5 py-14">
       <div className="max-w-5xl mx-auto space-y-12">
 
-        <div className="text-center space-y-4">
+        <div className="text-center pt-12 space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold">
             Grow Your Real Estate Business
             <span className="block bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
@@ -170,7 +201,7 @@ export default function SubscribePage() {
                 {loading ? "Processing..." : "Subscribe Now"}
               </button>
             </div>
-{/* 
+            {/* 
             <div className="space-y-4 text-sm">
               <Feature text="Unlimited listings" />
               <Feature text="Verified leads" />
@@ -179,12 +210,12 @@ export default function SubscribePage() {
               <Feature text="Direct buyer contact" />
             </div> */}
 
-             <div className="space-y-3 text-sm">
-        <Feature text="Unlimited property listings" />
-        <Feature text="Verified buyer & tenant leads" />
-        <Feature text="Priority listing visibility" />
-        <Feature text="Direct buyer contact access" />
-      </div> 
+            <div className="space-y-3 text-sm">
+              <Feature text="Unlimited property listings" />
+              <Feature text="Verified buyer & tenant leads" />
+              <Feature text="Priority listing visibility" />
+              <Feature text="Direct buyer contact access" />
+            </div>
 
           </div>
         </div>

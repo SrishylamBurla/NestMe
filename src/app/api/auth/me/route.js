@@ -6,6 +6,7 @@ import User from "@/models/User";
 import AgentProfile from "@/models/AgentProfile";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import Subscription from "@/models/Subscription";
 
 export async function GET() {
   try {
@@ -27,11 +28,29 @@ export async function GET() {
       return NextResponse.json({ user: null });
     }
 
-    const user = await User.findById(decoded.id).lean();
+    const user = await User.findById(decoded.id);
 
-    if (!user) {
-      return NextResponse.json({ user: null });
-    }
+if (!user) {
+  return NextResponse.json({ user: null });
+}
+
+const subscription = await Subscription.findOne({
+  user: user._id,
+});
+
+if (
+  subscription &&
+  subscription.endDate &&
+  new Date(subscription.endDate) < new Date()
+) {
+  subscription.status = "expired";
+  await subscription.save();
+
+  if (user.role === "agent") {
+    user.role = "user";
+    await user.save();
+  }
+}
 
     let agentProfileId = null;
 
@@ -40,9 +59,10 @@ export async function GET() {
       agentProfileId = profile?._id || null;
     }
 
+    const userData = user.toObject();
     return NextResponse.json({
       user: {
-        ...user,
+        ...userData,
         agentProfileId,
       },
     });

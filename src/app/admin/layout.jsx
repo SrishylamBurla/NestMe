@@ -1,66 +1,8 @@
-// "use client";
-
-// import Link from "next/link";
-// import { ChevronLeft } from "lucide-react"
-
-// export default function AdminLayout({ children }) {
-//   return (
-//     <div className="flex min-h-screen">
-
-//       {/* ================= SIDEBAR ================= */}
-//       <aside className="w-64 bg-black text-white p-6 space-y-3">
-
-//         <div className="flex gap-4">
-//           {/* 🔙 Back to Home */}
-//         <Link
-//           href="/"
-//           className="flex items-center gap-2 text-sm text-gray-300 bg-gray-800 rounded-full p-2 hover:text-white transition"
-//         >
-//           <ChevronLeft size={18} strokeWidth={2} />
-//         </Link>
-
-//         {/* Heading */}
-//         <h2 className="text-xl font-bold tracking-wide pt-2">
-//           Admin Panel
-//         </h2>
-//         </div>
-
-//         {/* Navigation */}
-//         <nav className="space-y-3 pt-4">
-//           <Nav link="/admin/dashboard" label="Dashboard" />
-//           <Nav link="/admin/users" label="Users" />
-//           <Nav link="/admin/agents" label="Agents" />
-//           <Nav link="/admin/properties" label="Properties" />
-//           <Nav link="/admin/leads" label="Leads" />
-//           <Nav link="/admin/subscriptions" label="Subscriptions" />
-//           <Nav link="/admin/pending-properties" label="Pending Approvals" />
-//           <Nav link="/admin/support" label="Support" />
-//         </nav>
-//       </aside>
-
-//       {/* ================= MAIN ================= */}
-//       <main className="flex-1 p-8 bg-gray-100">
-//         {children}
-//       </main>
-//     </div>
-//   );
-// }
-
-// function Nav({ link, label }) {
-//   return (
-//     <Link
-//       href={link}
-//       className="block text-gray-400 hover:text-yellow-400 transition"
-//     >
-//       {label}
-//     </Link>
-//   );
-// }
-
 
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   ChevronLeft,
@@ -77,153 +19,189 @@ import {
 } from "lucide-react";
 
 export default function AdminLayout({ children }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   const navItems = [
     {
       link: "/admin/dashboard",
       label: "Dashboard",
-      icon: <LayoutDashboard size={18} />,
+      icon: LayoutDashboard,
     },
     {
       link: "/admin/users",
       label: "Users",
-      icon: <Users size={18} />,
+      icon: Users,
     },
     {
       link: "/admin/agents",
       label: "Agents",
-      icon: <UserCheck size={18} />,
+      icon: UserCheck,
     },
     {
       link: "/admin/properties",
       label: "Properties",
-      icon: <Building2 size={18} />,
+      icon: Building2,
     },
     {
       link: "/admin/leads",
       label: "Leads",
-      icon: <BarChart3 size={18} />,
+      icon: BarChart3,
     },
     {
       link: "/admin/subscriptions",
       label: "Subscriptions",
-      icon: <BadgeDollarSign size={18} />,
+      icon: BadgeDollarSign,
     },
     {
       link: "/admin/pending-properties",
-      label: "Pending",
-      icon: <FileClock size={18} />,
+      label: "Pending Approvals",
+      icon: FileClock,
     },
     {
       link: "/admin/support",
       label: "Support",
-      icon: <Headset size={18} />,
+      icon: Headset,
     },
   ];
 
   return (
-    <div className="min-h-screen mobile-safe-top bg-gray-100 flex">
+    <div className="min-h-screen bg-slate-100 flex">
 
-      {/* ================= MOBILE OVERLAY ================= */}
+      {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* ================= SIDEBAR ================= */}
+      {/* Sidebar */}
       <aside
         className={`
-          fixed lg:static top-0 left-0 z-50
-          h-screen w-72 bg-black text-white
-          transform transition-transform duration-300
+          fixed lg:sticky top-0 left-0
+          h-screen w-72
+          bg-[#020617]
+          border-r border-white/10
+          z-50
+          transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
         `}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-800">
+        <div className="h-full flex flex-col">
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="bg-gray-800 hover:bg-gray-700 p-2 rounded-full transition"
-            >
-              <ChevronLeft size={18} />
-            </Link>
+          {/* Brand */}
+          <div className="px-6 py-4 border-b border-white/10">
 
-            <h2 className="text-xl font-bold">
-              Admin Panel
-            </h2>
+            <div className="flex items-center justify-between">
+
+              <div className="flex items-center gap-3 mobile-safe-top">
+
+                <Link
+                  href="/"
+                  className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20"
+                >
+                  <ChevronLeft size={18} className="text-white" />
+                </Link>
+
+                <div>
+                  <p className="text-xs text-slate-400">
+                    NestMe
+                  </p>
+
+                  <h2 className="font-bold text-lg text-white">
+                    Admin Panel
+                  </h2>
+                </div>
+
+              </div>
+
+              <button
+                className="lg:hidden"
+                onClick={() => setOpen(false)}
+              >
+                <X size={22} />
+              </button>
+
+            </div>
           </div>
 
-          {/* Close Button Mobile */}
-          <button
-            className="lg:hidden"
-            onClick={() => setOpen(false)}
-          >
-            <X size={22} />
-          </button>
-        </div>
+          {/* Nav */}
+          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
 
-        {/* Navigation */}
-        <nav className="p-4 space-y-2">
-          {navItems.map((item, index) => (
-            <Nav
-              key={index}
-              link={item.link}
-              label={item.label}
-              icon={item.icon}
-              onClick={() => setOpen(false)}
-            />
-          ))}
-        </nav>
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active =
+                pathname === item.link;
+
+              return (
+                <Link
+                  key={item.link}
+                  href={item.link}
+                  onClick={() => setOpen(false)}
+                  className={`
+                    flex items-center gap-3
+                    px-4 py-3 rounded-xl
+                    transition-all
+                    ${
+                      active
+                        ? "bg-yellow-400 text-black shadow-lg"
+                        : "text-slate-300 hover:bg-white/10 hover:text-white"
+                    }
+                  `}
+                >
+                  <Icon size={18} />
+
+                  <span className="font-medium">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+
+          </nav>
+
+          {/* Footer */}
+          {/* <div className="p-4 border-t border-white/10">
+            <div className="rounded-xl bg-white/5 p-3">
+              <p className="text-xs text-slate-400">
+                NestMe Admin
+              </p>
+
+              <p className="font-semibold">
+                Control Center
+              </p>
+            </div>
+          </div> */}
+
+        </div>
       </aside>
 
-      {/* ================= MAIN CONTENT ================= */}
-      <div className="flex-1 flex flex-col min-w-0">
+      {/* Main */}
+      <div className="flex-1 min-w-0">
 
-        {/* ================= TOPBAR ================= */}
-        <header className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between lg:hidden">
+        {/* Mobile Header */}
+        <header className="lg:hidden sticky top-0 z-30 bg-white border-b mobile-safe-top border-slate-200 px-4 py-4 flex items-center justify-between">
 
           <button onClick={() => setOpen(true)}>
             <Menu size={24} />
           </button>
 
-          <h1 className="font-semibold text-lg">
-            Admin Panel
+          <h1 className="font-bold">
+            NestMe Admin
           </h1>
 
-          <div />
+          <div className="w-6" />
+
         </header>
 
-        {/* ================= PAGE CONTENT ================= */}
-        <main className="p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+        {/* Content */}
+        <main className="p-4 sm:p-6 lg:p-8">
           {children}
         </main>
+
       </div>
     </div>
-  );
-}
-
-function Nav({ link, label, icon, onClick }) {
-  return (
-    <Link
-      href={link}
-      onClick={onClick}
-      className="
-        flex items-center gap-3
-        px-4 py-3 rounded-xl
-        text-gray-300
-        hover:bg-yellow-400
-        hover:text-black
-        transition-all duration-200
-      "
-    >
-      {icon}
-      <span className="font-medium">{label}</span>
-    </Link>
   );
 }

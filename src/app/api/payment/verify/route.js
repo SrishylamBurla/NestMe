@@ -46,15 +46,44 @@ export async function POST(req) {
 
   user.agentProfileId = agent._id;
 
-  // ✅ CREATE SUBSCRIPTION (🔥 THIS WAS MISSING)
- const subscription = await Subscription.create({
-  user: user._id,
-  plan: "basic",
-  price: 999,
-  status: "active",
-  startDate: new Date(),
-  endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-});
+  let subscription = await Subscription.findOne({
+    user: user._id,
+  });
+
+  if (subscription) {
+    const now = new Date();
+
+    const baseDate =
+      subscription.endDate &&
+        new Date(subscription.endDate) > now
+        ? new Date(subscription.endDate)
+        : now;
+
+    const newEndDate = new Date(baseDate);
+
+    newEndDate.setMonth(
+      newEndDate.getMonth() + 1
+    );
+
+    subscription.plan = "basic";
+    subscription.status = "active";
+    subscription.price = 999;
+    subscription.startDate = now;
+    subscription.endDate = newEndDate;
+
+    await subscription.save();
+  } else {
+    subscription = await Subscription.create({
+      user: user._id,
+      plan: "basic",
+      price: 999,
+      status: "active",
+      startDate: new Date(),
+      endDate: new Date(
+        Date.now() + 30 * 24 * 60 * 60 * 1000
+      ),
+    });
+  }
 
   user.subscriptionId = subscription._id;
   await user.save();

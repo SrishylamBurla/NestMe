@@ -98,7 +98,7 @@ export default function SearchContent() {
                 }`}
             >
               <div className="mobile-safe-top">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 md:pt-4">
                   <button
                     onClick={() => router.back()}
                     className="flex items-center gap-2 text-sm text-gray-300 bg-gray-800 rounded-full p-2 hover:text-white transition cursor-pointer"

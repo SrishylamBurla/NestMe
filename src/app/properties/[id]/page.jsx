@@ -111,7 +111,7 @@ return (
       <div
         className="
         fixed
-        top-0
+        top-2
         left-0
         w-full
         z-[100]
