@@ -17,8 +17,6 @@ export default function CheckoutContent() {
 
   const { user, refetch } = useAuth();
 
-  console.log(user);
-
   const [createOrder] = useCreateOrderMutation();
   const [verifyPayment] = useVerifyPaymentMutation();
 
@@ -33,8 +31,6 @@ export default function CheckoutContent() {
 
     try {
       const order = await createOrder(plan).unwrap();
-
-      console.log("ORDER", order);
 
       toast.dismiss(loading);
 
@@ -75,7 +71,6 @@ export default function CheckoutContent() {
         },
       };
 
-      console.log(options)
       const rzp = new window.Razorpay(options);
       rzp.open();
 
