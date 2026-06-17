@@ -19,25 +19,32 @@ export default function SubscribePage() {
   const { user, isLoading, refetch } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const { data } = useGetAgentSubscriptionQuery();
 
   const [cancelSubscription, { isLoading: cancelling }] =
     useCancelSubscriptionMutation();
+  const {
+    data,
+    refetch: refetchSubscription
 
+  } = useGetAgentSubscriptionQuery();
   const [createOrder] = useCreateOrderMutation();
   const [verifyPayment] = useVerifyPaymentMutation();
 
   /* ================= CANCEL ================= */
 
+
+
   const handleCancel = async () => {
+
     try {
       await cancelSubscription().unwrap();
-
       await refetch();
-
-      router.push("/subscribe");
-
-      toast.success("Subscription cancelled");
+      await refetchSubscription();
+      router.refresh();
+      window.location.reload();
+      toast.success(
+        'Subscription cancelled'
+      );
     } catch (err) {
       toast.error(err?.data?.message || "Cancel failed");
     }
@@ -54,13 +61,28 @@ export default function SubscribePage() {
   }
 
   /* ================= ALREADY AGENT ================= */
+  const sub = data?.subscription;
 
-  if (user?.role === "agent" || data?.subscription) {
+  const hasSubscription =
+    sub?.status === 'active' &&
+    new Date(sub.endDate) > new Date();
+
+  const isAgent =
+    sub?.status === 'active'
+    &&
+    sub?.endDate
+    &&
+    new Date(sub.endDate) > new Date();
+
+  console.log("USER");
+  console.log(user);
+
+  console.log("SUB");
+  console.log(sub);
+
+  if (isAgent) {
     const sub = data?.subscription;
-    const isExpired =
-      !sub ||
-      !sub.endDate ||
-      new Date(sub.endDate) < new Date();
+    const isExpired = false;
 
     return (
       <div className="min-h-screen mobile-safe-top bg-slate-900 text-white flex items-center justify-center px-4">

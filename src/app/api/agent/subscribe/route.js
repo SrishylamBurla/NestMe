@@ -28,30 +28,64 @@ export async function POST(req) {
 
   /* ================= CREATE SUBSCRIPTION ================= */
 
-  const subscription = await Subscription.create({
-  user: user._id,
-  plan,
-  price: planPrices[plan],
-  status: "active",
-  startDate: new Date(),
-  endDate: new Date(
-    Date.now() + durationDays * 24 * 60 * 60 * 1000
-  ),
-});
+  // const subscription = await Subscription.create({
+  //   user: user._id,
+  //   plan,
+  //   price: planPrices[plan],
+  //   status: "active",
+  //   startDate: new Date(),
+  //   endDate: new Date(
+  //     Date.now() + durationDays * 24 * 60 * 60 * 1000
+  //   ),
+  // });
+
+  let subscription = await Subscription.findOne({
+    user: user._id
+  });
+
+  if (subscription) {
+
+    subscription.plan = plan;
+    subscription.price = planPrices[plan];
+    subscription.status = 'active';
+    subscription.startDate = new Date();
+    subscription.endDate = new Date(
+      Date.now() + 30 * 24 * 60 * 60 * 1000
+    );
+
+    await subscription.save();
+
+  } else {
+
+
+    subscription = await Subscription.create({
+
+      user: user._id,
+      plan,
+      price: planPrices[plan],
+      status: 'active',
+      startDate: new Date(),
+      endDate: new Date(
+        Date.now() + 30 * 24 * 60 * 60 * 1000
+      )
+
+    });
+
+  }
 
   /* ================= CREATE AGENT PROFILE ================= */
 
   const agentProfile = await AgentProfile.findOneAndUpdate(
-  { user: user._id },
-  {
-    $setOnInsert: {
-      user: user._id,
-      designation: user.destination || "Real Estate Agent",
-      city: "",
-    }
-  },
-  { returnDocument: "after", upsert: true }
-);
+    { user: user._id },
+    {
+      $setOnInsert: {
+        user: user._id,
+        designation: user.destination || "Real Estate Agent",
+        city: "",
+      }
+    },
+    { returnDocument: "after", upsert: true }
+  );
 
   /* ================= UPDATE EXISTING PROPERTIES ================= */
 
@@ -94,6 +128,10 @@ export async function GET() {
 
   const subscription = await Subscription.findOne({
     user: user._id,
+    status: 'active',
+    endDate: {
+      $gt: new Date()
+    }
   }).sort({ createdAt: -1 });
 
   if (!subscription) {

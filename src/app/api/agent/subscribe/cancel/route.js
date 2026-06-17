@@ -16,11 +16,13 @@ export async function POST() {
     );
   }
 
- const subscription = await Subscription.findOne({
-  user: user._id,
-  endDate: { $gt: new Date() },
-});
-
+  const subscription = await Subscription.findOne({
+    user: user._id,
+    status: 'active'
+  })
+    .sort({
+      createdAt: -1
+    });
   if (!subscription) {
     return NextResponse.json(
       { message: "No active subscription" },
@@ -29,13 +31,21 @@ export async function POST() {
   }
 
   // Cancel subscription
-  subscription.status = "cancelled";
-  await subscription.save();
+  await Subscription.updateMany({
+    user: user._id,
+    status: 'active'
+  }, {
+    $set: {
+      status: 'cancelled'
+    }
+  });
 
   // 🔥 IMMEDIATE DOWNGRADE
-  user.role = "user";
-  user.agentProfileId = null;
-  await user.save();
+  user.role='user';
+user.agentProfileId=null;
+user.subscriptionId=null;
+
+await user.save();
 
   return NextResponse.json({
     message: "Subscription cancelled. You are now a normal user.",
