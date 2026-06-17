@@ -46,6 +46,25 @@ export const subscribeApi = api.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
+    createStripeSession: builder.mutation({
+      query: (plan) => ({
+        url: "/payment/stripe/create",
+        method: "POST",
+        body: { plan }
+      })
+    }),
+
+    verifyStripe: builder.mutation({
+      query: (sessionId) => ({
+        url: '/payment/stripe/verify',
+        method: 'POST',
+        body: {
+          sessionId
+        }
+      }),
+      invalidatesTags: ['Subscription']
+    }),
+
   }),
 });
 
@@ -55,4 +74,6 @@ export const {
   useVerifyPaymentMutation,
   useGetAgentSubscriptionQuery,
   useCancelSubscriptionMutation,
+  useCreateStripeSessionMutation,
+  useVerifyStripeMutation
 } = subscribeApi;
