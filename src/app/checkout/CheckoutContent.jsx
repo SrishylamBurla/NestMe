@@ -153,6 +153,10 @@ useEffect(() => {
     );
   }
 
+  <div className="bg-red-500 p-5 text-white text-4xl">
+    STRIPE DEPLOY TEST
+</div>
+
   return (
 
 
