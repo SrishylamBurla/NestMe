@@ -119,7 +119,16 @@ export const propertiesApi = api.injectEndpoints({
             "Properties",
           ],
       }),
-
+    getReviews: builder.query({
+      query: (id) => `/properties/${id}/reviews`
+    }),
+    addReview: builder.mutation({
+      query: ({ id, body}) => ({
+        url: `/properties/${id}/reviews`,
+        method: "POST",
+        body
+      })
+    })
   }),
 });
 
@@ -132,4 +141,6 @@ export const {
   useUpdatePropertyMutation,
   useUpdatePropertyStatusMutation,
   useAdminUpdatePropertyStatusMutation,
+  useGetReviewsQuery,
+  useAddReviewMutation
 } = propertiesApi;

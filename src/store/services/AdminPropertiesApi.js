@@ -16,17 +16,17 @@ export const adminPropertiesApi =
           ],
       }),
 
-      getAdminStats:
-        builder.query({
+      // getAdminStats:
+      //   builder.query({
 
-          query: () =>
-            "/admin/stats",
-      }),
+      //     query: () =>
+      //       "/admin/stats",
+      // }),
 
     }),
 });
 
 export const {
   useGetAdminPropertiesQuery,
-  useGetAdminStatsQuery,
+  // useGetAdminStatsQuery,
 } = adminPropertiesApi;

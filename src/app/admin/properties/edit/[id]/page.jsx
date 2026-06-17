@@ -41,6 +41,8 @@ export default function EditPropertyPage() {
         title: p.title || "",
         description: p.description || "",
         propertyType: p.propertyType || "apartment",
+        listingStatus:
+          p.listingStatus || "available",
         priceLabel: p.priceLabel || "",
         priceValue: p.priceValue || "",
         pricePerSqFt: p.pricePerSqFt || "",
@@ -85,7 +87,10 @@ export default function EditPropertyPage() {
     formData.append("description", form.description);
     formData.append("propertyType", form.propertyType);
     formData.append("listingType", form.listingType);
-
+    formData.append(
+      "listingStatus",
+      form.listingStatus || "available"
+    );
     formData.append("priceLabel", form.priceLabel);
     formData.append("priceValue", form.priceValue);
     formData.append("pricePerSqFt", form.pricePerSqFt);
@@ -221,10 +226,24 @@ export default function EditPropertyPage() {
                   onChange={(e) => update("propertyType", e.target.value)}
                 />
                 <Select
-                  label="Property Status"
-                  value={form.status}
-                  options={["approved", "rejected", "pending"]}
-                  onChange={(e) => update("status", e.target.value)}
+                  label="Listing Status"
+
+                  value={
+                    form.listingStatus
+                  }
+
+                  options={[
+                    "available",
+                    "sold",
+                    "rented"
+                  ]}
+
+                  onChange={(e) =>
+                    update(
+                      "listingStatus",
+                      e.target.value
+                    )
+                  }
                 />
               </Section>
 
@@ -317,8 +336,8 @@ export default function EditPropertyPage() {
                       key={a}
                       onClick={() => toggleAmenity(a)}
                       className={`px-4 py-2 rounded-full border font-bold ${form.amenities.includes(a)
-                          ? "bg-black text-white"
-                          : "bg-white"
+                        ? "bg-black text-white"
+                        : "bg-white"
                         }`}
                     >
                       {a}

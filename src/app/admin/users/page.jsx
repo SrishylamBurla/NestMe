@@ -115,6 +115,12 @@ export default function UsersPage() {
       <div className="flex flex-wrap gap-3">
 
         <TabButton
+          active={activeTab === "all"}
+          onClick={() => setActiveTab("all")}
+          label="All"
+        />
+        
+        <TabButton
           active={activeTab === "users"}
           onClick={() => setActiveTab("users")}
           label="Users"
@@ -132,11 +138,7 @@ export default function UsersPage() {
           label="Admins"
         />
 
-        <TabButton
-          active={activeTab === "all"}
-          onClick={() => setActiveTab("all")}
-          label="All"
-        />
+        
       </div>
 
       {/* ================= TABLE ================= */}

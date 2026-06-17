@@ -518,7 +518,7 @@ export default function PropertyCard({ property }) {
       ? "Sold"
       : property.listingStatus === "rented"
         ? "Rented"
-        : "Available";
+        : "available";
 
   const statusStyle =
     property.listingStatus === "sold"

@@ -313,7 +313,7 @@ export async function POST(req) {
       address: formData.get("address"),
       city: formData.get("city"),
       state: formData.get("state"),
-      listingStatus: formData.get("listingStatus"),
+      listingStatus: formData.get("listingStatus").toLowerCase(),
       amenities: formData.getAll("amenities[]"),
       location: {
         lat: formData.get("lat") ? Number(formData.get("lat")) : null,

@@ -237,6 +237,16 @@ export async function PUT(req, context) {
           "listingType"
         ),
 
+      listingStatus:
+        (
+          formData.get(
+            'listingStatus'
+          )
+          ||
+          'available'
+        )
+          .toLowerCase(),
+
       priceLabel:
         formData.get(
           "priceLabel"
