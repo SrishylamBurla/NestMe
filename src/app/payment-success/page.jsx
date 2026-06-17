@@ -13,11 +13,8 @@ export default function Page() {
     const params = useSearchParams();
     const { refetch } = useAuth();
 
-    const [verifyStripe] =
-        useVerifyStripeMutation();
-    useEffect(() => {
-        verify();
-    }, []);
+    const [verifyStripe] = useVerifyStripeMutation();
+    
     const verify = async () => {
         const session_id =
             params.get('session_id');
@@ -44,6 +41,10 @@ export default function Page() {
             );
         }
     };
+
+    useEffect(() => {
+        verify();
+    }, []);
     return (
         <div className='min-h-screen flex items-center justify-center'>
             Verifying Payment...
