@@ -157,9 +157,6 @@ useEffect(() => {
 
   return (
 <>
-<div className="bg-red-500 p-5 text-white text-4xl">
-    STRIPE DEPLOY TEST
-</div>
 
     <div className="min-h-screen mobile-safe-top bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white flex items-center justify-center px-4">
 

@@ -74,12 +74,6 @@ export default function SubscribePage() {
     &&
     new Date(sub.endDate) > new Date();
 
-  console.log("USER");
-  console.log(user);
-
-  console.log("SUB");
-  console.log(sub);
-
   if (isAgent) {
     const sub = data?.subscription;
     const isExpired = false;
