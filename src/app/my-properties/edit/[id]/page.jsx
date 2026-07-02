@@ -210,11 +210,8 @@ export default function EditPropertyPage() {
         state:
           p.state || "",
 
-        lat:
-          p.location?.lat || "",
-
-        lng:
-          p.location?.lng || "",
+        lat: Number(p.location?.lat) || 17.385,
+        lng: Number(p.location?.lng) || 78.4867,
 
         amenities:
           p.amenities || [],
@@ -1001,15 +998,8 @@ export default function EditPropertyPage() {
 
             <MapPicker
               initialPosition={{
-                lat:
-                  Number(
-                    form.lat.toFixed(3)
-                  ) || 17.385,
-
-                lng:
-                  Number(
-                    form.lng.toFixed(3)
-                  ) || 78.4867,
+                lat: Number(form.lat) || 17.385,
+                lng: Number(form.lng) || 78.4867,
               }}
               onSelect={({
                 lat,
