@@ -23,39 +23,37 @@ export default function EditPropertyPage() {
 
   const [form, setForm] = useState(null);
 
-  const [listingType, setListingType] = useState("sale");
-
   useEffect(() => {
-  if (!propertyData) return;
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  setForm((prev) => {
-    // ✅ prevent repeated updates
-    if (prev && prev.title === propertyData.title) return prev;
-    const p = propertyData;
+    if (!propertyData) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setForm((prev) => {
+      // ✅ prevent repeated updates
+      if (prev && prev.title === propertyData.title) return prev;
+      const p = propertyData;
 
-    return {
-      title: p.title || "",
-      description: p.description || "",
-      propertyType: p.propertyType || "apartment",
-      priceLabel: p.priceLabel || "",
-      priceValue: p.priceValue || "",
-      pricePerSqFt: p.pricePerSqFt || "",
-      beds: p.beds || 2,
-      baths: p.baths || 2,
-      areaSqFt: p.areaSqFt || "",
-      furnishing: p.furnishing || "semi",
-      facing: p.facing || "",
-      address: p.address || "",
-      city: p.city || "",
-      state: p.state || "",
-      lat: p.location?.lat || "",
-      lng: p.location?.lng || "",
-      amenities: p.amenities || [],
-      images: p.images?.length ? p.images : [""],
-      listingType: p.listingType || "sale",
-    };
-  });
-}, [propertyData]);
+      return {
+        title: p.title || "",
+        description: p.description || "",
+        propertyType: p.propertyType || "apartment",
+        priceLabel: p.priceLabel || "",
+        priceValue: p.priceValue || "",
+        pricePerSqFt: p.pricePerSqFt || "",
+        beds: p.beds || 2,
+        baths: p.baths || 2,
+        areaSqFt: p.areaSqFt || "",
+        furnishing: p.furnishing || "semi",
+        facing: p.facing || "",
+        address: p.address || "",
+        city: p.city || "",
+        state: p.state || "",
+        lat: Number(p.location?.lat) || "",
+        lng: Number(p.location?.lng) || "",
+        amenities: p.amenities || [],
+        images: p.images?.length ? p.images : [""],
+        listingType: p.listingType || "sale",
+      };
+    });
+  }, [propertyData]);
 
   if (isLoading || !form) return <p className="p-4">Loading property...</p>;
 
@@ -120,9 +118,8 @@ export default function EditPropertyPage() {
                     <button
                       key={t}
                       onClick={() => update("listingType", t)}
-                      className={`flex-1 py-2 rounded-lg font-bold ${
-                        listingType === t ? "bg-white shadow" : "text-gray-500"
-                      }`}
+                      className={`flex-1 py-2 rounded-lg font-bold ${form.listingType === t ? "bg-white shadow" : "text-gray-500"
+                        }`}
                     >
                       {t === "sale"
                         ? "For Sale"
@@ -262,11 +259,10 @@ export default function EditPropertyPage() {
                     <button
                       key={a}
                       onClick={() => toggleAmenity(a)}
-                      className={`px-4 py-2 rounded-full border font-bold ${
-                        form.amenities.includes(a)
+                      className={`px-4 py-2 rounded-full border font-bold ${form.amenities.includes(a)
                           ? "bg-black text-white"
                           : "bg-white"
-                      }`}
+                        }`}
                     >
                       {a}
                     </button>
