@@ -153,8 +153,7 @@ export default function Header() {
   className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
-  px-2 sm:px-4
-  pb-1
+  px-2 sm:px-4 py-2
   flex justify-between items-center
   border-b border-white/10
   backdrop-blur-xl mobile-safe-top
@@ -170,7 +169,7 @@ export default function Header() {
             alt="logo"
             width={50}
             height={50}
-            className="object-cover"
+            className="object-cover pt-2"
           />
         </div>
       )}
@@ -236,7 +235,7 @@ export default function Header() {
           {!user && !isLoading && (
             <button
               onClick={() => handleNavigate("/login")}
-              className="text-sm font-semibold cursor-pointer bg-gradient-to-r from-indigo-800 via-gray-800 to-purple-800 text-white px-4 py-2 rounded-lg animate-bounce duration-400"
+              className="text-sm font-semibold cursor-pointer bg-gradient-to-r from-indigo-800 via-gray-800 to-purple-800 text-white px-4 py-2 rounded-lg duration-400"
             >
               Login
             </button>

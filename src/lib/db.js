@@ -1,4 +1,10 @@
 import mongoose from "mongoose";
+import dns from "node:dns";
+
+dns.setServers([
+  "8.8.8.8",
+  "8.8.4.4",
+]);
 
 let isConnected = false;
 
@@ -11,6 +17,7 @@ export default async function connectDB() {
     throw new Error("❌ MONGO_URI is missing in environment variables");
   }
 
+  // console.log("MONGO_URI:", process.env.MONGO_URI);
   try {
     const conn = await mongoose.connect(uri, {
       dbName: "irealestate",
@@ -19,6 +26,7 @@ export default async function connectDB() {
 
     isConnected = true;
     console.log("✅ MongoDB connected:", conn.connection.host);
+    
   } catch (error) {
     console.error("❌ MongoDB connection failed:", error.message);
     throw error;
