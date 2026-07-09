@@ -49,11 +49,34 @@ export default function SupportChat({ onClose }) {
       setMessages([]);
     }
   };
+useEffect(() => {
+  let cancelled = false;
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+  (async () => {
+    try {
+      const res = await axios.get("/api/support");
+      const tickets = res.data;
 
+      if (cancelled) return;
+
+      if (tickets.length > 0) {
+        setMessages(tickets[0].messages || []);
+      } else {
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+
+      if (!cancelled) {
+        setMessages([]);
+      }
+    }
+  })();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
   // ⚡ SOCKET SETUP
   useEffect(() => {
     if (!user?._id) return;

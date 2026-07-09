@@ -150,32 +150,32 @@ export default function LoginPage() {
   // ================= GOOGLE LOGIN =================
 
   const googleLogin = async () => {
-  try {
-    const isMobile =
-      typeof window !== "undefined" && window.ReactNativeWebView;
+    try {
+      const isMobile =
+        typeof window !== "undefined" && window.ReactNativeWebView;
 
-    // 🚫 BLOCK MOBILE COMPLETELY
-    if (isMobile) {
-      alert("Google login is available only on website");
-      return;
+      // 🚫 BLOCK MOBILE COMPLETELY
+      if (isMobile) {
+        alert("Google login is available only on website");
+        return;
+      }
+
+      await initAuth();
+
+      const provider = new GoogleAuthProvider();
+
+      const result = await signInWithPopup(auth, provider);
+
+      const user = result.user;
+
+      window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
+
+    } catch (err) {
+      if (err.code === "auth/popup-closed-by-user") return;
+
+      console.error(err);
     }
-
-    await initAuth();
-
-    const provider = new GoogleAuthProvider();
-
-    const result = await signInWithPopup(auth, provider);
-
-    const user = result.user;
-
-    window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
-    
-  } catch (err) {
-    if (err.code === "auth/popup-closed-by-user") return;
-
-    console.error(err);
-  }
-};
+  };
   // const googleLogin = async () => {
   //   try {
   //     await initAuth();
