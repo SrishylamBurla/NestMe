@@ -12,6 +12,7 @@ import { signInWithRedirect } from "firebase/auth";
 import { initAuth } from "@/lib/firebase";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { Image } from "next/image";
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
@@ -21,7 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
 
-  const [isMobileApp, setIsMobileApp] = useState(false);
+  // const [isMobileApp, setIsMobileApp] = useState(false);
   const router = useRouter();
   const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
@@ -32,14 +33,14 @@ export default function LoginPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [otpSent, setOtpSent] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.ReactNativeWebView) {
-      setIsMobileApp(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined" && window.ReactNativeWebView) {
+  //     setIsMobileApp(true);
+  //   }
+  // }, []);
 
-  // const isMobileApp =
-  //   typeof window !== "undefined" && window.ReactNativeWebView;
+  const isMobileApp =
+    typeof window !== "undefined" && window.ReactNativeWebView;
   const { user } = useAuth();
 
   useEffect(() => {
