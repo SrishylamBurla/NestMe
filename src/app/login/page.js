@@ -22,6 +22,15 @@ import { useAuth } from "@/hooks/useAuth";
 export default function LoginPage() {
 
   const [isMobileApp, setIsMobileApp] = useState(false);
+  const router = useRouter();
+  const [login, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [phone, setPhone] = useState("");
+  const [confirm, setConfirm] = useState(null);
+  const [mode, setMode] = useState("email");
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otpSent, setOtpSent] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.ReactNativeWebView) {
@@ -42,15 +51,6 @@ export default function LoginPage() {
   useEffect(() => {
     initAuth();
   }, []);
-  const router = useRouter();
-  const [login, { isLoading, error }] = useLoginMutation();
-  const dispatch = useDispatch();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [phone, setPhone] = useState("");
-  const [confirm, setConfirm] = useState(null);
-  const [mode, setMode] = useState("email");
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [otpSent, setOtpSent] = useState(false);
 
 
 
@@ -214,16 +214,19 @@ export default function LoginPage() {
       { size: "invisible" }
     );
   }, [mode]);
+
   useEffect(() => {
     if (otp.every((d) => d !== "")) {
       verifyOtp();
     }
-  }, [otp]);
+  }, [otp, verifyOtp]);
+
   useEffect(() => {
     if (otpSent) {
       setTimeout(() => setOtpSent(false), 30000); // enable after 30s
     }
   }, [otpSent]);
+
   return (
     <AuthLayout>
       {/* <div className="flex items-center justify-center"> */}
@@ -249,7 +252,12 @@ export default function LoginPage() {
               onClick={googleLogin}
               className="w-full h-12 rounded-xl bg-white text-black font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] transition"
             >
-              <img src="/icons/google.png" className="w-5 h-5" />
+              <Image
+                src="/icons/google.png"
+                alt="Google"
+                width={20}
+                height={20}
+              />
               Continue with Google
             </button>
 
