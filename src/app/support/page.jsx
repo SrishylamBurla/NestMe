@@ -49,50 +49,34 @@ export default function SupportPage() {
   // =========================
   // FETCH TICKETS
   // =========================
+useEffect(() => {
+  let cancelled = false;
 
-  const fetchTickets =
-    async () => {
+  (async () => {
+    try {
+      const res = await fetch("/api/support");
+      const data = await res.json();
 
-      try {
+      const sorted = [...data].sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
 
-        const res =
-          await fetch(
-            "/api/support"
-          );
+      if (cancelled) return;
 
-        const data =
-          await res.json();
+      setTickets(sorted);
 
-        const sorted =
-          [...data].sort(
-            (a, b) =>
-              new Date(
-                b.updatedAt
-              ) -
-              new Date(
-                a.updatedAt
-              )
-          );
-
-        setTickets(sorted);
-
-        if (
-          sorted.length > 0
-        ) {
-          setSelectedTicket(
-            sorted[0]
-          );
-        }
-
-      } catch (err) {
-
-        console.log(err);
+      if (sorted.length > 0) {
+        setSelectedTicket(sorted[0]);
       }
-    };
+    } catch (err) {
+      console.log(err);
+    }
+  })();
 
-  useEffect(() => {
-    fetchTickets();
-  }, []);
+  return () => {
+    cancelled = true;
+  };
+}, []);
 
   // =========================
   // SOCKET
