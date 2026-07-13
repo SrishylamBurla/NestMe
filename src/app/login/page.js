@@ -12,7 +12,7 @@ import { signInWithRedirect } from "firebase/auth";
 import { initAuth } from "@/lib/firebase";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { Image } from "next/image";
+import Image from "next/image";
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
@@ -253,7 +253,7 @@ export default function LoginPage() {
               onClick={googleLogin}
               className="w-full h-12 rounded-xl bg-white text-black font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] transition"
             >
-              <Image
+              <img
                 src="/icons/google.png"
                 alt="Google"
                 width={20}
