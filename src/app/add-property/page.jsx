@@ -8,7 +8,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 
 const AMENITIES = ["pool", "gym", "parking", "security", "garden", "lift"];
-const FACING_OPTIONS = ["East", "West", "North", "South"];
+const FACING_OPTIONS = ["East", "West", "North", "South", "North-East", "North-West", "South-East", "South-West"];
 
 const MapPicker = dynamic(
   () => import("@/components/MapPicker"),
