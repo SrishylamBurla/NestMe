@@ -11,7 +11,7 @@ import { sendEmail } from "@/lib/sendEmail";
 import upload from "@/lib/multer";
 import cloudinary from "@/lib/cloudinary";
 import streamifier from "streamifier";
-
+import { sendNotification } from "@/lib/socket";
 
 //GET – LIST PROPERTIES
 export async function GET(req) {
