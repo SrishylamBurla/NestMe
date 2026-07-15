@@ -426,11 +426,15 @@ export async function POST(req) {
     }
 
     return NextResponse.json(property, { status: 201 });
-  } catch (error) {
-    console.error("CREATE PROPERTY ERROR:", error);
-    return NextResponse.json(
-      { message: "Failed to create property" },
-      { status: 500 },
-    );
-  }
+   } catch (error) {
+  console.error(error);
+
+  return NextResponse.json(
+    {
+      message: error.message,
+      stack: error.stack,
+    },
+    { status: 500 }
+  );
+}
 }
