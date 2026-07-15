@@ -354,8 +354,12 @@ export async function POST(req) {
       link: "/my-properties",
     });
 
-    io.to(user._id.toString()).emit("notification", {
-      title: "New Notification",
+    // Real-time notification (only if Socket.IO is initialized)
+    sendNotification(user._id.toString(), {
+      title: "Property Under Review ⏳",
+      message: `Your property "${property.title}" is under admin review.`,
+      type: "property-created",
+      link: "/my-properties",
     });
     /* ==============================
        🔔 ADMIN NOTIFICATIONS
@@ -363,15 +367,14 @@ export async function POST(req) {
     const admins = await User.find({ role: "admin" }).select("_id email name");
 
     if (admins.length) {
-      await Notification.insertMany(
-        admins.map((admin) => ({
-          user: admin._id,
+      admins.forEach((admin) => {
+        sendNotification(admin._id.toString(), {
           title: "New Property Pending Approval",
           message: `New property "${property.title}" submitted by ${user.name}`,
           type: "system",
           link: "/admin/properties",
-        })),
-      );
+        });
+      });
     }
 
     /* ==============================
@@ -426,15 +429,15 @@ export async function POST(req) {
     }
 
     return NextResponse.json(property, { status: 201 });
-   } catch (error) {
-  console.error(error);
+  } catch (error) {
+    console.error(error);
 
-  return NextResponse.json(
-    {
-      message: error.message,
-      stack: error.stack,
-    },
-    { status: 500 }
-  );
-}
+    return NextResponse.json(
+      {
+        message: error.message,
+        stack: error.stack,
+      },
+      { status: 500 }
+    );
+  }
 }
