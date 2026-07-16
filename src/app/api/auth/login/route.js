@@ -65,10 +65,13 @@ export async function POST(req) {
 
     return response;
   } catch (error) {
-    console.error("LOGIN ERROR:", error);
-    return NextResponse.json(
-      { message: "Login failed" },
-      { status: 500 }
-    );
-  }
+  console.error("LOGIN ERROR:", error);
+
+  return NextResponse.json(
+    {
+      message: error.message,
+      stack: error.stack,
+    },
+    { status: 500 }
+  );
 }
