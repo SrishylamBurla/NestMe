@@ -1,4 +1,4 @@
-import { api } from "../api";
+import { api } from "./api";
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,6 +18,15 @@ export const userApi = api.injectEndpoints({
         body: data,
       }),
     }),
+
+   updateAvatar: builder.mutation({
+  query: (formData) => ({
+    url: "/users/avatar",
+    method: "PUT",
+    body: formData,
+  }),
+}),
+
     changePassword: builder.mutation({
       query: (data) => ({
         url: "/users/change-password",
@@ -34,4 +43,5 @@ export const {
   useGetUserPropertiesQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
+  useUpdateAvatarMutation,
 } = userApi;
