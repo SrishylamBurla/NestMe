@@ -33,6 +33,8 @@ export async function POST(req) {
       );
     }
 
+    console.log("USER:", user);
+console.log("PASSWORD:", user.password);
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return NextResponse.json(
