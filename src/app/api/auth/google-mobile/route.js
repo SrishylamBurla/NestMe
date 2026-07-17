@@ -6,6 +6,7 @@ import connectDB from "@/lib/db";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+console.log("BACKEND GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
 export async function POST(req) {
     try {
         await connectDB();
