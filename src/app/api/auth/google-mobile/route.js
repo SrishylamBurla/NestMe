@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import connectDB from "@/lib/db";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export async function POST(req) {
     try {
