@@ -4,8 +4,6 @@ import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import connectDB from "@/lib/db";
 
-
-console.log("BACKEND GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
 export async function POST(req) {
     try {
         await connectDB();
@@ -19,10 +17,12 @@ export async function POST(req) {
             );
         }
 
+
         const decoded = jwt.decode(idToken);
 
-        console.log("TOKEN AUDIENCE:", decoded.aud);
-        console.log("BACKEND GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+        console.log("TOKEN AUD:", decoded.aud);
+        console.log("TOKEN AZP:", decoded.azp);
+        console.log("BACKEND CLIENT:", process.env.GOOGLE_CLIENT_ID);
 
         const ticket = await client.verifyIdToken({
             idToken,
