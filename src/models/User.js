@@ -20,11 +20,11 @@ const userSchema = new mongoose.Schema(
     },
 
     phone: {
-  type: String,
-  unique: true,
-  sparse: true,
-  set: (val) => val.replace(/\D/g, "").slice(-10), // 🔥 FORCE ALWAYS
-},
+      type: String,
+      unique: true,
+      sparse: true,
+      set: (val) => val.replace(/\D/g, "").slice(-10), // 🔥 FORCE ALWAYS
+    },
     avatar: String,
 
     /* ===== ROLE SYSTEM ===== */
@@ -75,6 +75,10 @@ const userSchema = new mongoose.Schema(
       default: "email",
     },
 
+    googleId: {
+      type: String,
+      default: null,
+    },
     accountStatus: {
       type: String,
       enum: ["active", "suspended", "deleted"],
