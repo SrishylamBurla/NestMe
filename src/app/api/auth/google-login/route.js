@@ -49,6 +49,7 @@ export async function GET(req) {
         avatar: image,
         loginProvider: "google",
         role: "user",
+        password: null
       });
     }
 const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {

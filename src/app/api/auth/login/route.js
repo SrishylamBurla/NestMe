@@ -19,9 +19,31 @@ export async function POST(req) {
     }
 
     const user = await User.findOne({ email });
+
+    if (!user) {
+      return NextResponse.json(
+        { message: "Invalid credentials" },
+        { status: 401 }
+      );
+    }
+
+    if (
+      user.loginProvider === "google" &&
+      !user.password
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            "This account uses Google Sign-In. Please continue with Google or set a password.",
+        },
+        { status: 400 }
+      );
+    }
+
+    
     let agentProfileId = null;
 
-    if( user && user.role === "agent") {
+    if (user && user.role === "agent") {
       const profile = await AgentProfile.findOne({ user: user._id }).select("_id")
       agentProfileId = profile?._id || null;
     }
@@ -33,8 +55,8 @@ export async function POST(req) {
       );
     }
 
-    console.log("USER:", user);
-console.log("PASSWORD:", user.password);
+    // console.log("USER:", user);
+    // console.log("PASSWORD:", user.password);
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return NextResponse.json(
@@ -54,7 +76,7 @@ console.log("PASSWORD:", user.password);
       name: user.name,
       email: user.email,
       role: user.role,
-      agentProfileId, 
+      agentProfileId,
     });
 
     response.cookies.set("token", token, {
@@ -67,14 +89,14 @@ console.log("PASSWORD:", user.password);
 
     return response;
   } catch (error) {
-  console.error("LOGIN ERROR:", error);
+    console.error("LOGIN ERROR:", error);
 
-  return NextResponse.json(
-    {
-      message: error.message,
-      stack: error.stack,
-    },
-    { status: 500 }
-  );
-}
+    return NextResponse.json(
+      {
+        message: error.message,
+        stack: error.stack,
+      },
+      { status: 500 }
+    );
+  }
 }

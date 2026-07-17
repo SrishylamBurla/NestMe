@@ -59,7 +59,14 @@ export async function GET(req) {
         avatar: image,
         loginProvider: "google",
         role: "user",
+        password: null
       });
+    }
+
+    // Old users may not have loginProvider
+    if (!user.loginProvider) {
+      user.loginProvider = user.password ? "email" : "google";
+      await user.save();
     }
 
     // 🔥 STEP 4: JWT
@@ -74,10 +81,12 @@ export async function GET(req) {
       ? NextResponse.redirect("nestme://")
       : NextResponse.redirect("https://www.nestme.in/");
 
+    const isProd = process.env.NODE_ENV === "production";
+
     res.cookies.set("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
       path: "/",
     });
 

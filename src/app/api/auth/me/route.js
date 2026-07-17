@@ -30,27 +30,27 @@ export async function GET() {
 
     const user = await User.findById(decoded.id);
 
-if (!user) {
-  return NextResponse.json({ user: null });
-}
+    if (!user) {
+      return NextResponse.json({ user: null });
+    }
 
-const subscription = await Subscription.findOne({
-  user: user._id,
-});
+    const subscription = await Subscription.findOne({
+      user: user._id,
+    });
 
-if (
-  subscription &&
-  subscription.endDate &&
-  new Date(subscription.endDate) < new Date()
-) {
-  subscription.status = "expired";
-  await subscription.save();
+    if (
+      subscription &&
+      subscription.endDate &&
+      new Date(subscription.endDate) < new Date()
+    ) {
+      subscription.status = "expired";
+      await subscription.save();
 
-  if (user.role === "agent") {
-    user.role = "user";
-    await user.save();
-  }
-}
+      if (user.role === "agent") {
+        user.role = "user";
+        await user.save();
+      }
+    }
 
     let agentProfileId = null;
 
@@ -60,6 +60,13 @@ if (
     }
 
     const userData = user.toObject();
+
+    // Never send the password to the frontend
+    delete userData.password;
+
+    // Tell the frontend whether the user has a password
+    userData.hasPassword = !!user.password;
+
     return NextResponse.json({
       user: {
         ...userData,
