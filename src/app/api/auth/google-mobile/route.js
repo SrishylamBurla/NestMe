@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
-import dbConnect from "@/lib/dbConnect";
 import User from "@/models/User";
+import connectDB from "@/lib/db";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export async function POST(req) {
   try {
-    await dbConnect();
+    await connectDB();
 
     const { idToken } = await req.json();
 
