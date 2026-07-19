@@ -50,6 +50,9 @@ export async function POST(req) {
     );
   }
 
+  console.log("Property Agent:", property.agent?._id?.toString());
+console.log("Requested Property:", propertyId);
+
   /* ---------------- CREATE LEAD ---------------- */
   const lead = await Lead.create({
     property: propertyId,
@@ -64,6 +67,8 @@ export async function POST(req) {
   await Property.findByIdAndUpdate(propertyId, {
     $inc: { leadsCount: 1 },
   });
+
+  console.log("Created Lead:", lead);
 
   // Create notification
   const notification = await Notification.create({
