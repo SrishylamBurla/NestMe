@@ -293,6 +293,7 @@ export async function POST(req) {
         public_id: result.public_id,
       });
     }
+    console.log("Agent Profile ID:", agentProfileId);
 
     /* ==============================
        🏠 CREATE PROPERTY
@@ -323,7 +324,7 @@ export async function POST(req) {
       owner: user._id,
       agent:
         user.role === "agent"
-          ? user.agentProfileId
+          ? agentProfileId
           : null,
       approvalStatus: "pending",
     });
@@ -336,7 +337,7 @@ export async function POST(req) {
         $inc: { totalListings: 1 },
       });
     }
-
+console.log("Saved Property Agent:", property.agent);
     await sendPushNotificationToUsers({
       title: "🔥 New Property Listed",
       body: property.title,
