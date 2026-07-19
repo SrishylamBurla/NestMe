@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useGetMyPropertiesQuery } from "@/store/services/authApi";
-import AgentPropertyCard from "@/components/AgentPropertyCard";
+import { AgentPropertyCard } from "@/components/agent/AgentPropertyCard"
 import { ChevronLeft } from "lucide-react";
 
 export default function AdminPropertiesPage() {
