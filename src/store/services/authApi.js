@@ -38,7 +38,7 @@ export const authApi = api.injectEndpoints({
       providesTags: ["Property"],
     }),
 
-    getUserLeads: builder.query({
+    getMyLeads: builder.query({
       query: () => "/auth/leads",
       providesTags: ["UserLeads"],
     }),
@@ -56,6 +56,6 @@ export const {
   useLogoutMutation,
   useGetMeQuery,
   useGetMyPropertiesQuery,
-  useGetUserLeadsQuery,
+  useGetMyLeadsQuery,
   useGetMyEnquiriesQuery,
 } = authApi;
