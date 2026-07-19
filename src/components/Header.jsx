@@ -334,18 +334,18 @@ export default function Header() {
                 label="Dashboard"
                 onClick={() => handleNavigate("/admin/dashboard")}
               />
-              {/* <DrawerItem
+              {/* {/* <DrawerItem
                 label="Users"
                 onClick={() => handleNavigate("/admin/users")}
-              />
+              /> */}
               <DrawerItem
-                label="Properties"
-                onClick={() => handleNavigate("/admin/properties")}
+                label="Admin Properties"
+                onClick={() => handleNavigate("/admin/adminProperties")}
               />
-              <DrawerItem
+              {/* <DrawerItem
                 label="Agents"
                 onClick={() => handleNavigate("/admin/agents")}
-              /> */}
+              />  */}
             </>
           )}
         </nav>
