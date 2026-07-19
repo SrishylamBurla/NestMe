@@ -12,7 +12,7 @@ export const leadApi = api.injectEndpoints({
   { type: "Property", id: body.propertyId },
 ],
     }),
-    getMyLeads: builder.query({
+    getUserLeads: builder.query({
       query: () => "/leads/my",
     }),
 
@@ -38,7 +38,7 @@ export const leadApi = api.injectEndpoints({
 
 export const {
   useCreateLeadMutation,
-  useGetMyLeadsQuery,
+  useGetUserLeadsQuery,
   useCreateAgentLeadMutation,
   // useGetAgentLeadsQuery,
   // useGetAllLeadsQuery,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useGetUserLeadsQuery } from "@/store/services/authApi";
+import { useGetUserLeadsQuery } from "@/store/services/LeadApi";
 import { useUpdateLeadStatusMutation } from "@/store/services/LeadApi";
 import { useRouter } from "next/navigation";
 
