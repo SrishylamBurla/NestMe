@@ -3,13 +3,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useGetAgentLeadsQuery } from "@/store/services/agentApi";
+import { useGetMyLeadsQuery } from "@/store/services/authApi";
 import { useUpdateLeadStatusMutation } from "@/store/services/LeadApi";
 import { useRouter } from "next/navigation";
 
 export default function LeadsClient({ agentId }) {
   const { data, isLoading, isError } =
-    useGetAgentLeadsQuery(agentId, { skip: !agentId });
+    useGetMyLeadsQuery(agentId, { skip: !agentId });
 
   const [updateStatus] = useUpdateLeadStatusMutation();
   const router = useRouter();
