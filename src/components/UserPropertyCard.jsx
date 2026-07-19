@@ -38,9 +38,8 @@ export default function UserPropertyCard({ property }) {
       {/* ================= CARD ================= */}
       <div
         onClick={handleCardClick}
-        className={`relative bg-white/70 backdrop-blur-xl mt-2 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${
-          showBlocked ? "animate-shake border-red-400" : ""
-        }`}
+        className={`relative bg-white/70 backdrop-blur-xl mt-2 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${showBlocked ? "animate-shake border-red-400" : ""
+          }`}
       >
         {/* Blocked Overlay */}
         {showBlocked && (
@@ -88,12 +87,10 @@ export default function UserPropertyCard({ property }) {
             src={
               property.images?.[0]?.url || "/propertyImg/placeholder-property.jpg"
             }
-            width={400}
-            height={600}
             alt="property"
-            className={`object-cover transition duration-300 ${
-              property.approvalStatus === "rejected" ? "brightness-75" : ""
-            }`}
+            fill
+            className={`object-cover transition duration-300 ${property.approvalStatus === "rejected" ? "brightness-75" : ""
+              }`}
           />
 
           {/* Rejection Overlay */}
@@ -109,13 +106,12 @@ export default function UserPropertyCard({ property }) {
           {/* Status Badge */}
           <div className="absolute top-3 right-3">
             <span
-              className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                property.approvalStatus === "approved"
+              className={`px-3 py-1 text-xs font-semibold rounded-full ${property.approvalStatus === "approved"
                   ? "bg-green-500 text-white"
                   : property.approvalStatus === "pending"
                     ? "bg-yellow-400 text-black"
                     : "bg-red-500 text-white"
-              }`}
+                }`}
             >
               {property.approvalStatus}
             </span>
@@ -225,20 +221,20 @@ export default function UserPropertyCard({ property }) {
               <div className="flex justify-between items-center gap-6 text-sm text-slate-600">
                 <div className="flex items-center gap-4">
                   <span>{previewProperty.beds} Beds</span>
-                <span>{previewProperty.baths} Baths</span>
-                {previewProperty.areaSqFt && (
-                  <span>{previewProperty.areaSqFt} ft²</span>
-                )}
+                  <span>{previewProperty.baths} Baths</span>
+                  {previewProperty.areaSqFt && (
+                    <span>{previewProperty.areaSqFt} ft²</span>
+                  )}
                 </div>
                 <button
-                onClick={() => setPreviewProperty(null)}
-                className="px-6 py-2 bg-slate-200 rounded-full text-red-500 hover:bg-slate-300 transition"
-              >
-                Close
-              </button>
+                  onClick={() => setPreviewProperty(null)}
+                  className="px-6 py-2 bg-slate-200 rounded-full text-red-500 hover:bg-slate-300 transition"
+                >
+                  Close
+                </button>
               </div>
 
-              
+
             </div>
           </div>
         </div>
