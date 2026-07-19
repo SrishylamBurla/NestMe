@@ -339,8 +339,8 @@ export default function Header() {
                 onClick={() => handleNavigate("/admin/users")}
               /> */}
               <DrawerItem
-                label="Admin Properties"
-                onClick={() => handleNavigate("/admin/adminProperties")}
+                label="My Properties"
+                onClick={() => handleNavigate("/my-properties")}
               />
               {/* <DrawerItem
                 label="Agents"
