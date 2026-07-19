@@ -24,6 +24,12 @@ export async function POST(req) {
     })
     .populate("owner", "email name pushTokens");
 
+  console.log("========== CREATE LEAD ==========");
+console.log("Property ID:", propertyId);
+console.log("Property Agent:", property.agent);
+console.log("Property Agent ID:", property.agent?._id?.toString());
+console.log("Property Owner:", property.owner?._id?.toString());
+
   if (!property)
     return NextResponse.json(
       { message: "Property not found" },
@@ -50,8 +56,6 @@ export async function POST(req) {
     );
   }
 
-  console.log("Property Agent:", property.agent?._id?.toString());
-console.log("Requested Property:", propertyId);
 
   /* ---------------- CREATE LEAD ---------------- */
   const lead = await Lead.create({
@@ -83,26 +87,26 @@ console.log("Requested Property:", propertyId);
     entityId: lead._id,
   });
 
- 
+
 
   // 🔥 REAL-TIME (SOCKET)
   sendNotification(receiverUserId.toString(), notification);
-// 🔔 PUSH NOTIFICATION (OPTIMIZED)
-let pushTokens = [];
+  // 🔔 PUSH NOTIFICATION (OPTIMIZED)
+  let pushTokens = [];
 
-if (receiverType === "agent") {
-  pushTokens = property.agent?.user?.pushTokens || [];
-} else {
-  pushTokens = property.owner?.pushTokens || [];
-}
+  if (receiverType === "agent") {
+    pushTokens = property.agent?.user?.pushTokens || [];
+  } else {
+    pushTokens = property.owner?.pushTokens || [];
+  }
 
-if (pushTokens.length > 0) {
-  await sendPush(
-    pushTokens,
-    "New Lead Received",
-    `New enquiry for ${property.title}`
-  );
-}
+  if (pushTokens.length > 0) {
+    await sendPush(
+      pushTokens,
+      "New Lead Received",
+      `New enquiry for ${property.title}`
+    );
+  }
 
   // Create notification
   // await Notification.create({
