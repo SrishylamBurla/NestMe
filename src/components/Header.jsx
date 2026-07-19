@@ -334,7 +334,7 @@ export default function Header() {
                 label="Dashboard"
                 onClick={() => handleNavigate("/admin/dashboard")}
               />
-              <DrawerItem
+              {/* <DrawerItem
                 label="Users"
                 onClick={() => handleNavigate("/admin/users")}
               />
@@ -345,7 +345,7 @@ export default function Header() {
               <DrawerItem
                 label="Agents"
                 onClick={() => handleNavigate("/admin/agents")}
-              />
+              /> */}
             </>
           )}
         </nav>
