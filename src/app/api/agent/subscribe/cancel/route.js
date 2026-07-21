@@ -42,12 +42,18 @@ export async function POST() {
 
   // 🔥 IMMEDIATE DOWNGRADE
   user.role='user';
-user.agentProfileId=null;
+
 user.subscriptionId=null;
 
 await user.save();
 
   return NextResponse.json({
-    message: "Subscription cancelled. You are now a normal user.",
-  });
+  success: true,
+  message: "Subscription cancelled successfully.",
+  user: {
+    role: user.role,
+    agentProfileId: user.agentProfileId,
+    subscriptionId: user.subscriptionId,
+  },
+});
 }
