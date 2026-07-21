@@ -42,7 +42,7 @@ export async function POST() {
 
   // 🔥 IMMEDIATE DOWNGRADE
   user.role='user';
-
+user.agentProfileId=null;
 user.subscriptionId=null;
 
 await user.save();
