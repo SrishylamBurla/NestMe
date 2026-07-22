@@ -92,7 +92,7 @@ export async function POST(req, context) {
 
     // notification
     await Notification.create({
-  user: authUser._id,
+  user: property.agentProfile._id,
   title: "New Lead Created",
   message: `Lead created for "${property.title}"`,
   type: "lead-received",
