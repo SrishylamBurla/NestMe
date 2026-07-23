@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import connectDB from "@/lib/db";
-import { getAuthUser } from "@/lib/getAuthUser";
+import { getAuthUser } from "@/lib/getAuthUser"
 
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
@@ -16,6 +16,7 @@ export async function POST(req) {
 
     const user = await getAuthUser();
 
+    
     const body = await req.json();
 
     const {
@@ -24,6 +25,8 @@ export async function POST(req) {
       priority,
       message,
     } = body;
+
+
 
     if (!subject || !message) {
       return NextResponse.json(
@@ -67,18 +70,20 @@ export async function POST(req) {
       }
     );
   } catch (err) {
-    console.error(err);
+  console.error("========== SUPPORT ERROR ==========");
+  console.error(err);
+  console.error(err.stack);
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Internal Server Error",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+  return NextResponse.json(
+    {
+      success: false,
+      message: err.message,
+    },
+    {
+      status: 500,
+    }
+  );
+}
 }
 
 /* ==========================================
