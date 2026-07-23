@@ -80,14 +80,12 @@ const supportTicketSchema = new mongoose.Schema(
   }
 );
 
-supportTicketSchema.pre("save", function (next) {
+supportTicketSchema.pre("save", function () {
   if (!this.ticketNumber) {
     this.ticketNumber =
       "NM-" +
       Date.now().toString().slice(-6);
   }
-
-  next();
 });
 
 export default mongoose.models.SupportTicket ||
