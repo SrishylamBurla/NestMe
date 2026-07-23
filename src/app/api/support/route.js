@@ -1,52 +1,36 @@
 import { NextResponse } from "next/server";
+
 import connectDB from "@/lib/db";
-import Support from "@/models/Support";
-import Notification from "@/models/Notification";
 import { getAuthUser } from "@/lib/getAuthUser";
-import User from "@/models/User";
 
+import SupportTicket from "@/models/SupportTicket";
+import SupportMessage from "@/models/SupportMessage";
 
+/* ==========================================
+   CREATE TICKET
+========================================== */
 
 export async function POST(req) {
   try {
-
     await connectDB();
 
-    const user =
-      await getAuthUser();
+    const user = await getAuthUser();
 
-    if (!user) {
-
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    // =========================
-    // BODY
-    // =========================
-
-    const body =
-      await req.json();
+    const body = await req.json();
 
     const {
-      text,
-      file,
       subject,
-      ticketId,
+      category,
+      priority,
+      message,
     } = body;
 
-    // =========================
-    // VALIDATION
-    // =========================
-
-    if (!text?.trim()) {
-
+    if (!subject || !message) {
       return NextResponse.json(
         {
-          error:
-            "Message is required",
+          success: false,
+          message:
+            "Subject and message are required.",
         },
         {
           status: 400,
@@ -54,136 +38,41 @@ export async function POST(req) {
       );
     }
 
-    let ticket = null;
-
-    // =========================
-    // EXISTING TICKET
-    // =========================
-
-    if (ticketId) {
-
-      ticket =
-        await Support.findById(
-          ticketId
-        );
-    }
-
-    // =========================
-    // CREATE NEW TICKET
-    // =========================
-
-    if (!ticket) {
-
-      ticket =
-        new Support({
-
-          user:
-            user._id,
-
-          subject:
-            subject ||
-            "Support Chat",
-
-          status:
-            "open",
-
-          messages: [
-            {
-              sender:
-                "user",
-
-              text,
-
-              file:
-                file || "",
-            },
-          ],
-        });
-
-    } else {
-
-      // =========================
-      // ADD MESSAGE
-      // =========================
-
-      ticket.messages.push({
-
-        sender:
-          "user",
-
-        text,
-
-        file:
-          file || "",
+    const ticket =
+      await SupportTicket.create({
+        user: user._id,
+        subject,
+        category,
+        priority,
+        lastMessage: message,
+        lastMessageAt: new Date(),
+        unreadAdmin: 1,
       });
 
-      ticket.status =
-        "open";
-    }
-
-    // =========================
-    // SAVE
-    // =========================
-
-    await ticket.save();
-
-    // =========================
-    // NOTIFY ADMINS
-    // =========================
-
-    const admins =
-      await User.find({
-        role: "admin",
-      });
-
-    if (admins.length > 0) {
-
-      await Notification.insertMany(
-
-        admins.map(
-          (admin) => ({
-
-            user:
-              admin._id,
-
-            title:
-              "New Support Message",
-
-            message:
-              text,
-
-            link:
-              "/admin/support",
-          })
-        )
-      );
-    }
-
-    // =========================
-    // FETCH UPDATED TICKET
-    // =========================
-
-    const updatedTicket =
-      await Support.findById(
-        ticket._id
-      ).lean();
-
-    return NextResponse.json(
-      updatedTicket
-    );
-
-  } catch (error) {
-
-    console.error(
-      "CREATE SUPPORT ERROR:",
-      error
-    );
+    await SupportMessage.create({
+      ticket: ticket._id,
+      sender: user._id,
+      senderRole: "user",
+      message,
+    });
 
     return NextResponse.json(
       {
-        error:
-          error.message ||
-          "Something went wrong",
+        success: true,
+        message: "Ticket created successfully.",
+        ticket,
+      },
+      {
+        status: 201,
+      }
+    );
+  } catch (err) {
+    console.error(err);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
       },
       {
         status: 500,
@@ -192,32 +81,38 @@ export async function POST(req) {
   }
 }
 
-// ============================
-// ✅ GET USER TICKETS
-// ============================
+/* ==========================================
+   GET MY TICKETS
+========================================== */
+
 export async function GET() {
   try {
     await connectDB();
 
     const user = await getAuthUser();
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
 
-    const tickets = await Support.find({ user: user._id })
-      .sort({ createdAt: -1 });
+    const tickets =
+      await SupportTicket.find({
+        user: user._id,
+        isArchived: false,
+      }).sort({
+        updatedAt: -1,
+      });
 
-    return NextResponse.json(tickets);
-
-  } catch (error) {
-    console.error("GET SUPPORT ERROR:", error);
+    return NextResponse.json({
+      success: true,
+      tickets,
+    });
+  } catch (err) {
+    console.error(err);
 
     return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
+      {
+        success: false,
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

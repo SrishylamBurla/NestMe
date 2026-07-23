@@ -6,6 +6,10 @@ export const api = createApi({
     baseUrl: "/api",
     credentials: "include",
   }),
-  tagTypes: ["Agent", "Property", "Admin", "User", "UserLeads", "Lead", "Notification", "Saved", "Properties", "Subscription", "Enquiries", "Leads", "PendingProperties"],
+  tagTypes: [
+    "SupportTickets",
+    "SupportTicket",
+    "Agent",
+    "Property", "Admin", "User", "UserLeads", "Lead", "Notification", "Saved", "Properties", "Subscription", "Enquiries", "Leads", "PendingProperties"],
   endpoints: () => ({}),
 });
