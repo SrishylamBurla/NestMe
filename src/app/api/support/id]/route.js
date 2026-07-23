@@ -11,7 +11,17 @@ export async function GET(req, { params }) {
     await connectDB();
 
     const user = await getAuthUser();
-
+if (!user) {
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Unauthorized",
+    },
+    {
+      status: 401,
+    }
+  );
+}
     const { id } = params;
 
     const ticket = await SupportTicket.findById(id)

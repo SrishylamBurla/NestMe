@@ -17,6 +17,7 @@ export async function POST(req) {
     console.log("STEP 2");
     const user = await getAuthUser();
 
+    
     console.log("STEP 3", user);
 
     const body = await req.json();
