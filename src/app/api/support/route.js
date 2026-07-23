@@ -28,6 +28,7 @@ export async function POST(req) {
     console.log("STEP 5");
 
     const ticket = await SupportTicket.create({
+      ticketNumber: `NM-${Date.now().toString().slice(-6)}`,
       user: user._id,
       subject,
       category,
