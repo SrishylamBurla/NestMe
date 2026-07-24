@@ -17,7 +17,7 @@ export async function POST(req) {
     console.log("STEP 2");
     const user = await getAuthUser();
 
-    
+
     console.log("STEP 3", user);
 
     const body = await req.json();
@@ -73,35 +73,39 @@ export async function POST(req) {
 /* ==========================================
    GET MY TICKETS
 ========================================== */
-
 export async function GET() {
   try {
+    console.log("========== SUPPORT GET ==========");
+
     await connectDB();
+    console.log("DB Connected");
 
     const user = await getAuthUser();
+    console.log("User:", user?._id);
 
-    const tickets =
-      await SupportTicket.find({
-        user: user._id,
-        isArchived: false,
-      }).sort({
-        updatedAt: -1,
-      });
+    const tickets = await SupportTicket.find({
+      user: user._id,
+    }).sort({
+      updatedAt: -1,
+    });
+
+    console.log("Tickets:", tickets);
+
+    console.log("Tickets found:", tickets.length);
 
     return NextResponse.json({
       success: true,
       tickets,
     });
   } catch (err) {
-    console.error(err);
+    console.error("SUPPORT GET ERROR:", err);
 
     return NextResponse.json(
       {
         success: false,
+        message: err.message,
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
