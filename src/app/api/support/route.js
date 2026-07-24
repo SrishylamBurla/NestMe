@@ -11,26 +11,27 @@ import SupportMessage from "@/models/SupportMessage";
 ========================================== */
 export async function POST(req) {
   try {
-    console.log("STEP 1");
     await connectDB();
-
-    console.log("STEP 2");
     const user = await getAuthUser();
 
-
-    console.log("STEP 3", user);
+    if (!["user", "agent"].includes(user.role)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Only users and agents can create support tickets.",
+        },
+        { status: 403 }
+      );
+    }
 
     const body = await req.json();
 
-    console.log("STEP 4", body);
-
     const { subject, category, priority, message } = body;
 
-    console.log("STEP 5");
-
     const ticket = await SupportTicket.create({
-      ticketNumber: `NM-${Date.now().toString().slice(-6)}`,
+      ticketNumber: `NM-${Date.now().toString().slice(-6)}-${Math.floor(Math.random() * 900 + 100)}`,
       user: user._id,
+      createdByRole: user.role,
       subject,
       category,
       priority,
@@ -39,16 +40,14 @@ export async function POST(req) {
       unreadAdmin: 1,
     });
 
-    console.log("STEP 6");
 
     await SupportMessage.create({
       ticket: ticket._id,
       sender: user._id,
-      senderRole: "user",
+      senderRole: user.role,
       message,
     });
 
-    console.log("STEP 7");
 
     return NextResponse.json({
       success: true,
@@ -75,23 +74,16 @@ export async function POST(req) {
 ========================================== */
 export async function GET() {
   try {
-    console.log("========== SUPPORT GET ==========");
 
     await connectDB();
-    console.log("DB Connected");
 
     const user = await getAuthUser();
-    console.log("User:", user?._id);
 
     const tickets = await SupportTicket.find({
       user: user._id,
     }).sort({
       updatedAt: -1,
     });
-
-    console.log("Tickets:", tickets);
-
-    console.log("Tickets found:", tickets.length);
 
     return NextResponse.json({
       success: true,

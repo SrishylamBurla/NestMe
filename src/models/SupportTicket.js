@@ -58,6 +58,12 @@ const supportTicketSchema = new mongoose.Schema(
       default: null,
     },
 
+    createdByRole: {
+      type: String,
+      enum: ["user", "agent"],
+      required: true,
+    },
+    
     lastMessage: {
       type: String,
       default: "",
@@ -89,7 +95,7 @@ supportTicketSchema.pre("save", function () {
 });
 
 export default mongoose.models.SupportTicket ||
-mongoose.model(
-  "SupportTicket",
-  supportTicketSchema
-);
+  mongoose.model(
+    "SupportTicket",
+    supportTicketSchema
+  );

@@ -95,6 +95,14 @@ export const supportApi = apiSlice.injectEndpoints({
         { type: "SupportTicket", id },
       ],
     }),
+
+    getAdminSupportTickets: builder.query({
+      query: () => ({
+        url: "/admin/support",
+        method: "GET",
+      }),
+      providesTags: ["AdminSupportTickets"],
+    }),
   }),
 });
 
@@ -109,6 +117,6 @@ export const {
   useReplySupportTicketMutation,
 
   useMarkSupportReadMutation,
-
+  useGetAdminSupportTicketsQuery,
   useCloseSupportTicketMutation,
 } = supportApi;
