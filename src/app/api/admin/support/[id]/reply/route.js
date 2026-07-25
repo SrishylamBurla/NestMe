@@ -1,44 +1,95 @@
 import { NextResponse } from "next/server";
+
 import connectDB from "@/lib/db";
-import Support from "@/models/Support";
-import { sendMessageToUser } from "@/lib/socket";
+import { getAuthUser } from "@/lib/getAuthUser";
 
-export async function POST(req) {
-  await connectDB();
+import SupportTicket from "@/models/SupportTicket";
+import SupportMessage from "@/models/SupportMessage";
 
-  const { ticketId, message } =
-    await req.json();
+export async function POST(req, context) {
+  try {
+    await connectDB();
 
-  const ticket =
-    await Support.findById(ticketId);
+    const admin = await getAuthUser();
 
-  if (!ticket) {
+    if (!admin || admin.role !== "admin") {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        {
+          status: 403,
+        }
+      );
+    }
+
+    const { id } = await context.params;
+
+    const ticket = await SupportTicket.findById(id);
+
+    if (!ticket.assignedTo) {
+      ticket.assignedTo = admin._id;
+    }
+
+    if (!ticket) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Ticket not found",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    const body = await req.json();
+
+    const { message } = body;
+
+    if (!message?.trim()) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Message is required",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const supportMessage = await SupportMessage.create({
+      ticket: ticket._id,
+      sender: admin._id,
+      senderRole: "admin",
+      message,
+    });
+
+    ticket.lastMessage = message;
+    ticket.lastMessageAt = new Date();
+
+    ticket.unreadUser += 1;
+    ticket.status = "waiting";
+    await ticket.save();
+
+    return NextResponse.json({
+      success: true,
+      message: supportMessage,
+    });
+
+  } catch (err) {
+    console.error(err);
+
     return NextResponse.json(
-      { error: "Ticket not found" },
-      { status: 404 }
+      {
+        success: false,
+        message: err.message,
+      },
+      {
+        status: 500,
+      }
     );
   }
-
-  // ✅ save admin message
-  ticket.messages.push({
-    sender: "admin",
-    text: message,
-  });
-
-  await ticket.save();
-
-  // ✅ full updated ticket
-  const updatedTicket =
-    await Support.findById(ticketId)
-      .lean();
-
-  // ⚡ realtime emit
-  sendMessageToUser(
-    ticket.user.toString(),
-    updatedTicket
-  );
-
-  return NextResponse.json(
-    updatedTicket
-  );
 }

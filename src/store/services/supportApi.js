@@ -103,7 +103,54 @@ export const supportApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["AdminSupportTickets"],
     }),
+
+    getAdminSupportTicket: builder.query({
+      query: (ticketId) => ({
+        url: `/admin/support/${ticketId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [
+        { type: "AdminSupportTicket", id },
+      ],
+    }),
+
+    replyAdminSupportTicket: builder.mutation({
+      query: ({ ticketId, message }) => ({
+        url: `/admin/support/${ticketId}/reply`,
+        method: "POST",
+        body: { message },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "AdminSupportTicket", id: arg.ticketId },
+        "AdminSupportTickets",
+      ],
+    }),
+
+    assignSupportTicket: builder.mutation({
+      query: (ticketId) => ({
+        url: `/admin/support/${ticketId}/assign`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "AdminSupportTicket", id },
+        "AdminSupportTickets",
+      ],
+    }),
+
+    updateSupportStatus: builder.mutation({
+      query: ({ ticketId, status }) => ({
+        url: `/admin/support/${ticketId}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "AdminSupportTicket", id: arg.ticketId },
+        "AdminSupportTickets",
+      ],
+    }),
+
   }),
+
 });
 
 export const {
@@ -115,4 +162,8 @@ export const {
   useMarkSupportReadMutation,
   useGetAdminSupportTicketsQuery,
   useCloseSupportTicketMutation,
+  useGetAdminSupportTicketQuery,
+  useReplyAdminSupportTicketMutation,
+  useAssignSupportTicketMutation,
+  useUpdateSupportStatusMutation,
 } = supportApi;
