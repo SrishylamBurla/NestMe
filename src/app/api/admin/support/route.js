@@ -25,7 +25,7 @@ export async function GET() {
     }
 
     const tickets = await SupportTicket.find({})
-      .populate("user", "name email phone profileImage")
+      .populate("user", "name email phone avatar")
       .populate("assignedTo", "name email")
       .select(
         "ticketNumber subject category priority status assignedTo user lastMessage lastMessageAt unreadAdmin updatedAt createdAt"
