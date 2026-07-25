@@ -9,6 +9,7 @@ export const api = createApi({
   tagTypes: [
     "SupportTickets",
     "SupportTicket",
+    "AdminSupportTickets",
     "Agent",
     "Property", "Admin", "User", "UserLeads", "Lead", "Notification", "Saved", "Properties", "Subscription", "Enquiries", "Leads", "PendingProperties"],
   endpoints: () => ({}),

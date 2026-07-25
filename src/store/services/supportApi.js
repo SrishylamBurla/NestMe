@@ -109,13 +109,9 @@ export const supportApi = apiSlice.injectEndpoints({
 export const {
   useGetSupportTicketsQuery,
   useGetSupportTicketQuery,
-
   useCreateSupportTicketMutation,
-
   useSendSupportMessageMutation,
-
   useReplySupportTicketMutation,
-
   useMarkSupportReadMutation,
   useGetAdminSupportTicketsQuery,
   useCloseSupportTicketMutation,
