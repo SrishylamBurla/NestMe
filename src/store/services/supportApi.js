@@ -160,8 +160,9 @@ export const {
   useSendSupportMessageMutation,
   useReplySupportTicketMutation,
   useMarkSupportReadMutation,
-  useGetAdminSupportTicketsQuery,
   useCloseSupportTicketMutation,
+
+   useGetAdminSupportTicketsQuery,
   useGetAdminSupportTicketQuery,
   useReplyAdminSupportTicketMutation,
   useAssignSupportTicketMutation,
