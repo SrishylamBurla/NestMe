@@ -6,7 +6,7 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
 
-export async function POST(req, { params }) {
+export async function POST(req, context) {
   try {
     await connectDB();
 
@@ -25,7 +25,7 @@ export async function POST(req, { params }) {
       );
     }
 
-    const { id } = params;
+    const { id } = await context.params;
 
     const { message, attachments = [] } =
       await req.json();
@@ -94,7 +94,7 @@ export async function POST(req, { params }) {
 
     await reply.populate(
       "sender",
-      "name profileImage role"
+      "name avatar role"
     );
 
     /*

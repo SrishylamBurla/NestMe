@@ -5,14 +5,11 @@ import { getAuthUser } from "@/lib/getAuthUser";
 
 import SupportTicket from "@/models/SupportTicket";
 
-export async function PATCH(req, { params }) {
+export async function PATCH(req, context) {
   try {
     await connectDB();
-
     const user = await getAuthUser();
-
-    const { id } = params;
-
+    const { id } = await context.params;
     const ticket = await SupportTicket.findById(id);
 
     if (!ticket) {

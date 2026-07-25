@@ -6,13 +6,13 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
 
-export async function POST(req, { params }) {
+export async function POST(req, context) {
   try {
     await connectDB();
 
     const user = await getAuthUser();
 
-    const { id } = params;
+    const { id } = await context.params;
 
     const { message, attachments = [] } = await req.json();
 
@@ -69,7 +69,7 @@ export async function POST(req, { params }) {
     const newMessage = await SupportMessage.create({
       ticket: ticket._id,
       sender: user._id,
-      senderRole: "user",
+      senderRole: user.role,
       message,
       attachments,
       deliveredAt: new Date(),
@@ -86,7 +86,7 @@ export async function POST(req, { params }) {
 
     await newMessage.populate(
       "sender",
-      "name profileImage role"
+      "name avatar role"
     );
 
     /*

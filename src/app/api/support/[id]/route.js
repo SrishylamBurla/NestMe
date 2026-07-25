@@ -11,21 +11,21 @@ export async function GET(req, { params }) {
     await connectDB();
 
     const user = await getAuthUser();
-if (!user) {
-  return NextResponse.json(
-    {
-      success: false,
-      message: "Unauthorized",
-    },
-    {
-      status: 401,
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        { status: 401 }
+      );
     }
-  );
-}
+
     const { id } = params;
 
     const ticket = await SupportTicket.findById(id)
-      .populate("user", "name email profileImage")
+      .populate("user", "name email avatar role")
       .populate("assignedTo", "name");
 
     if (!ticket) {
@@ -34,17 +34,14 @@ if (!user) {
           success: false,
           message: "Ticket not found",
         },
-        {
-          status: 404,
-        }
+        { status: 404 }
       );
     }
 
     const isOwner =
       ticket.user._id.toString() === user._id.toString();
 
-    const isAdmin =
-      user.role === "admin";
+    const isAdmin = user.role === "admin";
 
     if (!isOwner && !isAdmin) {
       return NextResponse.json(
@@ -52,24 +49,19 @@ if (!user) {
           success: false,
           message: "Unauthorized",
         },
-        {
-          status: 403,
-        }
+        { status: 403 }
       );
     }
 
     const messages = await SupportMessage.find({
       ticket: ticket._id,
     })
-      .populate(
-        "sender",
-        "name profileImage role"
-      )
+      .populate("sender", "name email avatar role")
       .sort({
         createdAt: 1,
       });
 
-    // Mark admin messages as read when user opens ticket
+    // Customer (User/Agent) opens ticket
     if (isOwner) {
       await SupportMessage.updateMany(
         {
@@ -89,12 +81,14 @@ if (!user) {
       await ticket.save();
     }
 
-    // Mark user messages as read when admin opens ticket
+    // Admin opens ticket
     if (isAdmin) {
       await SupportMessage.updateMany(
         {
           ticket: ticket._id,
-          senderRole: "user",
+          senderRole: {
+            $in: ["user", "agent"],
+          },
           isRead: false,
         },
         {
@@ -115,16 +109,14 @@ if (!user) {
       messages,
     });
   } catch (error) {
-    console.error(error);
+    console.error("GET SUPPORT TICKET ERROR:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Internal Server Error",
+        message: error.message,
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
