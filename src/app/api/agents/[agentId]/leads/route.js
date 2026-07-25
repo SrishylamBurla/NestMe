@@ -96,6 +96,7 @@ export async function POST(req, context) {
   title: "New Lead Created",
   message: `Lead created for "${property.title}"`,
   type: "lead-received",
+  entityId: property._id,
   link: `/agents/${agentId}/leads`,
 });
 

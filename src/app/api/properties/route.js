@@ -352,6 +352,7 @@ console.log("Saved Property Agent:", property.agent);
       title: "Property Under Review ⏳",
       message: `Your property "${property.title}" is under admin review.`,
       type: "property-created",
+      entityId: property._id,
       link: "/my-properties",
     });
 

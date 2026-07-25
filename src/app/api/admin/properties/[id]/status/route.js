@@ -71,6 +71,7 @@ export async function PUT(req, context) {
       title,
       message,
       type,
+      entityId: property._id,
       link: "/my-properties",
     });
 
