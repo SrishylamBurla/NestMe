@@ -62,7 +62,7 @@ export async function POST(req) {
         user: property.agent.user._id,
         type: "lead-received",
         message: `New lead on "${property.title}"`,
-        entityId: property._id,
+        entityId: lead._id,
         link: `/agents/${property.agent._id}/leads`,
       });
     }
@@ -72,7 +72,7 @@ export async function POST(req) {
       user: property.owner,
       type: "lead-received",
       message: `New enquiry for your property "${property.title}"`,
-      entityId: property._id,
+      entityId: lead._id,
       link: `/me/enquiries`,
     });
 
