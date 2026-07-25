@@ -11,7 +11,6 @@ export async function GET() {
 
     const admin = await getAuthUser();
 
-    // Optional: protect the route
     if (!admin || admin.role !== "admin") {
       return NextResponse.json(
         {

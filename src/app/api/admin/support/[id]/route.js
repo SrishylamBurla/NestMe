@@ -45,7 +45,7 @@ export async function GET(req, context) {
     }
 
     const messages = await SupportMessage.find({
-      ticket: params.id,
+      ticket: id,
     })
       .populate("sender", "name role avatar")
       .sort({
