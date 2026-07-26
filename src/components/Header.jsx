@@ -13,6 +13,7 @@ import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import { io } from "socket.io-client";
+import { notificationApi } from "@/store/services/notificationApi";
 
 export default function Header() {
   const router = useRouter();
@@ -64,9 +65,16 @@ export default function Header() {
 
     socket.emit("join", user._id);
 
-    socket.on("notification", (data) => {
-
-      refetch(); // 🔥 refresh instantly
+    socket.on("notification", (notification) => {
+      dispatch(
+        notificationApi.util.updateQueryData(
+          "getNotifications",
+          undefined,
+          (draft) => {
+            draft.unshift(notification);
+          },
+        ),
+      );
     });
 
     return () => socket.disconnect();
@@ -81,7 +89,7 @@ export default function Header() {
         JSON.stringify({
           type: "USER_DATA",
           userId: user._id,
-        })
+        }),
       );
     }
   }, [user]);
@@ -149,8 +157,8 @@ export default function Header() {
   return (
     <>
       {/* ================= HEADER ================= */}
-    <header
-  className="
+      <header
+        className="
   fixed top-0 left-0 w-full z-50
   bg-[rgba(0,0,0,0.8)]
   px-2 sm:px-4 py-2
@@ -158,21 +166,21 @@ export default function Header() {
   border-b border-white/10
   backdrop-blur-xl mobile-safe-top
 "
-  // style={{
-  //   paddingTop: "max(env(safe-area-inset-top), 12px)",
-  // }}
->
-{!user && (
-        <div>
-          <Image
-            src={"/splashlogo.png"}
-            alt="logo"
-            width={50}
-            height={50}
-            className="object-cover pt-2"
-          />
-        </div>
-      )}
+        // style={{
+        //   paddingTop: "max(env(safe-area-inset-top), 12px)",
+        // }}
+      >
+        {!user && (
+          <div>
+            <Image
+              src={"/splashlogo.png"}
+              alt="logo"
+              width={50}
+              height={50}
+              className="object-cover pt-2"
+            />
+          </div>
+        )}
         {user && (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -189,9 +197,9 @@ export default function Header() {
           </div> */}
             <div
               className="flex items-center gap-1 cursor-pointer"
-            // onClick={() => {
-            //   handleNavigate("/");
-            // }}
+              // onClick={() => {
+              //   handleNavigate("/");
+              // }}
             >
               <Image
                 src={"/splashlogo.png"}
@@ -420,10 +428,11 @@ export default function Header() {
                           handleNavigate(n.link);
                         }}
                         className={`flex gap-3 p-4 rounded-xl cursor-pointer transition-all
-                    ${!n.isRead
-                            ? "bg-indigo-50 hover:bg-indigo-100"
-                            : "bg-gray-100 hover:bg-gray-200"
-                          }`}
+                    ${
+                      !n.isRead
+                        ? "bg-indigo-50 hover:bg-indigo-100"
+                        : "bg-gray-100 hover:bg-gray-200"
+                    }`}
                       >
                         {/* Icon */}
                         <span className="material-symbols-outlined text-violet-500 mt-1 pt-2">
@@ -460,13 +469,13 @@ export default function Header() {
           {Object.values(groupedNotifications).every(
             (items) => items.length === 0,
           ) && (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <span className="material-symbols-outlined text-4xl mb-2">
-                  notifications_off
-                </span>
-                <p className="text-sm">No notifications yet</p>
-              </div>
-            )}
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <span className="material-symbols-outlined text-4xl mb-2">
+                notifications_off
+              </span>
+              <p className="text-sm">No notifications yet</p>
+            </div>
+          )}
         </div>
       </div>
     </>
