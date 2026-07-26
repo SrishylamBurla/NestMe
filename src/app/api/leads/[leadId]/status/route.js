@@ -11,41 +11,30 @@ export async function PUT(req, context) {
     const user = await getAuthUser();
 
     if (!user) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { leadId } = await context.params;
     const { status } = await req.json();
 
     if (!mongoose.Types.ObjectId.isValid(leadId)) {
-      return NextResponse.json(
-        { message: "Invalid lead id" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Invalid lead id" }, { status: 400 });
     }
 
     // IMPORTANT: populate property
     const lead = await Lead.findById(leadId)
-      // .populate("property");
-      // await Lead.findById(id)
-  .populate("user", "name email")
-  .populate("property")
-  .populate({
-    path: "agent",
-    populate: {
-      path: "user",
-      select: "name email phone",
-    },
-  });
+      .populate("user", "name email")
+      .populate("property")
+      .populate({
+        path: "agent",
+        populate: {
+          path: "user",
+          select: "name email phone",
+        },
+      });
 
     if (!lead) {
-      return NextResponse.json(
-        { message: "Lead not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Lead not found" }, { status: 404 });
     }
 
     //  Agent check
@@ -54,14 +43,10 @@ export async function PUT(req, context) {
       user.agentProfileId.toString() === lead.agent?.toString();
 
     //  Owner check
-    const isOwner =
-      lead.property?.owner?.toString() === user._id.toString();
+    const isOwner = lead.property?.owner?.toString() === user._id.toString();
 
     if (!isAgent && !isOwner) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
     lead.status = status;
@@ -71,12 +56,8 @@ export async function PUT(req, context) {
       message: "Status updated",
       lead,
     });
-
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { message: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
