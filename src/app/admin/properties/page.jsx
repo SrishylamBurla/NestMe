@@ -431,7 +431,7 @@ export default function AdminPropertiesPage() {
   <div className="flex items-center justify-center gap-2">
 
     <Link
-      href={`/properties/${property._id}`}
+      href={`/admin/properties/${property._id}`}
       className="
         px-3 py-2
         rounded-lg

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import PremiumSplash from "@/components/PremiumSplash";
 import ListingOptionsSection from "@/components/subscription/ListingOptionsSection";
-import HelpWidget from "@/components/HelpWidget";
+// import HelpWidget from "@/components/HelpWidget";
 import { useGetMeQuery } from "@/store/services/authApi";
 import Image from "next/image";
 // import PageContainer from "@/components/PageContainer";
@@ -48,7 +48,7 @@ export default function HomePage() {
     // <PageContainer>
     <div className="">
       <Header />
-      {user && <HelpWidget />}
+      {/* {user && <HelpWidget />} */}
       <main className="bg-[#f9fafb] overflow-x-hidden">
 
         {/* HERO */}
