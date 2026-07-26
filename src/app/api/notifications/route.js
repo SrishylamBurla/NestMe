@@ -7,9 +7,17 @@ export async function GET() {
   await connectDB();
   const user = await getAuthUser();
 
-  const notifications = await Notification.find({ user: user._id })
+  const { searchParams } = new URL(req.url);
+  const page = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 20;
+  const skip = (page - 1) * limit;
+
+  const notifications = await Notification.find({
+    user: user._id,
+  })
     .sort({ createdAt: -1 })
-    .limit(50);
+    .skip(skip)
+    .limit(limit);
 
   return NextResponse.json(notifications);
 }

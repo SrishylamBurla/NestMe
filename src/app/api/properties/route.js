@@ -337,7 +337,7 @@ export async function POST(req) {
         $inc: { totalListings: 1 },
       });
     }
-console.log("Saved Property Agent:", property.agent);
+
     await sendPushNotificationToUsers({
       title: "🔥 New Property Listed",
       body: property.title,
@@ -363,19 +363,31 @@ console.log("Saved Property Agent:", property.agent);
       type: "property-created",
       link: "/my-properties",
     });
+
+    
     /* ==============================
        🔔 ADMIN NOTIFICATIONS
     ============================== */
     const admins = await User.find({ role: "admin" }).select("_id email name");
 
     if (admins.length) {
-      admins.forEach((admin) => {
-        sendNotification(admin._id.toString(), {
-          title: "New Property Pending Approval",
-          message: `New property "${property.title}" submitted by ${user.name}`,
-          type: "system",
-          link: "/admin/properties",
-        });
+      admins.forEach( async (admin) => {
+        const notification = await Notification.create({
+    user: admin._id,
+    title: "New Property Pending Approval",
+    message: `New property "${property.title}" submitted by ${user.name}`,
+    type: "system",
+    entityId: property._id,
+    link: "/admin/properties",
+});
+
+sendNotification(admin._id.toString(), notification);
+        // sendNotification(admin._id.toString(), {
+        //   title: "New Property Pending Approval",
+        //   message: `New property "${property.title}" submitted by ${user.name}`,
+        //   type: "system",
+        //   link: "/admin/properties",
+        // });
       });
     }
 

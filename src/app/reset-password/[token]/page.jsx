@@ -11,29 +11,62 @@ export default function ResetPasswordPage() {
   const router = useRouter();
 
   const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(`/api/auth/reset-password/${token}`, {
-      method: "POST",
-      body: JSON.stringify({ password }),
-    });
+    setMessage("");
+    setError("");
 
-    const data = await res.json();
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
 
-    if (res.ok) {
-      setMsg("Password updated successfully");
-      setTimeout(() => router.push("/login"), 1500);
-    } else {
-      setMsg(data.message);
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(`/api/auth/reset-password/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Something went wrong.");
+        return;
+      }
+
+      setMessage("Password updated successfully.");
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+    } catch (err) {
+      setError("Unable to reset password. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <AuthLayout title="Reset Password">
       <form onSubmit={handleSubmit} className="space-y-4">
+
         <Input
           label="New Password"
           type="password"
@@ -41,11 +74,31 @@ export default function ResetPasswordPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {msg && (
-          <p className="text-sm text-center text-green-500">{msg}</p>
+        <Input
+          label="Confirm Password"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) =>
+            setConfirmPassword(e.target.value)
+          }
+        />
+
+        {error && (
+          <p className="text-center text-sm text-red-500">
+            {error}
+          </p>
         )}
 
-        <Button>Update Password</Button>
+        {message && (
+          <p className="text-center text-sm text-green-600">
+            {message}
+          </p>
+        )}
+
+        <Button disabled={loading}>
+          {loading ? "Updating..." : "Update Password"}
+        </Button>
+
       </form>
     </AuthLayout>
   );

@@ -60,6 +60,7 @@ export async function POST(req) {
     if (property.agent?.user?._id) {
       await Notification.create({
         user: property.agent.user._id,
+        title: "New Lead Created",
         type: "lead-received",
         message: `New lead on "${property.title}"`,
         entityId: lead._id,
@@ -70,6 +71,7 @@ export async function POST(req) {
     // 🔔 Always notify owner
     await Notification.create({
       user: property.owner,
+      title: "New Lead Created",
       type: "lead-received",
       message: `New enquiry for your property "${property.title}"`,
       entityId: lead._id,
