@@ -15,7 +15,7 @@ export async function GET() {
     property: { $in: myProperties.map(p => p._id) }
   })
     .populate("user", "name email phone")
-    .populate("property", "title", "priceValue", "city" )
+    .populate("property", "title priceValue priceLabel city" )
     .sort({ createdAt: -1 });
 
   return NextResponse.json({ leads });

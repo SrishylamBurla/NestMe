@@ -24,7 +24,7 @@ export async function PUT(req, context) {
     // IMPORTANT: populate property
     const lead = await Lead.findById(leadId)
       .populate("user", "name email")
-      .populate("property")
+      .populate("property", "priceLabel priceValue city")
       .populate({
         path: "agent",
         populate: {

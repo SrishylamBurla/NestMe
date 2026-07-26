@@ -55,7 +55,7 @@ export default function LeadsClient({ agentId }) {
           placeholder="Search by user or property..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full h-8 px-4 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full h-10 px-4 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
       </div>
 
