@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { Spline_Sans } from "next/font/google";
 import AuthProvider from "@/components/AuthProvider";
 import Script from "next/script";
-import { SocketProvider } from "@/context/SocketContext";
+import { SocketProvider } from "../context/SocketProvider"
 
 const spline = Spline_Sans({
   subsets: ["latin"],
