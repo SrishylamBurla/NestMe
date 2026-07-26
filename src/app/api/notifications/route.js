@@ -3,7 +3,7 @@ import Notification from "@/models/Notification";
 import connectDB from "@/lib/db";
 import { getAuthUser } from "@/lib/getAuthUser";
 
-export async function GET() {
+export async function GET(req) {
   await connectDB();
   const user = await getAuthUser();
 
