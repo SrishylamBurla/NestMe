@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { Spline_Sans } from "next/font/google";
 import AuthProvider from "@/components/AuthProvider";
 import Script from "next/script";
+import { SocketProvider } from "@/context/SocketContext";
 
 const spline = Spline_Sans({
   subsets: ["latin"],
@@ -47,7 +48,9 @@ export default function RootLayout({ children }) {
       >
         <Providers>
           <AuthProvider>
+            <SocketProvider>
             {children}
+            </SocketProvider>
           </AuthProvider>
           <Toaster
             position="top-right"

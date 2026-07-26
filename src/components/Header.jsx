@@ -12,7 +12,7 @@ import {
 import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import { notificationApi } from "@/store/services/notificationApi";
 
 export default function Header() {
@@ -55,30 +55,30 @@ export default function Header() {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
+  // useEffect(() => {
+  //   if (!user) return;
 
-    const socket = io("https://www.nestme.in", {
-      withCredentials: true,
-      transports: ["websocket"],
-    });
+  //   const socket = io("https://www.nestme.in", {
+  //     withCredentials: true,
+  //     transports: ["websocket"],
+  //   });
 
-    socket.emit("join", user._id);
+  //   socket.emit("join", user._id);
 
-    socket.on("notification", (notification) => {
-      dispatch(
-        notificationApi.util.updateQueryData(
-          "getNotifications",
-          undefined,
-          (draft) => {
-            draft.unshift(notification);
-          },
-        ),
-      );
-    });
+  //   socket.on("notification", (notification) => {
+  //     dispatch(
+  //       notificationApi.util.updateQueryData(
+  //         "getNotifications",
+  //         undefined,
+  //         (draft) => {
+  //           draft.unshift(notification);
+  //         },
+  //       ),
+  //     );
+  //   });
 
-    return () => socket.disconnect();
-  }, [user, refetch]);
+  //   return () => socket.disconnect();
+  // }, [user, refetch]);
 
   useEffect(() => {
     if (!user) return;
