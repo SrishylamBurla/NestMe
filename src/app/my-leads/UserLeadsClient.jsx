@@ -51,7 +51,7 @@ export default function UserLeadsClient() {
           placeholder="Search by user or property..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full h-11 px-4 rounded-full border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full h-20 px-4 rounded-full border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
       </div>
 
@@ -139,7 +139,7 @@ export default function UserLeadsClient() {
                   {lead.property.title}
                 </p>
                 <p className="text-sm text-slate-500">
-                  ₹ {lead.property.priceLabel} • {lead.property.city}
+                  ₹ {lead?.property?.priceLabel} • {lead?.property?.city}
                 </p>
               </div>
             )}

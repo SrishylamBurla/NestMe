@@ -29,7 +29,17 @@ export async function PUT(req, context) {
 
     // IMPORTANT: populate property
     const lead = await Lead.findById(leadId)
-      .populate("property");
+      // .populate("property");
+      // await Lead.findById(id)
+  .populate("user", "name email")
+  .populate("property")
+  .populate({
+    path: "agent",
+    populate: {
+      path: "user",
+      select: "name email phone",
+    },
+  });
 
     if (!lead) {
       return NextResponse.json(
