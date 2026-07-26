@@ -1,38 +1,44 @@
-"use client"
+"use client";
 
 import React, {
   createContext,
   useContext,
   useEffect,
-  useState,
+  useRef,
 } from "react";
-
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
-import { useGetMeQuery } from "../store/services/authApi"
-import { notificationApi } from "../store/services/notificationApi"
+import { useGetMeQuery } from "../store/services/authApi";
+import { notificationApi } from "../store/services/notificationApi";
 
-const SOCKET_URL = "https://www.nestme.in";
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || "https://www.nestme.in";
 
 const SocketContext = createContext(null);
 
 export function SocketProvider({ children }) {
   const { data: user } = useGetMeQuery();
-
   const dispatch = useDispatch();
 
-  const [socket, setSocket] = useState(null);
+  const socketRef = useRef(null);
 
   useEffect(() => {
+    // Disconnect if user logs out
     if (!user?._id) {
-      socket?.disconnect();
-      setSocket(null);
+      if (socketRef.current) {
+        socketRef.current.removeAllListeners();
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
       return;
     }
 
-    const socketInstance = io(SOCKET_URL, {
+    // Prevent duplicate connections
+    if (socketRef.current?.connected) return;
+
+    const socket = io(SOCKET_URL, {
       transports: ["websocket"],
       withCredentials: true,
       reconnection: true,
@@ -40,15 +46,16 @@ export function SocketProvider({ children }) {
       reconnectionDelay: 1000,
     });
 
-    setSocket(socketInstance);
+    socketRef.current = socket;
 
-    socketInstance.on("connect", () => {
+    socket.on("connect", () => {
       console.log("🟢 Socket Connected");
 
-      socketInstance.emit("join", user._id);
+      socket.emit("join", user._id);
     });
 
-    socketInstance.on("notification", (notification) => {
+    socket.on("notification", (notification) => {
+      // Update RTK Query cache instantly
       dispatch(
         notificationApi.util.updateQueryData(
           "getNotifications",
@@ -59,29 +66,28 @@ export function SocketProvider({ children }) {
         )
       );
 
-     toast.success("success",{
-        text: notification.title,
-        notification: notification.message
+      toast.success(notification.title, {
+        duration: 4000,
       });
     });
 
-    socketInstance.on("disconnect", () => {
+    socket.on("disconnect", () => {
       console.log("🔴 Socket Disconnected");
     });
 
-    socketInstance.on("connect_error", (err) => {
+    socket.on("connect_error", (err) => {
       console.log("Socket Error:", err.message);
     });
 
     return () => {
-      socketInstance.removeAllListeners();
-      socketInstance.disconnect();
-      setSocket(null);
+      socket.removeAllListeners();
+      socket.disconnect();
+      socketRef.current = null;
     };
   }, [user?._id, dispatch]);
 
   return (
-    <SocketContext.Provider value={socket}>
+    <SocketContext.Provider value={socketRef}>
       {children}
     </SocketContext.Provider>
   );
