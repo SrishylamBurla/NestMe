@@ -16,7 +16,7 @@ export async function POST(req, context) {
 
     const { message, attachments = [] } = await req.json();
 
-    if (!message?.trim() && attachments.length === 0) {
+    if (!message?.trim() && attachments?.length === 0) {
       return NextResponse.json(
         {
           success: false,
