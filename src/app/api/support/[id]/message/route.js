@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import connectDB from "@/lib/db";
 import { getAuthUser } from "@/lib/getAuthUser";
-
+import admin from "@/lib/firebaseAdmin"
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
 
@@ -24,7 +24,7 @@ export async function POST(req, context) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -38,7 +38,7 @@ export async function POST(req, context) {
         },
         {
           status: 404,
-        }
+        },
       );
     }
 
@@ -50,7 +50,7 @@ export async function POST(req, context) {
         },
         {
           status: 403,
-        }
+        },
       );
     }
 
@@ -62,7 +62,7 @@ export async function POST(req, context) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -84,19 +84,21 @@ export async function POST(req, context) {
 
     await ticket.save();
 
-    await newMessage.populate(
-      "sender",
-      "name avatar role"
-    );
+    await newMessage.populate("sender", "name avatar role");
 
-    /*
-      Socket Event (Later)
+    // Save message...
 
-      io.to(`support-${ticket._id}`).emit(
-        "support:new-message",
-        newMessage
-      );
-    */
+    await admin.messaging().send({
+      token: customer.fcmToken,
+      notification: {
+        title: "NestMe Support",
+        body: "Agent replied to your ticket",
+      },
+      data: {
+        ticketId: ticket._id.toString(),
+        screen: "SupportChat",
+      },
+    });
 
     return NextResponse.json(
       {
@@ -105,7 +107,7 @@ export async function POST(req, context) {
       },
       {
         status: 201,
-      }
+      },
     );
   } catch (error) {
     console.error(error);
@@ -117,7 +119,7 @@ export async function POST(req, context) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

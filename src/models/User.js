@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
 
     phone: {
@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
     },
     avatar: String,
 
+    fcmTokens: {
+      type: [String],
+      default: [],
+    },
     /* ===== ROLE SYSTEM ===== */
 
     role: {
@@ -50,7 +54,6 @@ const userSchema = new mongoose.Schema(
 
     phoneOTP: String,
     phoneOTPExpiry: Date,
-
 
     /* ===== PASSWORD RESET ===== */
 

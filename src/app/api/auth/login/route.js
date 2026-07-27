@@ -14,7 +14,7 @@ export async function POST(req) {
     if (!email || !password) {
       return NextResponse.json(
         { message: "Email and password required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -23,35 +23,33 @@ export async function POST(req) {
     if (!user) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
-    if (
-      user.loginProvider === "google" &&
-      !user.password
-    ) {
+    if (user.loginProvider === "google" && !user.password) {
       return NextResponse.json(
         {
           message:
             "This account uses Google Sign-In. Please continue with Google or set a password.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    
     let agentProfileId = null;
 
     if (user && user.role === "agent") {
-      const profile = await AgentProfile.findOne({ user: user._id }).select("_id")
+      const profile = await AgentProfile.findOne({ user: user._id }).select(
+        "_id",
+      );
       agentProfileId = profile?._id || null;
     }
 
     if (!user) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -61,22 +59,25 @@ export async function POST(req) {
     if (!isMatch) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     const response = NextResponse.json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      agentProfileId,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        agentProfileId,
+      },
     });
 
     response.cookies.set("token", token, {
@@ -87,7 +88,11 @@ export async function POST(req) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
+    
+
     return response;
+
+
   } catch (error) {
     console.error("LOGIN ERROR:", error);
 
@@ -96,7 +101,7 @@ export async function POST(req) {
         message: error.message,
         stack: error.stack,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

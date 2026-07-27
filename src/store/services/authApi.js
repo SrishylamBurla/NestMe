@@ -7,7 +7,7 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["User"]
+      invalidatesTags: ["User"],
     }),
 
     login: builder.mutation({
@@ -16,7 +16,7 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["User"]
+      invalidatesTags: ["User"],
     }),
 
     logout: builder.mutation({
@@ -24,8 +24,7 @@ export const authApi = api.injectEndpoints({
         url: "/auth/logout",
         method: "POST",
       }),
-      invalidatesTags: ["User"]
-
+      invalidatesTags: ["User"],
     }),
 
     getMe: builder.query({
@@ -47,6 +46,14 @@ export const authApi = api.injectEndpoints({
       query: () => "/auth/enquiries",
       providesTags: ["Enquiries"],
     }),
+
+    saveFcmToken: builder.mutation({
+      query: (data) => ({
+        url: "/profile/fcm-token",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -58,4 +65,5 @@ export const {
   useGetMyPropertiesQuery,
   useGetMyLeadsQuery,
   useGetMyEnquiriesQuery,
+  useSaveFcmTokenMutation,
 } = authApi;
