@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 
 import connectDB from "@/lib/db";
 import { getAuthUser } from "@/lib/getAuthUser";
-import admin from "@/lib/firebaseAdmin";
+import { messaging } from "@/lib/firebaseAdmin";
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
+import User from "@/models/User";
 
 export async function POST(req, context) {
   try {
@@ -93,17 +94,22 @@ export async function POST(req, context) {
 
     // Save message...
 
-    await admin.messaging().send({
-      token: customer.fcmToken,
-      notification: {
-        title: "NestMe Support",
-        body: "Agent replied to your ticket",
-      },
-      data: {
-        ticketId: ticket._id.toString(),
-        screen: "SupportChat",
-      },
-    });
+    const customer = await User.findById(ticket.user);
+
+    if (customer?.fcmTokens?.length) {
+      await messaging.send({
+        token: customer.fcmTokens[0],
+        notification: {
+          title: "NestMe Support",
+          body: "Agent replied to your ticket",
+        },
+        data: {
+          ticketId: ticket._id.toString(),
+          screen: "SupportChat",
+        },
+      });
+    }
+  
 
     return NextResponse.json(
       {

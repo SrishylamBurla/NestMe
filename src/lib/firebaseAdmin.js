@@ -1,17 +1,22 @@
-import admin from "firebase-admin";
+import { getApps, initializeApp, cert } from "firebase-admin/app";
+import { getMessaging } from "firebase-admin/messaging";
 import fs from "fs";
 import path from "path";
 
-if (!admin.apps.length) {
-  const serviceAccountPath = path.join(process.cwd(), "serviceAccountKey.json");
+const serviceAccount = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), "serviceAccountKey.json"),
+    "utf8"
+  )
+);
 
-  const serviceAccount = JSON.parse(
-    fs.readFileSync(serviceAccountPath, "utf8")
-  );
+const app =
+  getApps().length === 0
+    ? initializeApp({
+        credential: cert(serviceAccount),
+      })
+    : getApps()[0];
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
+export const messaging = getMessaging(app);
 
-export default admin;
+export default app;
