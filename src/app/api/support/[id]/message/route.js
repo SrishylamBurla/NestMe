@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import connectDB from "@/lib/db";
 import { getAuthUser } from "@/lib/getAuthUser";
-import admin from "@/lib/firebaseAdmin"
+import admin from "@/lib/firebaseAdmin";
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
 
@@ -14,9 +14,14 @@ export async function POST(req, context) {
 
     const { id } = await context.params;
 
-    const { message, attachments = [] } = await req.json();
+    const body = await req.json();
 
-    if (!message?.trim() && attachments?.length === 0) {
+    const message = body?.message ?? "";
+    const attachments = Array.isArray(body?.attachments)
+      ? body.attachments
+      : [];
+
+    if (!message?.trim() && attachments.length === 0) {
       return NextResponse.json(
         {
           success: false,
