@@ -12,7 +12,7 @@ export async function PATCH(req, context) {
 
     const user = await getAuthUser();
 
-    const { id } = await context.params;
+    const { id } = context.params;
 
     const ticket = await SupportTicket.findById(id);
 

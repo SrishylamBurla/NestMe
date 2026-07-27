@@ -6,9 +6,11 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import SupportTicket from "@/models/SupportTicket";
 import SupportMessage from "@/models/SupportMessage";
 
-export async function GET(req, { params }) {
+export async function GET(req, context) {
   try {
     await connectDB();
+
+
 
     const user = await getAuthUser();
 
@@ -22,7 +24,7 @@ export async function GET(req, { params }) {
       );
     }
 
-    const { id } = params;
+    const { id } = context.params;
 
     const ticket = await SupportTicket.findById(id)
       .populate("user", "name email avatar role")
