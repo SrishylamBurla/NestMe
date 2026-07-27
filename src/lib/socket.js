@@ -47,10 +47,25 @@ export const initSocket = (server) => {
 };
 
 // 🔔 Notification helper
+
 export const sendNotification = (userId, data) => {
-  if (!io) return;
+  console.log("🔔 sendNotification()");
+  console.log("User:", userId);
+
+  if (!io) {
+    console.log("❌ io not initialized");
+    return;
+  }
+
+  console.log("✅ Emitting notification");
+
   io.to(userId).emit("notification", data);
 };
+// export const sendNotification = (userId, data) => {
+//   if (!io) return;
+//   io.to(userId).emit("notification", data);
+// };
+
 
 // 💬 Chat helper
 export const sendMessageToUser = (userId, message) => {

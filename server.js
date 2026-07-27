@@ -34,10 +34,11 @@ app.prepare().then(() => {
       socket.to(userId).emit("typing");
     });
   });
+  
 
   // 🔥 make socket globally available
   global.io = io;
-
+console.log("🚀 Custom Socket Server Started");
   server.listen(3000, () => {
     console.log("🚀 Server running on http://localhost:3000");
   });

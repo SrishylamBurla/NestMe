@@ -24,11 +24,7 @@ export async function POST(req) {
     })
     .populate("owner", "email name pushTokens");
 
-  console.log("========== CREATE LEAD ==========");
-console.log("Property ID:", propertyId);
-console.log("Property Agent:", property.agent);
-console.log("Property Agent ID:", property.agent?._id?.toString());
-console.log("Property Owner:", property.owner?._id?.toString());
+
 
   if (!property)
     return NextResponse.json(
