@@ -5,7 +5,7 @@ import Property from "@/models/Property";
 import Notification from "@/models/Notification";
 import User from "@/models/User";
 import { sendNotification } from "@/lib/socket";
-import { sendPushNotification } from "@/lib/sendPushNotification"
+import { sendPushNotification } from "@/lib/sendPushNotification";
 import { sendEmail } from "@/lib/sendEmail";
 
 export async function PUT(req, { params }) {
@@ -15,26 +15,13 @@ export async function PUT(req, { params }) {
     const admin = await getAuthUser();
 
     if (!admin || admin.role !== "admin") {
-      return NextResponse.json(
-        { message: "Admin only" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: "Admin only" }, { status: 403 });
     }
 
-    const {
-      approvalStatus,
-      rejectionReason = "",
-    } = await req.json();
+    const { approvalStatus, rejectionReason = "" } = await req.json();
 
-    if (
-      !["approved", "rejected", "pending"].includes(
-        approvalStatus
-      )
-    ) {
-      return NextResponse.json(
-        { message: "Invalid status" },
-        { status: 400 }
-      );
+    if (!["approved", "rejected", "pending"].includes(approvalStatus)) {
+      return NextResponse.json({ message: "Invalid status" }, { status: 400 });
     }
 
     const property = await Property.findById(params.id);
@@ -42,15 +29,13 @@ export async function PUT(req, { params }) {
     if (!property) {
       return NextResponse.json(
         { message: "Property not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     property.approvalStatus = approvalStatus;
     property.rejectionReason =
-      approvalStatus === "rejected"
-        ? rejectionReason
-        : "";
+      approvalStatus === "rejected" ? rejectionReason : "";
 
     await property.save();
 
@@ -84,30 +69,28 @@ Reason: ${rejectionReason}`;
         break;
     }
 
-    const notification =
-      await Notification.create({
-        user: owner._id,
-        title,
-        message,
-        type,
-        entityId: property._id,
-        priority,
-        link: `/properties/${property._id}`,
-      });
+    const notification = await Notification.create({
+      user: owner._id,
+      title,
+      message,
+      type,
+      entityId: property._id,
+      priority,
+      link: `/properties/${property._id}`,
+    });
 
-    sendNotification(
-      owner._id.toString(),
-      notification
-    );
+    sendNotification(owner._id.toString(), notification);
 
     if (owner.fcmTokens?.length) {
-      await sendPushNotification(
-        owner.fcmTokens,
-        {
-          title,
-          body: message,
-        }
-      );
+      await sendPushNotification(owner.fcmTokens, {
+        title,
+        body: message,
+        data: {
+          type,
+          screen: "PropertyDetails",
+          propertyId: property._id.toString(),
+        },
+      });
     }
 
     if (owner.email) {
@@ -146,11 +129,10 @@ Reason: ${rejectionReason}`;
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
-
 
 // import Notification from "@/models/Notification";
 // import Property from "@/models/Property";

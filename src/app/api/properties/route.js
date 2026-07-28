@@ -139,7 +139,6 @@ async function sendPushNotificationToUsers({ title, body, url }) {
     const tokens = users.flatMap((u) => u.pushTokens || []);
 
     if (!tokens.length) {
-
       return;
     }
 
@@ -162,7 +161,6 @@ async function sendPushNotificationToUsers({ title, body, url }) {
     });
 
     const result = await response.json();
-
   } catch (err) {
     console.error("Push error:", err);
   }
@@ -322,10 +320,7 @@ export async function POST(req) {
       },
       images: uploadedImages,
       owner: user._id,
-      agent:
-        user.role === "agent"
-          ? agentProfileId
-          : null,
+      agent: user.role === "agent" ? agentProfileId : null,
       approvalStatus: "pending",
     });
 
@@ -364,24 +359,24 @@ export async function POST(req) {
       link: "/my-properties",
     });
 
-    
     /* ==============================
        🔔 ADMIN NOTIFICATIONS
     ============================== */
     const admins = await User.find({ role: "admin" }).select("_id email name");
 
     if (admins.length) {
-      admins.forEach( async (admin) => {
+      admins.forEach(async (admin) => {
         const notification = await Notification.create({
-    user: admin._id,
-    title: "New Property Pending Approval",
-    message: `New property "${property.title}" submitted by ${user.name}`,
-    type: "system",
-    entityId: property._id,
-    link: "/admin/properties",
-});
+          user: admin._id,
+          title: "New Property Pending Approval",
+          message: `New property "${property.title}" submitted by ${user.name}`,
+          type: "system",
+          entityId: property._id,
+          link: "/admin/properties",
+        });
 
-sendNotification(admin._id.toString(), notification);
+        sendNotification(admin._id.toString(), notification);
+        //                 or
         // sendNotification(admin._id.toString(), {
         //   title: "New Property Pending Approval",
         //   message: `New property "${property.title}" submitted by ${user.name}`,
@@ -451,7 +446,7 @@ sendNotification(admin._id.toString(), notification);
         message: error.message,
         stack: error.stack,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

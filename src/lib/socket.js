@@ -3,7 +3,9 @@ import { Server } from "socket.io";
 let io;
 
 export const initSocket = (server) => {
+   console.log("🔥 initSocket() called");
   if (!io) {
+    console.log("🔥 Creating Socket.IO instance");
     io = new Server(server, {
       cors: {
         origin: [
@@ -48,19 +50,32 @@ export const initSocket = (server) => {
 
 // 🔔 Notification helper
 
-export const sendNotification = (userId, data) => {
-  console.log("🔔 sendNotification()");
-  console.log("User:", userId);
 
-  if (!io) {
-    console.log("❌ io not initialized");
+export const sendNotification = (userId, data) => {
+  const socket = global.io;
+
+  console.log("global.io exists:", !!socket);
+
+  if (!socket) {
+    console.log("❌ global.io missing");
     return;
   }
 
-  console.log("✅ Emitting notification");
-
-  io.to(userId).emit("notification", data);
+  socket.to(userId).emit("notification", data);
 };
+// export const sendNotification = (userId, data) => {
+//   console.log("🔔 sendNotification()");
+//   console.log("User:", userId);
+
+//   if (!io) {
+//     console.log("❌ io not initialized");
+//     return;
+//   }
+
+//   console.log("✅ Emitting notification");
+
+//   io.to(userId).emit("notification", data);
+// };
 // export const sendNotification = (userId, data) => {
 //   if (!io) return;
 //   io.to(userId).emit("notification", data);
