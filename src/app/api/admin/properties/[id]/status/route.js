@@ -4,7 +4,6 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import Property from "@/models/Property";
 import Notification from "@/models/Notification";
 import User from "@/models/User";
-import { sendNotification } from "@/lib/socket";
 import { sendPushNotification } from "@/lib/sendPushNotification";
 import { sendEmail } from "@/lib/sendEmail";
 
@@ -68,8 +67,7 @@ Reason: ${rejectionReason}`;
         type = "property-pending";
         break;
     }
-
-    const notification = await Notification.create({
+    await Notification.create({
       user: owner._id,
       title,
       message,
@@ -79,7 +77,7 @@ Reason: ${rejectionReason}`;
       link: `/properties/${property._id}`,
     });
 
-    sendNotification(owner._id.toString(), notification);
+    // sendNotification(owner._id.toString(), notification);
 
     if (owner.fcmTokens?.length) {
       await sendPushNotification(owner.fcmTokens, {
