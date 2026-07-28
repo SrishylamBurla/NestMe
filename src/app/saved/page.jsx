@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useGetSavedPropertiesQuery } from "@/store/services/savedApi";
 import SavedPropertyCard from "@/components/saved/SavedPropertyCard";
 import SavedSkeleton from "@/components/saved/SavedSkeleton";

@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useLoginMutation } from "@/store/services/authApi";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -177,30 +177,7 @@ export default function LoginPage() {
       console.error(err);
     }
   };
-  // const googleLogin = async () => {
-  //   try {
-  //     await initAuth();
-
-  //     const provider = new GoogleAuthProvider();
-
-  //     const isMobile = window.ReactNativeWebView;
-
-  //     if (isMobile) {
-  //       await signInWithRedirect(auth, provider); // ✅ mobile
-  //     } else {
-  //       const result = await signInWithPopup(auth, provider); // ✅ web
-
-  //       const user = result.user;
-
-  //       window.location.href = `/api/auth/google-login?email=${user.email}&name=${user.displayName}&image=${user.photoURL}`;
-  //     }
-
-  //   } catch (err) {
-  //     if (err.code === "auth/popup-closed-by-user") return;
-
-  //     console.error(err);
-  //   }
-  // };
+  
   // ================= RECAPTCHA =================
   useEffect(() => {
     if (mode !== "phone") return;

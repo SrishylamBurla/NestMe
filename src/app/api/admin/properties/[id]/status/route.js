@@ -5,7 +5,7 @@ import Property from "@/models/Property";
 import Notification from "@/models/Notification";
 import User from "@/models/User";
 import { sendNotification } from "@/lib/socket";
-import { sendPushNotification } from "@/lib/sendPushNotification";
+import { sendPushNotification } from "@/lib/sendPushNotification"
 import { sendEmail } from "@/lib/sendEmail";
 
 export async function PUT(req, { params }) {

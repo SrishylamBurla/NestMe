@@ -6,7 +6,7 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import Notification from "@/models/Notification";
 import { sendLeadEmail } from "@/lib/sendLeadEmail";
 import { sendNotification } from "@/lib/socket";
-import { sendPush } from "@/lib/sendPushNotification";
+import { sendPushNotification } from "@/lib/sendPushNotification";
 
 export async function POST(req) {
   await connectDB();
@@ -97,7 +97,7 @@ export async function POST(req) {
   }
 
   if (pushTokens.length > 0) {
-    await sendPush(
+    await sendPushNotification(
       pushTokens,
       "New Lead Received",
       `New enquiry for ${property.title}`

@@ -1,22 +1,45 @@
-import fetch from "node-fetch";
+import { messaging } from "@/lib/firebaseAdmin";
 
-export const sendPush = async (tokens, title, body) => {
-  const messages = tokens.map((token) => ({
-    to: token,
-    sound: "default",
-    title,
-    body,
-  }));
+export const sendPushNotification = async (tokens, { title, body }) => {
+  if (!tokens || tokens.length === 0) {
+    console.log("No FCM tokens found");
+    return;
+  }
 
   try {
-    await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await messaging.sendEachForMulticast({
+      tokens,
+      notification: {
+        title,
+        body,
       },
-      body: JSON.stringify(messages),
+      android: {
+        priority: "high",
+        notification: {
+          sound: "default",
+        },
+      },
+      apns: {
+        payload: {
+          aps: {
+            sound: "default",
+          },
+        },
+      },
     });
-  } catch (error) {
-    console.log("Push error:", error);
+
+    console.log(
+      `Push sent: ${response.successCount}/${tokens.length} successful`,
+    );
+
+    if (response.failureCount > 0) {
+      response.responses.forEach((res, index) => {
+        if (!res.success) {
+          console.error(`Failed token (${tokens[index]}):`, res.error?.message);
+        }
+      });
+    }
+  } catch (err) {
+    console.error("FCM Error:", err);
   }
 };
