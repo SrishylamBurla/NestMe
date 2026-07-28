@@ -19,6 +19,7 @@ app.prepare().then(() => {
     },
   });
 
+  
   io.on("connection", (socket) => {
     console.log("⚡ Socket connected");
 
@@ -38,7 +39,6 @@ app.prepare().then(() => {
 
   // 🔥 make socket globally available
   global.io = io;
-console.log("🚀 Custom Socket Server Started");
   server.listen(3000, () => {
     console.log("🚀 Server running on http://localhost:3000");
   });

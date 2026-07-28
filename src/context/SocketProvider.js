@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import React, { createContext, useContext, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -19,7 +14,9 @@ const SOCKET_URL =
 const SocketContext = createContext(null);
 
 export function SocketProvider({ children }) {
-  const { data: user } = useGetMeQuery();
+  const { data } = useGetMeQuery();
+
+  const user = data?.user;
   const dispatch = useDispatch();
 
   const socketRef = useRef(null);
@@ -62,8 +59,8 @@ export function SocketProvider({ children }) {
           undefined,
           (draft) => {
             draft.unshift(notification);
-          }
-        )
+          },
+        ),
       );
 
       toast.success(notification.title, {
