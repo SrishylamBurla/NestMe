@@ -1,6 +1,7 @@
+import { initSocket } from "@/lib/socket";
 import { createServer } from "http";
 import next from "next";
-import { Server } from "socket.io";
+// import { Server } from "socket.io";
 
 const dev = true;
 const app = next({ dev });
@@ -13,12 +14,7 @@ app.prepare().then(() => {
     handle(req, res);
   });
 
-  io = new Server(server, {
-    cors: {
-      origin: "*",
-    },
-  });
-
+  initSocket(server)
   
   io.on("connection", (socket) => {
     console.log("⚡ Socket connected");
