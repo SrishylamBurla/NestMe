@@ -84,7 +84,7 @@ export async function POST(req, context) {
     ticket.lastMessage = message;
     ticket.lastMessageAt = new Date();
 
-    ticket.status = "waiting-support";
+    ticket.status = "waiting";
 
     ticket.unreadAdmin += 1;
 
@@ -97,19 +97,22 @@ export async function POST(req, context) {
     const customer = await User.findById(ticket.user);
 
     if (customer?.fcmTokens?.length) {
-      await messaging.send({
-        token: customer.fcmTokens[0],
-        notification: {
-          title: "NestMe Support",
-          body: "Agent replied to your ticket",
-        },
-        data: {
-          ticketId: ticket._id.toString(),
-          screen: "SupportChat",
-        },
-      });
+      try {
+        await messaging.send({
+          token: customer.fcmTokens[0],
+          notification: {
+            title: "NestMe Support",
+            body: "Agent replied to your ticket",
+          },
+          data: {
+            ticketId: ticket._id.toString(),
+            screen: "SupportChat",
+          },
+        });
+      } catch (err) {
+        console.error("FCM notification failed:", err);
+      }
     }
-  
 
     return NextResponse.json(
       {

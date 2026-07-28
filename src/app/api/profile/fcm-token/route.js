@@ -4,24 +4,27 @@ import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function POST(req) {
   try {
+    console.log("====== FCM API ======");
+
     await connectDB();
 
     const user = await getAuthUser();
+    console.log("USER:", user?._id);
 
-    if (!user) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const body = await req.json();
+    console.log("BODY:", body);
 
-    const { fcmToken } = await req.json();
+    const { fcmToken } = body;
 
     if (!fcmToken) {
       return NextResponse.json(
         { message: "FCM token is required" },
-        { status: 400 }
+        { status: 400 },
       );
+    }
+
+    if (!user.fcmTokens) {
+      user.fcmTokens = [];
     }
 
     if (!user.fcmTokens.includes(fcmToken)) {
@@ -33,13 +36,16 @@ export async function POST(req) {
       success: true,
       message: "FCM token saved",
     });
-
   } catch (err) {
-    console.error(err);
+    console.error("FCM ERROR:", err);
 
     return NextResponse.json(
-      { message: "Server Error" },
-      { status: 500 }
+      {
+        success: false,
+        message: err.message,
+        stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+      },
+      { status: 500 },
     );
   }
 }
