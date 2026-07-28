@@ -39,7 +39,7 @@ app.prepare().then(() => {
 
   // 🔥 make socket globally available
   global.io = io;
-  server.listen(3000, () => {
+  server.listen(3000,"0.0.0.0", () => {
     console.log("🚀 Server running on http://localhost:3000");
   });
 });
