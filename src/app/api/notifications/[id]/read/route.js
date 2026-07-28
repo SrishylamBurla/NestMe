@@ -6,7 +6,7 @@ export async function PUT(req, context) {
   try {
     await connectDB();
 
-    const { id } = await context.params;
+    const { id } = context.params;
 
     const notification = await Notification.findById(id);
 

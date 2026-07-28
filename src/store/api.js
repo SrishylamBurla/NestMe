@@ -17,6 +17,7 @@ export const api = createApi({
     "UserLeads",
     "Lead",
     "Notification",
+    "Notifications",
     "Saved",
     "Properties",
     "Subscription",
