@@ -4,16 +4,9 @@ import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function POST(req) {
   try {
-    console.log("====== FCM API ======");
-
     await connectDB();
-
     const user = await getAuthUser();
-    console.log("USER:", user?._id);
-
     const body = await req.json();
-    console.log("BODY:", body);
-
     const { fcmToken } = body;
 
     if (!fcmToken) {

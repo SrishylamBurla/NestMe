@@ -5,7 +5,7 @@ let io;
 export const initSocket = (server) => {
    console.log("🔥 initSocket() called");
   if (!io) {
-    console.log("🔥 Creating Socket.IO instance");
+   
     io = new Server(server, {
       cors: {
         origin: [

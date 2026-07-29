@@ -4,7 +4,7 @@ export const notificationApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getNotifications: builder.query({
       query: () => "/notifications",
-      providesTags: ["Notification"],
+      providesTags: ["Notification", "Notifications"],
     }),
 
 
@@ -14,6 +14,7 @@ export const notificationApi = api.injectEndpoints({
           method: "POST",
           body: { token },
         }),
+        invalidatesTags: ["Notification", "Notifications"]
       }),
 
     markRead: builder.mutation({
@@ -38,7 +39,7 @@ export const notificationApi = api.injectEndpoints({
         }
       },
 
-      invalidatesTags: ["Notification"],
+      invalidatesTags: ["Notification", "Notifications"],
     }),
   }),
 });
