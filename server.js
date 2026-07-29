@@ -1,45 +1,24 @@
+
 // import { createServer } from "http";
 // import next from "next";
-// import { Server } from "socket.io";
+// import { initSocket } from "./src/lib/socket.js";
 
-// const dev = true;
+// const dev = process.env.NODE_ENV !== "production";
 // const app = next({ dev });
 // const handle = app.getRequestHandler();
-
-// let io;
 
 // app.prepare().then(() => {
 //   const server = createServer((req, res) => {
 //     handle(req, res);
 //   });
 
-//   io = new Server(server, {
-//     cors: {
-//       origin: "*",
-//     },
-//   });
+//   // Initialize Socket.IO (only once)
+//   initSocket(server);
 
-  
-//   io.on("connection", (socket) => {
-//     console.log("⚡ Socket connected");
 
-//     socket.on("join", (userId) => {
-//       socket.join(userId);
-//     });
+// // console.log("global.io:", !!global.io);
 
-//     socket.on("sendMessage", ({ userId, message }) => {
-//       io.to(userId).emit("newMessage", message);
-//     });
-
-//     socket.on("typing", (userId) => {
-//       socket.to(userId).emit("typing");
-//     });
-//   });
-  
-
-//   // 🔥 make socket globally available
-//   global.io = io;
-//   server.listen(3000,"0.0.0.0", () => {
+//   server.listen(3000, "0.0.0.0", () => {
 //     console.log("🚀 Server running on http://localhost:3000");
 //   });
 // });
@@ -51,6 +30,7 @@ import { initSocket } from "./src/lib/socket.js";
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
+
 console.log("🚀 server.js started");
 
 app.prepare().then(() => {
@@ -58,14 +38,15 @@ app.prepare().then(() => {
     handle(req, res);
   });
 
-  // Initialize Socket.IO (only once)
-  initSocket(server);
+  // Initialize Socket.IO
+  const io = initSocket(server);
 
+  // Make it globally available
   global.io = io;
 
-// console.log("global.io:", !!global.io);
+  console.log("global.io exists:", !!global.io);
 
   server.listen(3000, "0.0.0.0", () => {
-    console.log("🚀 Server running on http://0.0.0.0:3000");
+    console.log("🚀 Server running on http://localhost:3000");
   });
 });

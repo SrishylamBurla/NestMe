@@ -38,7 +38,10 @@ export async function PUT(req, { params }) {
 
     await property.save();
 
+
     const owner = await User.findById(property.owner);
+
+    
 
     let title = "";
     let message = "";
@@ -90,6 +93,10 @@ Reason: ${rejectionReason}`;
         },
       });
     }
+
+    console.log("Owner:", owner.email);
+console.log("FCM Tokens:", owner.fcmTokens);
+console.log("Sending push...");
 
     if (owner.email) {
       await sendEmail({
