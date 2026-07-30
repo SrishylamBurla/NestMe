@@ -43,7 +43,7 @@ export async function PUT(req, context) {
     //  Agent check
     const isAgent =
       user.agentProfileId &&
-      user.agentProfileId.toString() === lead.agent._id.toString();
+      user.agentProfileId.toString() === lead.agent?.toString();
 
     //  Owner check
     const isOwner = lead.property?.owner?.toString() === user._id.toString();
