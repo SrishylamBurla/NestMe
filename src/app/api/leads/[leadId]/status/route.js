@@ -4,6 +4,7 @@ import connectDB from "@/lib/db";
 import Lead from "@/models/Lead";
 import Property from "@/models/Property"
 import User from "@/models/Property"
+import AgentProfile from "@/models/AgentProfile";
 import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function PUT(req, context) {
