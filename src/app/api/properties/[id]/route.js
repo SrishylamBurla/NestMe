@@ -12,7 +12,6 @@ import jwt from "jsonwebtoken";
 import cloudinary from "@/lib/cloudinary";
 import streamifier from "streamifier";
 
-
 export async function GET(req, context) {
   try {
     await connectDB();
@@ -22,14 +21,14 @@ export async function GET(req, context) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { message: "Invalid property ID" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const property = await Property.findByIdAndUpdate(
       id,
       { $inc: { viewsCount: 1 } },
-      { new: true }
+      { new: true },
     )
       .populate({
         path: "agent",
@@ -45,7 +44,7 @@ export async function GET(req, context) {
     if (!property) {
       return NextResponse.json(
         { message: "Property not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -74,76 +73,56 @@ export async function GET(req, context) {
     propertyData.isSaved = isSaved;
 
     return NextResponse.json(propertyData);
-
   } catch (error) {
     console.error("PROPERTY FETCH ERROR:", error);
-    return NextResponse.json(
-      { message: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
 
-
 export async function PUT(req, context) {
   try {
-
     await connectDB();
 
     const user = await getAuthUser();
 
     if (!user) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = await context.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { message: "Invalid ID" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
     }
 
     // ==============================
     // 📦 FORM DATA
     // ==============================
 
-    const formData =
-      await req.formData();
+    const formData = await req.formData();
 
     // ==============================
     // 🖼 HANDLE IMAGES
     // ==============================
 
-    const imageFiles =
-      formData.getAll("images");
+    const imageFiles = formData.getAll("images");
 
     let uploadedImages = [];
 
     for (const item of imageFiles) {
-
       // ============================
       // ✅ EXISTING IMAGE
       // ============================
 
-      if (
-        typeof item === "string"
-      ) {
+      if (typeof item === "string") {
         try {
-
-          const parsed =
-            JSON.parse(item);
+          const parsed = JSON.parse(item);
 
           if (parsed?.url) {
             uploadedImages.push(parsed);
           }
 
           continue;
-
         } catch {
           continue;
         }
@@ -153,64 +132,36 @@ export async function PUT(req, context) {
       // ✅ NEW FILE
       // ============================
 
-      if (!item?.name)
-        continue;
+      if (!item?.name) continue;
 
-      const bytes =
-        await item.arrayBuffer();
+      const bytes = await item.arrayBuffer();
 
-      const buffer =
-        Buffer.from(bytes);
+      const buffer = Buffer.from(bytes);
 
-      const uploadFromBuffer =
-        () =>
-          new Promise(
-            (
-              resolve,
-              reject
-            ) => {
-
-              const stream =
-                cloudinary.uploader.upload_stream(
-                  {
-                    folder:
-                      "NestMe",
-                  },
-                  (
-                    error,
-                    result
-                  ) => {
-
-                    if (result) {
-                      resolve(
-                        result
-                      );
-
-                    } else {
-                      reject(
-                        error
-                      );
-                    }
-                  }
-                );
-
-              streamifier
-                .createReadStream(
-                  buffer
-                )
-                .pipe(stream);
-            }
+      const uploadFromBuffer = () =>
+        new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              folder: "NestMe",
+            },
+            (error, result) => {
+              if (result) {
+                resolve(result);
+              } else {
+                reject(error);
+              }
+            },
           );
 
-      const result =
-        await uploadFromBuffer();
+          streamifier.createReadStream(buffer).pipe(stream);
+        });
+
+      const result = await uploadFromBuffer();
 
       uploadedImages.push({
-        url:
-          result.secure_url,
+        url: result.secure_url,
 
-        public_id:
-          result.public_id,
+        public_id: result.public_id,
       });
     }
 
@@ -219,115 +170,50 @@ export async function PUT(req, context) {
     // ==============================
 
     const body = {
-      title:
-        formData.get("title"),
+      title: formData.get("title"),
 
-      description:
-        formData.get(
-          "description"
-        ),
+      description: formData.get("description"),
 
-      propertyType:
-        formData.get(
-          "propertyType"
-        ),
+      propertyType: formData.get("propertyType"),
 
-      listingType:
-        formData.get(
-          "listingType"
-        ),
+      listingType: formData.get("listingType"),
 
-      listingStatus:
-        (
-          formData.get(
-            'listingStatus'
-          )
-          ||
-          'available'
-        )
-          .toLowerCase(),
+      listingStatus: (
+        formData.get("listingStatus") || "available"
+      ).toLowerCase(),
 
-      priceLabel:
-        formData.get(
-          "priceLabel"
-        ),
+      priceLabel: formData.get("priceLabel"),
 
-      priceValue: Number(
-        formData.get(
-          "priceValue"
-        )
-      ),
+      priceValue: Number(formData.get("priceValue")),
 
-      pricePerSqFt:
-        formData.get(
-          "pricePerSqFt"
-        ),
+      pricePerSqFt: formData.get("pricePerSqFt"),
 
-      beds: Number(
-        formData.get(
-          "beds"
-        )
-      ),
+      beds: Number(formData.get("beds")),
 
-      baths: Number(
-        formData.get(
-          "baths"
-        )
-      ),
+      baths: Number(formData.get("baths")),
 
-      areaSqFt: Number(
-        formData.get(
-          "areaSqFt"
-        )
-      ),
+      areaSqFt: Number(formData.get("areaSqFt")),
 
-      furnishing:
-        formData.get(
-          "furnishing"
-        ),
+      furnishing: formData.get("furnishing"),
 
-      facing:
-        formData.get(
-          "facing"
-        ),
+      facing: formData.get("facing"),
 
-      address:
-        formData.get(
-          "address"
-        ),
+      address: formData.get("address"),
 
-      city:
-        formData.get(
-          "city"
-        ),
+      city: formData.get("city"),
 
-      state:
-        formData.get(
-          "state"
-        ),
+      state: formData.get("state"),
 
-      amenities:
-        formData.getAll(
-          "amenities[]"
-        ),
+      amenities: formData.getAll("amenities[]"),
 
       location: {
-        lat: Number(
-          formData.get(
-            "lat"
-          )
-        ),
+        lat: Number(formData.get("lat")),
 
-        lng: Number(
-          formData.get(
-            "lng"
-          )
-        ),
+        lng: Number(formData.get("lng")),
       },
 
       // ✅ IMPORTANT
-      images:
-        uploadedImages,
+      images: uploadedImages,
     };
 
     // ==============================
@@ -338,68 +224,49 @@ export async function PUT(req, context) {
 
     // ADMIN
     if (user.role === "admin") {
-
-      property =
-        await Property.findById(
-          id
-        );
-
+      property = await Property.findById(id);
     }
 
     // AGENT
-    else if (
-      user.role === "agent"
-    ) {
+    else if (user.role === "agent") {
+      property = await Property.findOne({
+        _id: id,
 
-      property =
-        await Property.findOne({
-          _id: id,
+        $or: [
+          {
+            agent: user.agentProfileId,
+          },
 
-          $or: [
-            {
-              agent:
-                user.agentProfileId,
-            },
+          {
+            owner: user._id,
+          },
+        ],
+      });
 
-            {
-              owner:
-                user._id,
-            },
-          ],
-        });
+      body.approvalStatus = "pending";
 
-      body.approvalStatus =
-        "pending";
-
-      body.rejectionReason =
-        "";
+      body.rejectionReason = "";
     }
 
     // USER
     else {
+      property = await Property.findOne({
+        _id: id,
 
-      property =
-        await Property.findOne({
-          _id: id,
+        owner: user._id,
+      });
 
-          owner:
-            user._id,
-        });
+      body.approvalStatus = "pending";
 
-      body.approvalStatus =
-        "pending";
-
-      body.rejectionReason =
-        "";
+      body.rejectionReason = "";
     }
 
     if (!property) {
       return NextResponse.json(
         {
-          message:
-            "Property not found",
+          message: "Property not found",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -407,10 +274,7 @@ export async function PUT(req, context) {
     // 💾 SAVE
     // ==============================
 
-    Object.assign(
-      property,
-      body
-    );
+    Object.assign(property, body);
 
     await property.save();
 
@@ -418,20 +282,14 @@ export async function PUT(req, context) {
       success: true,
       property,
     });
-
   } catch (error) {
-
-    console.error(
-      "UPDATE ERROR:",
-      error
-    );
+    console.error("UPDATE ERROR:", error);
 
     return NextResponse.json(
       {
-        message:
-          "Server error",
+        message: "Server error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -472,6 +330,9 @@ export async function DELETE(req, context) {
     }
 
     await property.deleteOne();
+    await User.findByIdAndUpdate(property.owner, {
+      $inc: { propertiesPosted: -1 },
+    });
 
     return NextResponse.json({ message: "Property deleted" });
   } catch (error) {

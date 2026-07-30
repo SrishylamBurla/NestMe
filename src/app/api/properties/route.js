@@ -323,7 +323,11 @@ export async function POST(req) {
       agent: user.role === "agent" ? agentProfileId : null,
       approvalStatus: "pending",
     });
-
+    await User.findByIdAndUpdate(user._id, {
+      $inc: {
+        propertiesPosted: 1,
+      },
+    });
     /* ==============================
        📈 INCREMENT AGENT LISTINGS
     ============================== */
