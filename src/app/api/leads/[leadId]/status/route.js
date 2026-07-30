@@ -24,7 +24,7 @@ export async function PUT(req, context) {
     // IMPORTANT: populate property
     const lead = await Lead.findById(leadId)
       .populate("user", "name email")
-      .populate("property", "priceLabel priceValue city")
+      .populate("property", "priceLabel priceValue city owner")
       .populate({
         path: "agent",
         populate: {
@@ -40,7 +40,7 @@ export async function PUT(req, context) {
     //  Agent check
     const isAgent =
       user.agentProfileId &&
-      user.agentProfileId.toString() === lead.agent?.toString();
+      user.agentProfileId.toString() === lead.agent._id.toString();
 
     //  Owner check
     const isOwner = lead.property?.owner?.toString() === user._id.toString();
