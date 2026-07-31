@@ -5,6 +5,8 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import Notification from "@/models/Notification";
 import AgentProfile from "@/models/AgentProfile";
 import User from "@/models/User";
+import Enquiry from "@/models/Enquiry";
+import Lead from "@/models/Lead";
 import mongoose from "mongoose";
 import SavedProperty from "@/models/SavedProperty";
 import { cookies } from "next/headers";
@@ -28,7 +30,7 @@ export async function GET(req, context) {
     const property = await Property.findByIdAndUpdate(
       id,
       { $inc: { viewsCount: 1 } },
-      { returnDocument: "after",},
+      { returnDocument: "after" },
     )
       .populate({
         path: "agent",
@@ -329,7 +331,30 @@ export async function DELETE(req, context) {
       );
     }
 
+    for (const image of property.images || []) {
+      if (image.public_id) {
+        await cloudinary.uploader.destroy(image.public_id);
+      }
+    }
+
+    await Promise.all([
+      SavedProperty.deleteMany({ property: property._id }),
+
+      Notification.deleteMany({
+        entityId: property._id,
+      }),
+
+      Enquiry.deleteMany({
+        property: property._id,
+      }),
+
+      Lead.deleteMany({
+        property: property._id,
+      }),
+    ]);
+
     await property.deleteOne();
+
     await User.findByIdAndUpdate(property.owner, {
       $inc: { propertiesPosted: -1 },
     });
