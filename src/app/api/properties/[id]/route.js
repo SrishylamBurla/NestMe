@@ -28,7 +28,7 @@ export async function GET(req, context) {
     const property = await Property.findByIdAndUpdate(
       id,
       { $inc: { viewsCount: 1 } },
-      { new: true },
+      { returnDocument: "after",},
     )
       .populate({
         path: "agent",
