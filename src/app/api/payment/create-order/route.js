@@ -5,7 +5,18 @@ export async function POST(req) {
   try {
     console.log("========== CREATE ORDER ==========");
 
-    console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
+    console.log("==================================");
+console.log("HOST:", req.headers.get("host"));
+console.log("ORIGIN:", req.headers.get("origin"));
+console.log("USER-AGENT:", req.headers.get("user-agent"));
+console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
+console.log(
+  "KEY_SECRET:",
+  process.env.RAZORPAY_KEY_SECRET?.substring(0, 8) + "..."
+);
+console.log("==================================");
+
+
     console.log(
       "KEY_SECRET EXISTS:",
       !!process.env.RAZORPAY_KEY_SECRET
