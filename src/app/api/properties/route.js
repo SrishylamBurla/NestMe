@@ -291,7 +291,7 @@ export async function POST(req) {
         public_id: result.public_id,
       });
     }
-    console.log("Agent Profile ID:", agentProfileId);
+    
 
     /* ==============================
        🏠 CREATE PROPERTY

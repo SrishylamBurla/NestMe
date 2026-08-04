@@ -42,9 +42,9 @@ export const sendPushNotification = async (
       },
     });
 
-    console.log(
-      `✅ Push sent: ${response.successCount}/${tokens.length} successful`
-    );
+    // console.log(
+    //   `✅ Push sent: ${response.successCount}/${tokens.length} successful`
+    // );
 
     response.responses.forEach((res, index) => {
       if (!res.success) {

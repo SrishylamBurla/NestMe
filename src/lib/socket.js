@@ -3,7 +3,6 @@ import { Server } from "socket.io";
 let io;
 
 export const initSocket = (server) => {
-   console.log("🔥 initSocket() called");
   if (!io) {
    
     io = new Server(server, {
@@ -63,23 +62,6 @@ export const sendNotification = (userId, data) => {
 
   socket.to(userId).emit("notification", data);
 };
-// export const sendNotification = (userId, data) => {
-//   console.log("🔔 sendNotification()");
-//   console.log("User:", userId);
-
-//   if (!io) {
-//     console.log("❌ io not initialized");
-//     return;
-//   }
-
-//   console.log("✅ Emitting notification");
-
-//   io.to(userId).emit("notification", data);
-// };
-// export const sendNotification = (userId, data) => {
-//   if (!io) return;
-//   io.to(userId).emit("notification", data);
-// };
 
 
 // 💬 Chat helper

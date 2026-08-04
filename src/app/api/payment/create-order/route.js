@@ -3,39 +3,12 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    console.log("========== CREATE ORDER ==========");
-
-    console.log("==================================");
-console.log("HOST:", req.headers.get("host"));
-console.log("ORIGIN:", req.headers.get("origin"));
-console.log("USER-AGENT:", req.headers.get("user-agent"));
-console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
-console.log(
-  "KEY_SECRET:",
-  process.env.RAZORPAY_KEY_SECRET?.substring(0, 8) + "..."
-);
-console.log("==================================");
-
-
-    console.log(
-      "KEY_SECRET EXISTS:",
-      !!process.env.RAZORPAY_KEY_SECRET
-    );
-
-    const body = await req.json();
-
-    console.log("REQUEST BODY:", body);
-
-    const { plan } = body;
+    const { plan } = await req.json();
 
     if (!plan) {
       return NextResponse.json(
-        {
-          message: "Plan is required",
-        },
-        {
-          status: 400,
-        }
+        { message: "Plan is required" },
+        { status: 400 }
       );
     }
 
@@ -45,13 +18,13 @@ console.log("==================================");
 
     const amount = prices[plan];
 
-    console.log("PLAN:", plan);
-    console.log("AMOUNT:", amount);
-
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
+
+
+    
 
     const order = await razorpay.orders.create({
       amount: amount * 100,
@@ -59,25 +32,13 @@ console.log("==================================");
       receipt: `receipt_${Date.now()}`,
     });
 
-    console.log("ORDER CREATED:", order.id);
-
     return NextResponse.json(order);
   } catch (err) {
-    console.log("========== CREATE ORDER ERROR ==========");
-    console.log(err);
-
-    if (err.error) {
-      console.log("RAZORPAY ERROR:", err.error);
-    }
+    console.error("RAZORPAY ERROR:", err);
 
     return NextResponse.json(
-      {
-        message: err.message,
-        error: err.error || null,
-      },
-      {
-        status: 500,
-      }
+      { message: err.message },
+      { status: 500 }
     );
   }
 }

@@ -94,10 +94,6 @@ Reason: ${rejectionReason}`;
       });
     }
 
-    console.log("Owner:", owner.email);
-console.log("FCM Tokens:", owner.fcmTokens);
-console.log("Sending push...");
-
     if (owner.email) {
       await sendEmail({
         to: owner.email,

@@ -68,8 +68,6 @@ export async function POST(req) {
     $inc: { leadsCount: 1 },
   });
 
-  console.log("Created Lead:", lead);
-
   // Create notification
   const notification = await Notification.create({
     user: receiverUserId,

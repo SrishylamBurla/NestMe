@@ -46,7 +46,7 @@ export function SocketProvider({ children }) {
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      console.log("🟢 Socket Connected");
+      // console.log("🟢 Socket Connected");
 
       socket.emit("join", user._id);
     });
