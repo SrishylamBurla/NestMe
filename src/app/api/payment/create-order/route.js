@@ -11,7 +11,8 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
+console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
+console.log("SECRET EXISTS:", !!process.env.RAZORPAY_KEY_SECRET);
     const prices = {
       basic: 999,
     };

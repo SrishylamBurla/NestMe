@@ -65,6 +65,7 @@ useEffect(() => {
     const loading = toast.loading("Preparing payment...");
 
     try {
+      console.log(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
       const order = await createOrder(plan).unwrap();
 
       toast.dismiss(loading);
@@ -104,6 +105,7 @@ useEffect(() => {
           email: user?.email,
         },
       };
+      
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch {
